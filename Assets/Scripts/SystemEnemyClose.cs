@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SystemEnemyClose : MonoBehaviour
+public class SystemEnemyClose : SystemEnemy
 {
-    // Start is called before the first frame update
-    void Start()
+    /*
+     * The Close Combat Enemies. Pirates and holy Order distinction in the ComponentEnemyState
+     * TODO:
+     *  -Overwrite Attack
+     *  -Overwrite some Movement
+     *  -Interprete "AI" instructions and 
+     *  -Attack Logic
+     */
+    void Tick()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }
