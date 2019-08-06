@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * this class tracks the progression of the scenes
+ * 
+ * handled by Game-Master-System
+ *  
+ * TODO:
+ *  -track the progression inside a level
+ */
+
 public class SystemProgression : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

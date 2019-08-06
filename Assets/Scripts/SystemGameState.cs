@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * this class store the the game state, start screen, paused, playing
+ * 
+ * TODO:
+ *  -track the current game state 
+ */
+
 public class SystemGameState : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * thic class is used for spawning enemies, and other spawnabel object
+ * TODO:
+ *  -spawn enemies
+ */
+
 public class SystemSpawn : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

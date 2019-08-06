@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * this class handles the animations of the main character
+ * 
+ * handled by Game-Master-System
+ * 
+ * TODO:
+ *  -make animations on events (attack)
+ */
+
 public class SystemMainCharacterAnimation : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

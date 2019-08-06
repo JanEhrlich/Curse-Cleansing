@@ -2,16 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * this class is used to update the UI and HUD
+ * 
+ * handled by Game-Master-System
+ * 
+ * TODO:
+ *  -display health
+ *  -display curse-bar
+ *  -information on events
+ */
+
 public class SystemUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

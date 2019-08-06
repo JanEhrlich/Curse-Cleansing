@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * this class handles the different scenes and moving from one scene to another
+ * TODO:
+ *  -manage the scenes
+ *  -manage from start to first scene
+ */
+
 public class SystemScene : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

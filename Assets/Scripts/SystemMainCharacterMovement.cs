@@ -2,16 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * this class implements the main character movement
+ * 
+ * handled by Game-Master-System
+ * 
+ * TODO:
+ *  -left, right, jumps
+ *  -check bounds, walls, ceilings, etc.
+ *  -is able to move?
+ *  -attacking, check if attack is finished
+ */
+
 public class SystemMainCharacterMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }
