@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Here the Camera will be handele.
+ * TODO:
+ *  -Look at certain positions
+ *  -Follow Main Character
+ *  -Paralax Effect
+ *  -Follow predefined Camera Movement from a Path in the Camera State Component
+ */
 public class SystemCamera : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

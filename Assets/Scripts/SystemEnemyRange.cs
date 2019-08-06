@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SystemEnemyRange : MonoBehaviour
+/*
+ * The Range Combat Enemies. Pirates and holy Order distinction in the ComponentEnemyState
+ * TODO:
+ *  -Overwrite Attack
+ *  -Overwrite some Movement, because the can not jump
+ *  -Handle Reload/Magic Cooldown in Component State
+ *  -Interprete "AI" instructions and 
+ *  -Attack Logic
+ */
+public class SystemEnemyRange : SystemEnemy
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }

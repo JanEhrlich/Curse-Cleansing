@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Handels the Playback of Cutscenes. Will be activated and deactivated by the SystemGameMaster
+ * TODO:
+ *  -Get Camera GameObject and Display the Video+(optional)Sound of the Cutscene
+ */
 public class SystemCutscene : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Tick()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedTick()
     {
         
     }
