@@ -28,7 +28,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     void FixedTick(SystemGameMaster systemGM)
     {
         ComponentMainCharacterState componentMainCharacterState = systemGM.MainCharacterState;
-        Rigidbody2D ridgetBody2D = componentMainCharacterState.Rigidbody2D;
+        Rigidbody2D ridgetBody2D = componentMainCharacterState.mainCharacter.GetComponent<Rigidbody2D>();
         //Store the current horizontal input in the float moveHorizontal.
         float moveHorizontal = Input.GetAxis("Horizontal");
 
@@ -39,6 +39,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
         //Call the AddForce function of our Rigidbody2D ridgetBody2D supplying movement multiplied by speed to move our player.
-        ridgetBody2D.AddForce(movement * componentMainCharacterState.Speed);
+        ridgetBody2D.AddForce(movement * componentMainCharacterState.speed);
     }
 }
