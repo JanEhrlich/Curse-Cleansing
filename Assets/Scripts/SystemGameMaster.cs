@@ -13,6 +13,7 @@ using UnityEngine;
 
 public class SystemGameMaster : MonoBehaviour
 {
+    private ComponentMainCharacterState componentMainCharacterState;
     void Tick()
     {
         
@@ -22,4 +23,6 @@ public class SystemGameMaster : MonoBehaviour
     {
         
     }
+
+    public ComponentMainCharacterState MainCharacterState { get { return componentMainCharacterState; } }
 }
