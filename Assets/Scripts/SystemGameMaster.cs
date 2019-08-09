@@ -22,7 +22,7 @@ public class SystemGameMaster : MonoBehaviour
     public ComponentInput ComponentInput { get; } = new ComponentInput();
     public ComponentMainCharacterAction ComponentMainCharacterAction { get; } = new ComponentMainCharacterAction();
     public ComponentMainCharacterState ComponentMainCharacterState { get; } = new ComponentMainCharacterState();
-    public ComponentPrograssion ComponentPrograssion { get; } = new ComponentPrograssion();
+    public ComponentProgression ComponentProgression { get; } = new ComponentProgression();
     public ComponentScene ComponentScene { get; } = new ComponentScene();
     public ComponentSpawn ComponentSpawn { get; } = new ComponentSpawn();
 

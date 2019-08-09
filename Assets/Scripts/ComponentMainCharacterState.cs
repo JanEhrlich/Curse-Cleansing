@@ -6,7 +6,7 @@ using UnityEngine;
  * Information about the Player
  */
 
-public class ComponentMainCharacterState : MonoBehaviour
+public class ComponentMainCharacterState
 {
     public GameObject MainCharacter { get; set; }
     public float Speed { get; set; } = 10;
