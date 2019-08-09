@@ -55,7 +55,7 @@ public class SystemInput : MonoBehaviour
         componentInput = systemGameMaster.ComponentInput;
 
         //Uncomment for debugging
-        /*
+        
         componentInput.AddAttackButtonPressFunction(() => Debug.Log("Attack Pressed"));
         componentInput.AddAttackButtonCancelFunction(() => Debug.Log("Attack Cancel"));
         componentInput.AddJumpButtonPressFunction(() => Debug.Log("jump Pressed"));
@@ -77,7 +77,7 @@ public class SystemInput : MonoBehaviour
         componentInput.AddQuickTransformGhostButtonPressFunction(() => Debug.Log("ghost Pressed"));
         componentInput.AddQuickTransformGhostButtonCancelFunction(() => Debug.Log("ghost Cancel"));
         componentInput.AddQuickTransformWolfButtonPressFunction(() => Debug.Log("wolf Pressed"));
-        componentInput.AddQuickTransformWolfButtonCancelFunction(() => Debug.Log("wolf Cancel"));*/
+        componentInput.AddQuickTransformWolfButtonCancelFunction(() => Debug.Log("wolf Cancel"));
     }
 
     public void Tick()
