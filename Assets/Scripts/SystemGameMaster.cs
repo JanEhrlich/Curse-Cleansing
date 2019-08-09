@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,37 +14,51 @@ using UnityEngine;
 
 public class SystemGameMaster : MonoBehaviour
 {
-    private ComponentCameraState componentCameraState;
-    private ComponentCutscene componentCutscene;
-    private ComponentEnemyAction componentEnemyAction;
-    private ComponentEnemyState componentEnemyState;
-    private ComponentGameState componentGameState;
-    private ComponentInput componentInput;
-    private ComponentMainCharacterAction componentMainCharacterAction;
-    private ComponentMainCharacterState componentMainCharacterState;
-    private ComponentPrograssion componentPrograssion;
-    private ComponentScene componentScene;
-    private ComponentSpawn componentSpawn;
-    void Tick()
+    public ComponentCameraState ComponentCameraState { get; } = new ComponentCameraState();
+    public ComponentCutscene ComponentCutscene { get; } = new ComponentCutscene();
+    public ComponentEnemyAction ComponentEnemyAction { get; } = new ComponentEnemyAction();
+    public ComponentEnemyState ComponentEnemyState { get; } = new ComponentEnemyState();
+    public ComponentGameState ComponentGameState { get; } = new ComponentGameState();
+    public ComponentInput ComponentInput { get; } = new ComponentInput();
+    public ComponentMainCharacterAction ComponentMainCharacterAction { get; } = new ComponentMainCharacterAction();
+    public ComponentMainCharacterState ComponentMainCharacterState { get; } = new ComponentMainCharacterState();
+    public ComponentPrograssion ComponentPrograssion { get; } = new ComponentPrograssion();
+    public ComponentScene ComponentScene { get; } = new ComponentScene();
+    public ComponentSpawn ComponentSpawn { get; } = new ComponentSpawn();
+
+
+    private SystemInput systemInput;
+    private SystemMainCharacterMovement systemMainCharacterMovement;
+
+    void Start()
     {
-        
+        InitComponents();
+        InitSystems();
     }
 
-    void FixedTick()
+    void Update()
     {
-        
+        systemInput.Tick();       
+    }
+
+    void FixedUpdate()
+    {
+        systemMainCharacterMovement.FixedTick();
+    }
+
+    private void InitComponents()
+    {
+        //TODO Initialisations which are needed can be put in here
+    }
+
+    private void InitSystems()
+    {
+        systemInput = GetComponent<SystemInput>();
+        systemInput.Init(this);
+
+        systemMainCharacterMovement = GetComponent<SystemMainCharacterMovement>();
+        systemMainCharacterMovement.Init(this);
     }
 
 
-    public ComponentCameraState ComponentCameraState { get => componentCameraState; }
-    public ComponentCutscene ComponentCutscene { get => componentCutscene; }
-    public ComponentEnemyAction ComponentEnemyAction { get => componentEnemyAction; }
-    public ComponentEnemyState ComponentEnemyState { get => componentEnemyState; }
-    public ComponentGameState ComponentGameState { get => componentGameState; }
-    public ComponentInput ComponentInput { get => componentInput; }
-    public ComponentMainCharacterAction ComponentMainCharacterAction { get => componentMainCharacterAction; }
-    public ComponentMainCharacterState MainCharacterState { get => componentMainCharacterState;}
-    public ComponentPrograssion ComponentPrograssion { get => componentPrograssion;  }
-    public ComponentScene ComponentScene { get => componentScene; }
-    public ComponentSpawn ComponentSpawn { get => componentSpawn; }
 }

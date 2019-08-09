@@ -17,28 +17,38 @@ using UnityEngine;
 
 public class SystemMainCharacterMovement : MonoBehaviour
 {
-    //TODO Initialize Ridgidbody
-    // initialize ComponentMainCharacter
+    public GameObject mainCharacterGameObject;
+    Rigidbody2D rigidBody;
+    SystemGameMaster systemGameMaster;
 
-    void Tick(SystemGameMaster systemGM)
+    ComponentInput componentInput;
+    ComponentMainCharacterState componentMainCharacterState;
+
+    //Tmp Variables used for Calculations
+    Vector2 movement;
+
+    public void Init(SystemGameMaster gameMaster)
+    {
+        systemGameMaster = gameMaster;
+        rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
+        componentInput = systemGameMaster.ComponentInput;
+        componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
+        componentMainCharacterState.MainCharacter = mainCharacterGameObject;
+    }
+
+    public void Tick()
     {
         
     }
 
-    void FixedTick(SystemGameMaster systemGM)
+    public void FixedTick()
     {
-        ComponentMainCharacterState componentMainCharacterState = systemGM.MainCharacterState;
-        Rigidbody2D ridgetBody2D = componentMainCharacterState.mainCharacter.GetComponent<Rigidbody2D>();
-        //Store the current horizontal input in the float moveHorizontal.
-        float moveHorizontal = Input.GetAxis("Horizontal");
-
-        //Store the current vertical input in the float moveVertical.
-        float moveVertical = Input.GetAxis("Vertical");
-
         //Use the two store floats to create a new Vector2 variable movement.
-        Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+         movement= componentInput.getCurrentJoystickDirection();
 
         //Call the AddForce function of our Rigidbody2D ridgetBody2D supplying movement multiplied by speed to move our player.
-        ridgetBody2D.AddForce(movement * componentMainCharacterState.speed);
+        rigidBody.AddForce(movement * componentMainCharacterState.Speed);
+
+        //mainCharacterGameObject.transform.Translate(movement*0.2f);
     }
 }

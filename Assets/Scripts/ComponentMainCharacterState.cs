@@ -8,6 +8,6 @@ using UnityEngine;
 
 public class ComponentMainCharacterState : MonoBehaviour
 {
-    public GameObject mainCharacter;
-    public float speed;
+    public GameObject MainCharacter { get; set; }
+    public float Speed { get; set; } = 10;
 }
