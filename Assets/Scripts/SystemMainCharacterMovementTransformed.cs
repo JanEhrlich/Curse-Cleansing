@@ -18,6 +18,8 @@ using UnityEngine;
 public class SystemMainCharacterMovementTransformed : MonoBehaviour
 {
 
+    public bool drawDebugRaycasts = true;	//Should the environment checks be visualized
+
     //handles:
     public GameObject mainCharacterGameObject;
     Rigidbody2D rigidBody;
@@ -26,6 +28,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     ComponentInput componentInput;
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
+    Animator anim;
 
     Vector2 movement;  //Tmp Variables used for Calculations
 
@@ -37,6 +40,8 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
+        anim = mainCharacterGameObject.GetComponent<Animator>();
+        
         InitPlayerStuff();
         
         //add button functions
@@ -72,7 +77,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentMainCharacterState.jumpForceMultiplier = componentMainCharacterAction.krakenJumpPercentage;
         collider2d.size = componentMainCharacterAction.colliderKrakenSize;
         collider2d.offset = componentMainCharacterAction.colliderKrakenOffset;
-
+        anim.SetBool("isCrouching",true);
     }
 
     private void transformToBat()
@@ -90,6 +95,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         rigidBody.velocity = new Vector2(rigidBody.velocity.x,rigidBody.velocity.y * componentMainCharacterAction.gravityPercentageBat);
         collider2d.size = componentMainCharacterAction.colliderBatSize;
         collider2d.offset = componentMainCharacterAction.colliderBatOffset;
+        anim.SetBool("isCrouching", true);
     }
 
     private void transformToNormalCaracter()
@@ -107,6 +113,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         rigidBody.gravityScale = componentMainCharacterState.normalGravity;
         collider2d.size = componentMainCharacterAction.colliderStandSize;
         collider2d.offset = componentMainCharacterAction.colliderStandOffset;
+        anim.SetBool("isCrouching", false);
 
     }
     private bool IsAlreadyTransformed()
@@ -120,9 +127,51 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
 
     public void FixedTick()
     {
-        if (componentMainCharacterAction.timeUnTillNormal < Time.time)
-        {
+        PhysicsCheck();
+
+        if (componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
             transformToNormalCaracter();
+        //check that the bat is not so high, that it touches the ceiling
+        //TODO can be buggy, dont know if this should work
+        if (componentMainCharacterAction.isBat && componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isFootBlocked)
+            transformToNormalCaracter();
+    }
+
+    void PhysicsCheck()
+    {
+       componentMainCharacterAction.isHeadBlocked = false;
+       componentMainCharacterAction.isFootBlocked = false;
+
+        //Cast the ray to check above the player's head
+        RaycastHit2D headCheck = Raycast(new Vector2(0f, collider2d.size.y/2), Vector2.up, componentMainCharacterAction.headClearance, componentMainCharacterState.layerMask);
+        //Cast the ray to check below the player's feet
+        RaycastHit2D footCheck = Raycast(Vector2.zero, Vector2.down, componentMainCharacterAction.headClearance, componentMainCharacterState.layerMask);
+
+        //If that ray hits, the player's head is blocked
+        if (headCheck)
+            componentMainCharacterAction.isHeadBlocked = true;
+        if (footCheck)
+            componentMainCharacterAction.isFootBlocked = true;
+    }
+
+    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, int layerMask)
+    {
+        //Record the player's position
+        Vector2 pos = mainCharacterGameObject.transform.position;
+
+        //Send out the desired raycasr and record the result
+        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layerMask);
+
+        //If we want to show debug raycasts in the scene...
+        if (drawDebugRaycasts)
+        {
+            //...determine the color based on if the raycast hit...
+            Color color = hit ? Color.red : Color.green;
+            //...and draw the ray in the scene view
+            Debug.DrawRay(pos + offset, rayDirection * length, color);
         }
+
+        //Return the results of the raycast
+        return hit;
     }
 }

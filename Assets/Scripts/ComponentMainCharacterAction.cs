@@ -49,6 +49,11 @@ public class ComponentMainCharacterAction
     public float batSpeedPercentage = 0.7f; //Speed reduction while being a bat
 
     public bool isGliding = false;          //Is the player gliding?
+    public bool isHeadBlocked;              //can the player transform back?
+    public float headClearance = 1.5f;		//Space needed above the player's head
+
+    public bool isFootBlocked;              //can the player transform back?
+    public float foodClearance = 1.5f;		//Space needed above the player's head
 
     public bool hasDoubleJump = true;              //Variable to hold jump duration
 }

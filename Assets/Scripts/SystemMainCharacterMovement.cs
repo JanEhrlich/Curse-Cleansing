@@ -22,7 +22,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
     //handles:
     public GameObject mainCharacterGameObject;
     Rigidbody2D rigidBody;
-    BoxCollider2D collider2d;
     SystemGameMaster systemGameMaster;
     ComponentInput componentInput;
     ComponentMainCharacterAction componentMainCharacterAction;
@@ -38,11 +37,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         systemGameMaster = gameMaster;
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
-        collider2d = mainCharacterGameObject.GetComponentInChildren<BoxCollider2D>();
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
         componentMainCharacterState.layerMask = TransformToLayerMask(mainCharacterGameObject.layer);
+
+        //Record the original x scale of the player
+        componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
+
         //add button functions
         componentInput.AddJumpButtonPressFunction(MidAirMovement);
     }
@@ -86,6 +88,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //Calculate the desired velocity based on inputs
         float xVelocity = currentSpeed * componentInput.getCurrentHorizontalJoystickPosition();
 
+        //If the sign of the velocity and direction don't match, flip the character
+        if (xVelocity * componentMainCharacterState.direction < 0f)
+            FlipCharacterDirection();
 
         //Apply the desired velocity 
         rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
@@ -116,6 +121,20 @@ public class SystemMainCharacterMovement : MonoBehaviour
         return hit;
     }
 
+    void FlipCharacterDirection()
+    {
+        //Turn the character by flipping the direction
+        componentMainCharacterState.direction *= -1;
+
+        //Record the current scale
+        Vector3 scale = mainCharacterGameObject.transform.localScale;
+
+        //Set the X scale to be the original times the direction
+        scale.x = componentMainCharacterState.originalXScale * componentMainCharacterState.direction;
+
+        //Apply the new scale
+        mainCharacterGameObject.transform.localScale = scale;
+    }
 
     void MidAirMovement()
     {

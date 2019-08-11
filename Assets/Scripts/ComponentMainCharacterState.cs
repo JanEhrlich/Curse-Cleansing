@@ -24,8 +24,9 @@ public class ComponentMainCharacterState
 
     public bool isOnGround;                 //Is the player on the ground?
     public float coyoteTime;                       //Variable to hold coyote duration
-    public float playerHeight;					   //Height of the player
+    public float playerHeight;                     //Height of the player
 
+    public float originalXScale;                   //Original scale on X axis
     public int direction = 1;						//Direction player is facing
 
     public int layerMask; //do not hit player with raycast
