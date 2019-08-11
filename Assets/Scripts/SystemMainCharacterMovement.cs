@@ -19,11 +19,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
 {
     public bool drawDebugRaycasts = true;	//Should the environment checks be visualized
 
+    //handles:
     public GameObject mainCharacterGameObject;
     Rigidbody2D rigidBody;
     SystemGameMaster systemGameMaster;
     ComponentInput componentInput;
+    ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
+
     Vector2 movement;  //Tmp Variables used for Calculations
 
     public void Init(SystemGameMaster gameMaster)
@@ -33,27 +36,36 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterState.MainCharacter = mainCharacterGameObject;
+        componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
+
+        //add button functions
         componentInput.AddJumpButtonPressFunction(MidAirMovement);
     }
-
     public void Tick()
     {
         
     }
-
     public void FixedTick()
     {
-
         PhysicsCheck();
-
         GroundMovement();
-        //Use the two store floats to create a new Vector2 variable movement.
-         //movement= componentInput.getCurrentJoystickDirection();
+    }
 
-        //Call the AddForce function of our Rigidbody2D ridgetBody2D supplying movement multiplied by speed to move our player.
-        //rigidBody.AddForce(movement * componentMainCharacterState.Speed);
+    private void PhysicsCheck()
+    {
+        //Start by assuming the player isn't on the ground and the head isn't blocked
+        componentMainCharacterState.isOnGround = false;
 
-        //mainCharacterGameObject.transform.Translate(movement*0.2f);
+        //Cast rays for the left and right foot
+        RaycastHit2D leftCheck = Raycast(new Vector2(-componentMainCharacterState.footOffset, 0f), Vector2.down, componentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
+        RaycastHit2D rightCheck = Raycast(new Vector2(componentMainCharacterState.footOffset, 0f), Vector2.down, componentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
+
+        //If either ray hit the ground, the player is on the ground
+        if (leftCheck || rightCheck)
+        {
+            componentMainCharacterState.isOnGround = true;
+            componentMainCharacterState.hasDoubleJump = true;
+        }
     }
 
     void GroundMovement()
@@ -68,47 +80,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
         if (componentMainCharacterState.isOnGround)
             componentMainCharacterState.coyoteTime = Time.time + componentMainCharacterState.coyoteDuration;
     }
-
-    void MidAirMovement()
-    {
-        //If the jump key is pressed  AND
-        //the player is on the ground or within the coyote time window...
-        if (componentMainCharacterState.isOnGround || componentMainCharacterState.coyoteTime > Time.time)
-        {
-            //...The player is no longer on the groud and is jumping...
-            componentMainCharacterState.isOnGround = false;
-
-            //...add the jump force to the rigidbody...
-            rigidBody.AddForce(new Vector2(0f, componentMainCharacterState.jumpForce), ForceMode2D.Impulse);
-
-        }
-
-        //If player is falling to fast, reduce the Y velocity to the max
-        if (rigidBody.velocity.y < componentMainCharacterState.maxFallSpeed)
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, componentMainCharacterState.maxFallSpeed);
-    }
-    private void PhysicsCheck()
-    {
-        //Start by assuming the player isn't on the ground and the head isn't blocked
-        componentMainCharacterState.isOnGround = false;
-
-        //Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-componentMainCharacterState.footOffset, -0.2f), Vector2.down, componentMainCharacterState.groundDistance);
-        RaycastHit2D rightCheck = Raycast(new Vector2(componentMainCharacterState.footOffset, -0.2f), Vector2.down, componentMainCharacterState.groundDistance);
-
-        //If either ray hit the ground, the player is on the ground
-        if (leftCheck || rightCheck)
-            componentMainCharacterState.isOnGround = true;
-
-
-    }
-    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
+   
+    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, int layermask = 0)
     {
         //Record the player's position
         Vector2 pos = mainCharacterGameObject.transform.position;
 
         //Send out the desired raycasr and record the result
-        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length);
+        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layermask);
 
         //If we want to show debug raycasts in the scene...
         if (drawDebugRaycasts)
@@ -121,5 +100,41 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         //Return the results of the raycast
         return hit;
+    }
+
+
+    void MidAirMovement()
+    {
+        
+        //If the jump key is pressed  AND
+        //the player is on the ground or within the coyote time window...
+        if (componentMainCharacterState.isOnGround || componentMainCharacterState.coyoteTime > Time.time)
+        {
+            Debug.Log("Single jump! "+componentMainCharacterState.isOnGround);
+            //remove y-velocity, so that one can not use edges to boost
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+
+            //...The player is no longer on the groud and is jumping...
+            componentMainCharacterState.isOnGround = false;
+
+            //...add the jump force to the rigidbody...
+            rigidBody.AddForce(new Vector2(0f, componentMainCharacterState.jumpForce), ForceMode2D.Impulse);
+
+        }
+        else if(componentMainCharacterAction.hasBat && componentMainCharacterState.hasDoubleJump)
+        {
+            Debug.Log("Double jump!" + componentMainCharacterState.isOnGround);
+            //remove y-velocity, so that one can not use edges to boost
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+
+            //now we are double jumping
+            componentMainCharacterState.hasDoubleJump = false;
+
+            //...add the jump force to the rigidbody...
+            rigidBody.AddForce(new Vector2(0f, componentMainCharacterState.jumpForce), ForceMode2D.Impulse);
+        }
+        //If player is falling to fast, reduce the Y velocity to the max
+        if (rigidBody.velocity.y < componentMainCharacterState.maxFallSpeed)
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, componentMainCharacterState.maxFallSpeed);
     }
 }

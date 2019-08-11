@@ -38,7 +38,7 @@ public class SystemGameMaster : MonoBehaviour
 
     void Update()
     {
-        systemInput.Tick();       
+        systemInput.Tick();
     }
 
     void FixedUpdate()
