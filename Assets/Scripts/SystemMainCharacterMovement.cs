@@ -22,25 +22,36 @@ public class SystemMainCharacterMovement : MonoBehaviour
     //handles:
     public GameObject mainCharacterGameObject;
     Rigidbody2D rigidBody;
+    BoxCollider2D collider2d;
     SystemGameMaster systemGameMaster;
     ComponentInput componentInput;
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
 
-    Vector2 movement;  //Tmp Variables used for Calculations
+    //Tmp Variables used for Calculations
+    Vector2 movement;
+    private float currentSpeed;
+    private float currentJumpForce;
+    private float currentGravity;
 
     public void Init(SystemGameMaster gameMaster)
     {
         systemGameMaster = gameMaster;
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
+        collider2d = mainCharacterGameObject.GetComponentInChildren<BoxCollider2D>();
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
-        componentMainCharacterState.MainCharacter = mainCharacterGameObject;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
-
+        componentMainCharacterState.layerMask = TransformToLayerMask(mainCharacterGameObject.layer);
         //add button functions
         componentInput.AddJumpButtonPressFunction(MidAirMovement);
     }
+
+    private int TransformToLayerMask(int layer)
+    {
+        return ~(1<<layer);
+    }
+
     public void Tick()
     {
         
@@ -53,6 +64,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     private void PhysicsCheck()
     {
+        currentSpeed = componentMainCharacterState.speed * componentMainCharacterState.speedMultiplier;
+        currentJumpForce = componentMainCharacterState.jumpForce * componentMainCharacterState.jumpForceMultiplier;
         //Start by assuming the player isn't on the ground and the head isn't blocked
         componentMainCharacterState.isOnGround = false;
 
@@ -64,14 +77,15 @@ public class SystemMainCharacterMovement : MonoBehaviour
         if (leftCheck || rightCheck)
         {
             componentMainCharacterState.isOnGround = true;
-            componentMainCharacterState.hasDoubleJump = true;
+            componentMainCharacterAction.hasDoubleJump = true;
         }
     }
 
     void GroundMovement()
     {
         //Calculate the desired velocity based on inputs
-        float xVelocity = componentMainCharacterState.speed * componentInput.getCurrentHorizontalJoystickPosition();
+        float xVelocity = currentSpeed * componentInput.getCurrentHorizontalJoystickPosition();
+
 
         //Apply the desired velocity 
         rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
@@ -81,13 +95,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
             componentMainCharacterState.coyoteTime = Time.time + componentMainCharacterState.coyoteDuration;
     }
    
-    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, int layermask = 0)
+    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, int layerMask)
     {
         //Record the player's position
         Vector2 pos = mainCharacterGameObject.transform.position;
 
         //Send out the desired raycasr and record the result
-        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layermask);
+        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layerMask);
 
         //If we want to show debug raycasts in the scene...
         if (drawDebugRaycasts)
@@ -108,9 +122,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
         
         //If the jump key is pressed  AND
         //the player is on the ground or within the coyote time window...
-        if (componentMainCharacterState.isOnGround || componentMainCharacterState.coyoteTime > Time.time)
+        if (componentMainCharacterState.isOnGround || componentMainCharacterState.coyoteTime > Time.time )
         {
-            Debug.Log("Single jump! "+componentMainCharacterState.isOnGround);
             //remove y-velocity, so that one can not use edges to boost
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
 
@@ -118,20 +131,19 @@ public class SystemMainCharacterMovement : MonoBehaviour
             componentMainCharacterState.isOnGround = false;
 
             //...add the jump force to the rigidbody...
-            rigidBody.AddForce(new Vector2(0f, componentMainCharacterState.jumpForce), ForceMode2D.Impulse);
+            rigidBody.AddForce(new Vector2(0f, currentJumpForce), ForceMode2D.Impulse);
 
         }
-        else if(componentMainCharacterAction.hasBat && componentMainCharacterState.hasDoubleJump)
+        else if(componentMainCharacterAction.hasBat && componentMainCharacterAction.hasDoubleJump || componentMainCharacterAction.isBat)
         {
-            Debug.Log("Double jump!" + componentMainCharacterState.isOnGround);
             //remove y-velocity, so that one can not use edges to boost
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
 
             //now we are double jumping
-            componentMainCharacterState.hasDoubleJump = false;
+            componentMainCharacterAction.hasDoubleJump = false;
 
             //...add the jump force to the rigidbody...
-            rigidBody.AddForce(new Vector2(0f, componentMainCharacterState.jumpForce), ForceMode2D.Impulse);
+            rigidBody.AddForce(new Vector2(0f, currentJumpForce), ForceMode2D.Impulse);
         }
         //If player is falling to fast, reduce the Y velocity to the max
         if (rigidBody.velocity.y < componentMainCharacterState.maxFallSpeed)
