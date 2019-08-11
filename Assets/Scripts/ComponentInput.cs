@@ -45,6 +45,15 @@ public class ComponentInput
      */
     private Vector2 currentJoystickAxis;
 
+    /*
+     * The Controller which is currently in use
+     * We support Nintendo Switch Pro Controller and Xbox Controllers
+     */
+    public enum ControllerType {None, SwitchPro, Xbox};
+    private ControllerType currentUsedControllerType = ControllerType.None;
+    private bool isControllerCurrentlyConnected;
+    int currentlyActiveControllerSlot = 0;
+
     private List<Action> callOnJumpButtonPress = new List<Action>();
     private List<Action> callOnJumpButtonCancel = new List<Action>();
 
@@ -77,6 +86,48 @@ public class ComponentInput
 
     private List<Action> callOnQuickTransformWolfButtonPress = new List<Action>();
     private List<Action> callOnQuickTransformWolfButtonCancel = new List<Action>();
+
+    //Tracking of Currently used Controller
+    #region ConnectedControllerHandling
+    public void setControllerTypeToSwitchPro()
+    {
+        currentUsedControllerType = ControllerType.SwitchPro;
+    }
+
+    public void setControllerTypeToXbox()
+    {
+        currentUsedControllerType = ControllerType.Xbox;
+    }
+
+    public void setControllerTypeToNone()
+    {
+        currentUsedControllerType = ControllerType.None;
+    }
+
+    public ControllerType getCurrentControllerType()
+    {
+        return currentUsedControllerType;
+    }
+
+    public void setConnectedStatus(bool isConnected)
+    {
+        isControllerCurrentlyConnected = isConnected;
+    }
+    public bool isControllerConnected()
+    {
+        return isControllerCurrentlyConnected;
+    }
+
+    public void setControllerSlot(int slot)
+    {
+        currentlyActiveControllerSlot = slot;
+    }
+
+    public int getControllerSlot()
+    {
+        return currentlyActiveControllerSlot;
+    }
+    #endregion
 
     //Call these to Add a Function to be called when a button was pressed or canceled
     #region AddFunctionsToLists

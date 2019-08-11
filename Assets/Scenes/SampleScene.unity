@@ -377,8 +377,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dPadLeftCurse: 1
   dPadRightCurse: 0
-  dPadUpCurse: 4
-  dPadDownCurse: 4
+  dPadUpCurse: 3
+  dPadDownCurse: 2
 --- !u!114 &437925223
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,6 +25,12 @@ public class SystemInput : MonoBehaviour
     //Handle to SystemGameMaster
     SystemGameMaster systemGameMaster;
 
+    //Variables Used to to identify the Type of the connected Controller
+    int fingerprintXbox = 33;
+    int fingerptintSwitchPro = 16;
+    int fingerprintOfLastState = -1;
+    string[] controllerNames;
+
     //Tmp Variables to calculate Joystick and DPad Position 
     float tmp_x,tmp_y;
     Vector2 tmp_axis;
@@ -33,26 +39,51 @@ public class SystemInput : MonoBehaviour
     bool left, right, up, down;
     bool oldLeft, oldRight, oldUp, oldDown;
 
-    //Input Mapping Names for quick changes on Naming
+    //Tmp Variables to calculate Trigger presses and cancels on Xbox Controllers
+    bool xboxTriggerPressed;
+    bool oldXboxTriggerPressed;
+
     #region MappingStrings
 
-    string moveHorizontalString = "MoveHorizontal";
-    string moveVerticalString = "MoveVertical";
-    string quickTransformHorizontalString = "QuickTransformHorizontal";
-    string quickTransformVerticalString = "QuickTransformVertical";
-    string jumpString = "Jump";
-    string attackString = "Attack";
-    string tentacleString = "Tentacle";
-    string dashString = "Dash";
-    string pauseString = "Pause";
-    string batAttackString = "BatAttack";
-    string interactString = "Interact";
+    //Actually used Strings in the code. The Content will switch depending on Connected Status. Initial Mapping is Switch Controller
+    string moveHorizontalString;
+    string moveVerticalString;
+    string quickTransformHorizontalString;
+    string quickTransformVerticalString;
+    string dashString;
+    string dashStringXboxTrigger2;
+    string pauseString;
+    string batAttackString;
+    string interactString;
+    string jumpString;
+    string attackString;
+    string tentacleString;
+
+    //Input Mapping Names for quick changes on Naming [Nintendo Switch Pro Controller]
+    string moveHorizontalStringPrefix = "MoveHorizontal";
+    string moveVerticalStringPrefix = "MoveVertical";
+    string quickTransformHorizontalStringPrefix = "QuickTransformHorizontal";
+    string quickTransformVerticalStringPrefix = "QuickTransformVertical";
+    string dashStringPrefix = "Dash";
+    string dashStringPrefixXbox1 = "DashTriggerRight";
+    string dashStringPrefixXbox2 = "DashTriggerLeft";
+    string pauseStringPrefix = "Pause";
+    string batAttackStringPrefix = "BatAttack";
+    string interactStringPrefix = "Interact";
+    string jumpStringPrefix = "Jump";
+    string attackStringPrefix = "Attack";
+    string tentacleStringPrefix = "Tentacle";
+
+    string switchProSuffix = "Switch";
+    string xboxSuffix = "Xbox";
     #endregion
 
     public void Init(SystemGameMaster gameMaster)
     {       
         systemGameMaster = gameMaster;
         componentInput = systemGameMaster.ComponentInput;
+
+        CheckForControllerChange();
 
         //Uncomment for debugging
         /*
@@ -62,8 +93,8 @@ public class SystemInput : MonoBehaviour
         componentInput.AddJumpButtonCancelFunction(() => Debug.Log("jump Cancel"));
         componentInput.AddTentacleButtonPressFunction(() => Debug.Log("ten Pressed"));
         componentInput.AddTentacleButtonCancelFunction(() => Debug.Log("ten Cancel"));
-        componentInput.AddDashButtonPressFunction(() => Debug.Log("das Pressed"));
-        componentInput.AddDashButtonCancelFunction(() => Debug.Log("das Cancel"));
+        componentInput.AddDashButtonPressFunction(() => Debug.Log("dash Pressed"));
+        componentInput.AddDashButtonCancelFunction(() => Debug.Log("dash Cancel"));
         componentInput.AddPauseButtonPressFunction(() => Debug.Log("pau Pressed"));
         componentInput.AddPauseButtonCancelFunction(() => Debug.Log("pau Cancel"));
         componentInput.AddBatAttackButtonPressFunction(() => Debug.Log("bat Pressed"));
@@ -82,11 +113,26 @@ public class SystemInput : MonoBehaviour
 
     public void Tick()
     {
-        UpdateJoystickValues();
+        /*
+        Debug.Log("Controller Connected: " + componentInput.isControllerConnected());
+        Debug.Log("Controller Type: " + componentInput.getCurrentControllerType());
+        Debug.Log("Controller Slot: " + componentInput.getControllerSlot());*/
 
-        UpdateDPadState();
+        CheckForControllerChange();
 
-        CheckButtonDownsAndUps();       
+        if (componentInput.isControllerConnected())
+        {
+            UpdateJoystickValues();
+
+            UpdateDPadState();
+
+            CheckButtonDownsAndUps();
+
+            if (componentInput.getCurrentControllerType() == ComponentInput.ControllerType.Xbox)
+            {
+                HandelXboxTriggerButtons();
+            }
+        }
     }
 
     public void FixedTick()
@@ -455,5 +501,115 @@ public class SystemInput : MonoBehaviour
             foreach (Action func in componentInput.getCallOnInteractButtonCancel())
                 func();
         }
+    }
+
+    //Checks if current Controller is still connected and if not tries to reconnect to another controller
+    private void CheckForControllerChange()
+    {
+        controllerNames = Input.GetJoystickNames();
+        if (controllerNames.Length != 0 && fingerprintOfLastState != controllerNames[componentInput.getControllerSlot()].Length)
+        {
+            UpdateUsedController();
+        }
+    }
+
+    //Checks whether a controller is connected. And if there is one, whether it is a Xbox Controller or a Switch Pro Controller
+    private void UpdateUsedController()
+    {
+        for (int i = 0; i < controllerNames.Length; i++)
+        {
+            if (controllerNames[i].Length != fingerprintXbox && controllerNames[i].Length != fingerptintSwitchPro)
+            {
+                componentInput.setControllerTypeToNone();
+                componentInput.setConnectedStatus(false);
+                fingerprintOfLastState = -1;
+                MapInputStringsToController();
+                //Debug.Log("There is no Controller connected || Slot: " + i + " of " + (controllerNames.Length-1) + " ||  String: " + controllerNames[i]);
+            }
+            else
+            {               
+                if (controllerNames[i].Length == fingerprintXbox)
+                {
+                    componentInput.setControllerTypeToXbox();
+                    fingerprintOfLastState = fingerprintXbox;
+                    //Debug.Log("XBOX Controller connected || Slot: " + i + " of " + (controllerNames.Length - 1) + "  ||  String: " + controllerNames[i]);
+                }
+
+                if (controllerNames[i].Length == fingerptintSwitchPro)
+                {
+                    componentInput.setControllerTypeToSwitchPro();
+                    fingerprintOfLastState = fingerptintSwitchPro;
+                    //Debug.Log("SWITCH Controller connected || Slot: " + i + " of " + (controllerNames.Length - 1) + "  ||  String: " + controllerNames[i]);
+                }
+
+                componentInput.setControllerSlot(i);
+                componentInput.setConnectedStatus(true);
+
+                MapInputStringsToController();
+
+                break;
+            }
+        }
+    }
+
+    //Sets the used Strings for the Input names to the specific controller
+    private void MapInputStringsToController()
+    {
+        string suffix = componentInput.getControllerSlot().ToString();
+
+        if (componentInput.getCurrentControllerType() == ComponentInput.ControllerType.SwitchPro)
+        {
+            suffix += switchProSuffix;
+
+            dashString = dashStringPrefix;
+            pauseString = pauseStringPrefix;
+            //Debug.Log("Mapping2Switch SlotID = " + componentInput.getControllerSlot());
+        }
+
+        if (componentInput.getCurrentControllerType() == ComponentInput.ControllerType.Xbox)
+        {
+            suffix += xboxSuffix;
+
+            dashString = dashStringPrefixXbox1 + suffix;
+            dashStringXboxTrigger2 = dashStringPrefixXbox2 + suffix;
+            pauseString = pauseStringPrefix + xboxSuffix;
+            //Debug.Log("Mapping2Xbox SlotID = " + componentInput.getControllerSlot());
+        }
+
+        moveHorizontalString = moveHorizontalStringPrefix + suffix;
+        moveVerticalString = moveVerticalStringPrefix + suffix;
+        quickTransformHorizontalString = quickTransformHorizontalStringPrefix + suffix;
+        quickTransformVerticalString = quickTransformVerticalStringPrefix + suffix;
+        
+        batAttackString = batAttackStringPrefix;
+        interactString = interactStringPrefix;
+        jumpString = jumpStringPrefix;
+        attackString = attackStringPrefix;
+        tentacleString = tentacleStringPrefix;
+    }
+
+    //Function only used for Xbox Controller because Trigger Buttons aren't buttons but axes
+    private void HandelXboxTriggerButtons()
+    {
+        tmp_x = Input.GetAxis(dashString);
+        tmp_y = Input.GetAxis(dashStringXboxTrigger2);
+
+        xboxTriggerPressed = tmp_x > 0 || tmp_y > 0;
+
+        if (xboxTriggerPressed != oldXboxTriggerPressed)
+        {
+            if (xboxTriggerPressed)
+            {
+                foreach (Action func in componentInput.getCallOnDashButtonPress())
+                    func();
+            }
+            else
+            {
+                foreach (Action func in componentInput.getCallOnDashButtonCancel())
+                    func();
+            }
+        }
+
+        oldXboxTriggerPressed = xboxTriggerPressed;
     }
 }
