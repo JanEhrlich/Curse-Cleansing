@@ -5,30 +5,49 @@ using UnityEngine;
 /*
  * Information about the Player
  */
-
 public class ComponentMainCharacterState
 {
 
-    public float speed = 6f;                //Player speed
-    public float coyoteDuration = .05f;     //How long the player can jump after falling
-    public float maxFallSpeed = -25f;       //Max speed player can fall
-    public float speedMultiplier = 1f;      //adjust speed
-    public float normalGravity;
-    public float jumpForceMultiplier = 1f;  //adjust jump height
+    /*
+     * Hardcoded Variables which shape the games behaviour
+     */
+    #region StaticVariables
+    public static float speed = 6f;                 //Player speed
+    public static float coyoteDuration = .05f;      //How long the player can jump after falling
+    public static float maxFallSpeed = -25f;        //Max speed player can fall
+
+    public static float jumpForce = 12f;            //Initial force of jump
+    public static float groundDistance = .2f;       //Distance from player to ground which is considered as grounded
+    #endregion
 
 
-    public float jumpForce = 12f;           //Initial force of jump
+    /*
+     * Variables which will be set on Startup and never changed later
+     */
+    #region SetOnInitVariables
+    public float footOffset = .4f;                  //X Offset of feet raycast
+    public float normalGravity;                     //normal gravity of the World
+    #endregion
 
-    public float footOffset = .4f;          //X Offset of feet raycast
-    public float groundDistance = .2f;      //Distance player is considered to be on the ground
 
-    public bool isOnGround;                 //Is the player on the ground?
-    public float coyoteTime;                       //Variable to hold coyote duration
-    public float playerHeight;                     //Height of the player
+    /*
+     * Dynamic Variables which will change very often depending on the game state and player actions
+     */
+    #region DynamictVariables
+    public float speedMultiplier = 1f;              //adjusts speed based on form and state (normal,kraken,bat,...)
+    public float jumpForceMultiplier = 1f;          //adjusts jump height based on form and state (normal,kraken,bat,...)
 
-    public float originalXScale;                   //Original scale on X axis
-    public int direction = 1;						//Direction player is facing
+    public float currentSpeed;                      //current speed of the Player
+    public float currentJumpForce;                  //current jumpForce of the Player
 
-    public int layerMask; //do not hit player with raycast
+    public bool hasJump;                         //Can the player intentionally jump once. Used to prevent edge case "doubleJump" during coyoteTime
+    public bool isOnGround;                         //Is the player on the ground?
+    public float coyoteTime;                        //Variable to hold coyote duration
+    public float playerHeight;                      //Height of the player
 
+    public float originalXScale;                    //Original scale on X axis
+    public int direction = 1;                       //Direction player is facing
+
+    public int layerMask;                           //do not hit player with raycast
+    #endregion
 }

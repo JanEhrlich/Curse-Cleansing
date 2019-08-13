@@ -27,11 +27,17 @@ public class SystemMainCharacterMovement : MonoBehaviour
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
 
+    //Variable used to process jumping and gliding
+    bool receivedJumpFlag;
+    bool holdJumpButton;
+
+    //Used to avoid setting jupedOnce back to false because Jump couldn't build up distance to make GroundedCheck false
+    bool skipNextFrame;
+
     //Tmp Variables used for Calculations
     Vector2 movement;
-    private float currentSpeed;
-    private float currentJumpForce;
-    private float currentGravity;
+    Vector3 tmp_scale;
+    float tmp_xVelocity;
 
     public void Init(SystemGameMaster gameMaster)
     {
@@ -46,126 +52,197 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
 
         //add button functions
-        componentInput.AddJumpButtonPressFunction(MidAirMovement);
-    }
-
-    private int TransformToLayerMask(int layer)
-    {
-        return ~(1<<layer);
+        componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
+        componentInput.AddJumpButtonCancelFunction(ReceiveJumpCancelInput);
     }
 
     public void Tick()
     {
         
     }
+
     public void FixedTick()
     {
-        PhysicsCheck();
-        GroundMovement();
+        UpdatedSpeedAndJumpForce();
+
+
+        if (skipNextFrame)
+        {
+            skipNextFrame = false;            
+        }
+        else
+        {
+            GroundedCheck();
+        }
+
+        HorizontalMovement();
+
+        if (receivedJumpFlag)
+        {
+            HandelJumpInstruction();
+            receivedJumpFlag = false;
+        }
+
+        CapFallingSpeed();
     }
 
-    private void PhysicsCheck()
+    /*
+     * Bit shift the index of the given layer to get a bit mask
+     * This would create a layermask with only the given layer index.
+     * We want a layermask with everything except the given layer index. The ~ operator does this, it inverts the bitmask.
+     */
+    private int TransformToLayerMask(int layer)
     {
-        currentSpeed = componentMainCharacterState.speed * componentMainCharacterState.speedMultiplier;
-        currentJumpForce = componentMainCharacterState.jumpForce * componentMainCharacterState.jumpForceMultiplier;
-        //Start by assuming the player isn't on the ground and the head isn't blocked
-        componentMainCharacterState.isOnGround = false;
+        return ~(1 << layer);
+    }
 
+    /*
+     * Calculates the current speed and jumpForce based on set speedMultiplier and jumpForceMultiplier.
+     */
+    private void UpdatedSpeedAndJumpForce()
+    {
+        componentMainCharacterState.currentSpeed = ComponentMainCharacterState.speed * componentMainCharacterState.speedMultiplier;
+        componentMainCharacterState.currentJumpForce = ComponentMainCharacterState.jumpForce * componentMainCharacterState.jumpForceMultiplier;
+    }
+
+    /*
+    * Checks if Player is grounded using 2 raycasts
+    */
+    private void GroundedCheck()
+    {
         //Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-componentMainCharacterState.footOffset, 0f), Vector2.down, componentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
-        RaycastHit2D rightCheck = Raycast(new Vector2(componentMainCharacterState.footOffset, 0f), Vector2.down, componentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
+        RaycastHit2D leftCheck = RaycastForGround(new Vector2(-componentMainCharacterState.footOffset, 0f), Vector2.down, ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
+        RaycastHit2D rightCheck = RaycastForGround(new Vector2(componentMainCharacterState.footOffset, 0f), Vector2.down, ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
 
-        //If either ray hit the ground, the player is on the ground
-        if (leftCheck || rightCheck)
+        //If either ray hit the ground, the player is on the ground and doubleJump gets enabled
+        componentMainCharacterState.isOnGround = leftCheck || rightCheck;
+
+        if (componentMainCharacterState.isOnGround)
         {
-            componentMainCharacterState.isOnGround = true;
+            componentMainCharacterState.hasJump = true;
             componentMainCharacterAction.hasDoubleJump = true;
         }
     }
 
-    void GroundMovement()
+    /*
+     * Handels the horizontal movement based on inputs
+     */
+    void HorizontalMovement()
     {
-        //Calculate the desired velocity based on inputs
-        float xVelocity = currentSpeed * componentInput.getCurrentHorizontalJoystickPosition();
+        tmp_xVelocity = componentMainCharacterState.currentSpeed * componentInput.getCurrentHorizontalJoystickPosition();
+        rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
 
         //If the sign of the velocity and direction don't match, flip the character
-        if (xVelocity * componentMainCharacterState.direction < 0f)
+        if (tmp_xVelocity * componentMainCharacterState.direction < 0f)
             FlipCharacterDirection();
-
-        //Apply the desired velocity 
-        rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
 
         //If the player is on the ground, extend the coyote time window
         if (componentMainCharacterState.isOnGround)
-            componentMainCharacterState.coyoteTime = Time.time + componentMainCharacterState.coyoteDuration;
+            componentMainCharacterState.coyoteTime = Time.time + ComponentMainCharacterState.coyoteDuration;
     }
-   
-    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, int layerMask)
-    {
-        //Record the player's position
-        Vector2 pos = mainCharacterGameObject.transform.position;
 
-        //Send out the desired raycasr and record the result
+    /*
+    * Sends down a Raycast from the main character with a given offset.
+    * If it hits any layer of the layermaks within the given length, then it will return true
+    */
+    private RaycastHit2D RaycastForGround(Vector2 offset, Vector2 rayDirection, float length, int layerMask)
+    {
+        Vector2 pos = mainCharacterGameObject.transform.position;
         RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layerMask);
 
-        //If we want to show debug raycasts in the scene...
         if (drawDebugRaycasts)
         {
-            //...determine the color based on if the raycast hit...
             Color color = hit ? Color.red : Color.green;
-            //...and draw the ray in the scene view
             Debug.DrawRay(pos + offset, rayDirection * length, color);
         }
 
-        //Return the results of the raycast
         return hit;
     }
 
+    /*
+     * Flips the dierection of the Gameobject and the State in the Component
+     */
     void FlipCharacterDirection()
     {
         //Turn the character by flipping the direction
         componentMainCharacterState.direction *= -1;
-
-        //Record the current scale
-        Vector3 scale = mainCharacterGameObject.transform.localScale;
-
-        //Set the X scale to be the original times the direction
-        scale.x = componentMainCharacterState.originalXScale * componentMainCharacterState.direction;
+        tmp_scale = mainCharacterGameObject.transform.localScale;
+        tmp_scale.x = componentMainCharacterState.originalXScale * componentMainCharacterState.direction;
 
         //Apply the new scale
-        mainCharacterGameObject.transform.localScale = scale;
+        mainCharacterGameObject.transform.localScale = tmp_scale;
     }
 
-    void MidAirMovement()
+    /*
+     * sets Jump flag to signal received Jump Instruction on Update
+     */
+    void ReceiveJumpPressInput()
     {
-        
-        //If the jump key is pressed  AND
-        //the player is on the ground or within the coyote time window...
-        if (componentMainCharacterState.isOnGround || componentMainCharacterState.coyoteTime > Time.time )
+        receivedJumpFlag = true;
+        holdJumpButton = true;
+    }
+
+    /*
+     * Removes Jump is beeing hold Flag
+     */
+    void ReceiveJumpCancelInput()
+    {
+        holdJumpButton = false;
+    }
+
+    /*
+     * Handels Jump Instructions
+     */
+    void HandelJumpInstruction()
+    {
+        if (isJumpPossible())
         {
-            //remove y-velocity, so that one can not use edges to boost
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
-
-            //...The player is no longer on the groud and is jumping...
-            componentMainCharacterState.isOnGround = false;
-
-            //...add the jump force to the rigidbody...
-            rigidBody.AddForce(new Vector2(0f, currentJumpForce), ForceMode2D.Impulse);
-
+            if (componentMainCharacterState.hasJump && (componentMainCharacterState.isOnGround || Time.time < componentMainCharacterState.coyoteTime))
+            {
+                Jump();
+                skipNextFrame = true;
+                componentMainCharacterState.isOnGround = false;
+                componentMainCharacterState.hasJump = false;
+            }
+            else
+            {
+                if ((componentMainCharacterAction.hasBat && componentMainCharacterAction.hasDoubleJump) || componentMainCharacterAction.isBat)
+                {
+                    Jump();
+                    componentMainCharacterAction.hasDoubleJump = false;
+                }
+            }
         }
-        else if(componentMainCharacterAction.hasBat && componentMainCharacterAction.hasDoubleJump || componentMainCharacterAction.isBat)
-        {
-            //remove y-velocity, so that one can not use edges to boost
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+    }
 
-            //now we are double jumping
-            componentMainCharacterAction.hasDoubleJump = false;
+    /*
+     * Applies force to the character to actually jump
+     */
+    void Jump()
+    {
+        //remove y-velocity, so that one can not use edges to boost
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
 
-            //...add the jump force to the rigidbody...
-            rigidBody.AddForce(new Vector2(0f, currentJumpForce), ForceMode2D.Impulse);
-        }
-        //If player is falling to fast, reduce the Y velocity to the max
-        if (rigidBody.velocity.y < componentMainCharacterState.maxFallSpeed)
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, componentMainCharacterState.maxFallSpeed);
+        componentMainCharacterState.isOnGround = false;
+        rigidBody.AddForce(new Vector2(0f, componentMainCharacterState.currentJumpForce), ForceMode2D.Impulse);
+    }
+
+    /*
+     * Caps falling speed If player is falling to fast, reduce the Y velocity to the max
+     */
+    void CapFallingSpeed()
+    {
+        if (rigidBody.velocity.y < ComponentMainCharacterState.maxFallSpeed)
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, ComponentMainCharacterState.maxFallSpeed);
+    }
+
+    /*
+     * TODO
+     * Checks all possible states of components to determine whether Jump is currently possible
+     * e.g. no jump during attack, no jump during tentacle attack, etc.
+     */
+    bool isJumpPossible()
+    {
+        return true;
     }
 }
