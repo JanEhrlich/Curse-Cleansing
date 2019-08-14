@@ -85,6 +85,7 @@ public class SystemInput : MonoBehaviour
 
         CheckForControllerChange();
 
+        #region Debugging
         //Uncomment for debugging
         /*
         componentInput.AddAttackButtonPressFunction(() => Debug.Log("Attack Pressed"));
@@ -109,6 +110,7 @@ public class SystemInput : MonoBehaviour
         componentInput.AddQuickTransformGhostButtonCancelFunction(() => Debug.Log("ghost Cancel"));
         componentInput.AddQuickTransformWolfButtonPressFunction(() => Debug.Log("wolf Pressed"));
         componentInput.AddQuickTransformWolfButtonCancelFunction(() => Debug.Log("wolf Cancel"));*/
+        #endregion
     }
 
     public void Tick()

@@ -19,8 +19,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
 {
     public bool drawDebugRaycasts = true;	//Should the environment checks be visualized
 
-    //handles:
-    public GameObject mainCharacterGameObject;
+    //handles
+    GameObject mainCharacterGameObject;
     Rigidbody2D rigidBody;
     SystemGameMaster systemGameMaster;
     ComponentInput componentInput;
@@ -38,10 +38,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
     Vector2 movement;
     Vector3 tmp_scale;
     float tmp_xVelocity;
+    RaycastHit2D leftCheck;
+    RaycastHit2D rightCheck;
 
     public void Init(SystemGameMaster gameMaster)
     {
         systemGameMaster = gameMaster;
+        mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
@@ -111,8 +114,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
     private void GroundedCheck()
     {
         //Cast rays for the left and right foot
-        RaycastHit2D leftCheck = RaycastForGround(new Vector2(-componentMainCharacterState.footOffset, 0f), Vector2.down, ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
-        RaycastHit2D rightCheck = RaycastForGround(new Vector2(componentMainCharacterState.footOffset, 0f), Vector2.down, ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask);
+        leftCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position, 
+            new Vector2(-componentMainCharacterState.footOffset, 0f), Vector2.down, 
+            ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask, drawDebugRaycasts);
+
+        rightCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
+            new Vector2(componentMainCharacterState.footOffset, 0f), Vector2.down, 
+            ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask, drawDebugRaycasts);
 
         //If either ray hit the ground, the player is on the ground and doubleJump gets enabled
         componentMainCharacterState.isOnGround = leftCheck || rightCheck;
@@ -139,24 +147,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //If the player is on the ground, extend the coyote time window
         if (componentMainCharacterState.isOnGround)
             componentMainCharacterState.coyoteTime = Time.time + ComponentMainCharacterState.coyoteDuration;
-    }
-
-    /*
-    * Sends down a Raycast from the main character with a given offset.
-    * If it hits any layer of the layermaks within the given length, then it will return true
-    */
-    private RaycastHit2D RaycastForGround(Vector2 offset, Vector2 rayDirection, float length, int layerMask)
-    {
-        Vector2 pos = mainCharacterGameObject.transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layerMask);
-
-        if (drawDebugRaycasts)
-        {
-            Color color = hit ? Color.red : Color.green;
-            Debug.DrawRay(pos + offset, rayDirection * length, color);
-        }
-
-        return hit;
     }
 
     /*

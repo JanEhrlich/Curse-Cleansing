@@ -310,6 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05869bcf8deb6f942815f8d3e07b5efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainmainCharacterGameObject: {fileID: 1126654651}
 --- !u!4 &437925224
 Transform:
   m_ObjectHideFlags: 0
@@ -337,7 +338,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
-  mainCharacterGameObject: {fileID: 1126654651}
 --- !u!114 &437925226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,7 +351,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
-  mainCharacterGameObject: {fileID: 1126654651}
 --- !u!1 &445147433
 GameObject:
   m_ObjectHideFlags: 0

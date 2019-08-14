@@ -17,11 +17,10 @@ using UnityEngine;
 
 public class SystemMainCharacterMovementTransformed : MonoBehaviour
 {
-
     public bool drawDebugRaycasts = true;	//Should the environment checks be visualized
 
-    //handles:
-    public GameObject mainCharacterGameObject;
+    //handles
+    GameObject mainCharacterGameObject;
     Rigidbody2D rigidBody;
     BoxCollider2D collider2d;
     SystemGameMaster systemGameMaster;
@@ -30,11 +29,15 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     ComponentMainCharacterState componentMainCharacterState;
     Animator anim;
 
-    Vector2 movement;  //Tmp Variables used for Calculations
+    //Tmp Variables used for Calculations
+    Vector2 movement;
+    RaycastHit2D headCheck;
+    RaycastHit2D footCheck;
 
     public void Init(SystemGameMaster gameMaster)
     {
         systemGameMaster = gameMaster;
+        mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
         collider2d = mainCharacterGameObject.GetComponentInChildren<BoxCollider2D>();
         componentInput = systemGameMaster.ComponentInput;
@@ -45,10 +48,31 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         InitPlayerStuff();
         
         //add button functions
-        componentInput.AddQuickTransformKrakenButtonPressFunction(transformToKraken);
-        componentInput.AddQuickTransformBatButtonPressFunction(transformToBat);
+        componentInput.AddQuickTransformKrakenButtonPressFunction(TransformToKraken);
+        componentInput.AddQuickTransformBatButtonPressFunction(TransformToBat);
     }
 
+    public void Tick()
+    {
+
+    }
+
+    public void FixedTick()
+    {
+        SpaceCheck();
+
+        if (componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
+            TransformToNormalCaracter();
+
+        //check that the bat is not so high, that it touches the ceiling
+        //TODO can be buggy, dont know if this should work
+        if (componentMainCharacterAction.isBat && componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isFootBlocked)
+            TransformToNormalCaracter();
+    }
+
+    /*
+     * Sets Size Variables of the MainCharacter Objects in the componentMainCharacterAction and componentMainCharacterState
+     */
     public void InitPlayerStuff()
     {
         componentMainCharacterState.playerHeight = collider2d.size.y;
@@ -58,120 +82,116 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentMainCharacterAction.colliderStandSize = collider2d.size;
         componentMainCharacterAction.colliderStandOffset = collider2d.offset;
         //kraken size
-        componentMainCharacterAction.colliderKrakenSize = new Vector2(componentMainCharacterAction.colliderStandSize.x, componentMainCharacterAction.colliderStandSize.y * componentMainCharacterAction.krakenSizePercentage);
-        componentMainCharacterAction.colliderKrakenOffset = new Vector2(componentMainCharacterAction.colliderStandOffset.x, componentMainCharacterAction.colliderStandOffset.y * componentMainCharacterAction.krakenSizePercentage);
+        componentMainCharacterAction.colliderKrakenSize = new Vector2(componentMainCharacterAction.colliderStandSize.x, componentMainCharacterAction.colliderStandSize.y * ComponentMainCharacterAction.krakenSizePercentage);
+        componentMainCharacterAction.colliderKrakenOffset = new Vector2(componentMainCharacterAction.colliderStandOffset.x, componentMainCharacterAction.colliderStandOffset.y * ComponentMainCharacterAction.krakenSizePercentage);
         //bat size
-        componentMainCharacterAction.colliderBatSize = new Vector2(componentMainCharacterAction.colliderStandSize.x, componentMainCharacterAction.colliderStandSize.y * componentMainCharacterAction.batSizePercentage);
-        componentMainCharacterAction.colliderBatOffset = new Vector2(componentMainCharacterAction.colliderStandOffset.x, componentMainCharacterAction.colliderStandOffset.y * componentMainCharacterAction.batSizePercentage);
+        componentMainCharacterAction.colliderBatSize = new Vector2(componentMainCharacterAction.colliderStandSize.x, componentMainCharacterAction.colliderStandSize.y * ComponentMainCharacterAction.batSizePercentage);
+        componentMainCharacterAction.colliderBatOffset = new Vector2(componentMainCharacterAction.colliderStandOffset.x, componentMainCharacterAction.colliderStandOffset.y * ComponentMainCharacterAction.batSizePercentage);
     }
 
-    private void transformToKraken()
+    /*
+     * Setting all Variables and changes when fully transform into a curse form
+     */
+    #region TransformationsIntoAllForms
+
+    private void TransformToKraken()
     {
         //do not transform if we do not have the kraken or if we already are a creature
         if (!componentMainCharacterAction.hasKraken || IsAlreadyTransformed()) return;
-        componentMainCharacterAction.timeUnTillNormal = Time.time + componentMainCharacterAction.durationTransformationKrake;
 
-        //set kraken size and status
+        //Handels all Variables
+        SetTransformationVariables(ComponentMainCharacterAction.durationTransformationKrake,
+            ComponentMainCharacterAction.krakenSpeedPercentage, ComponentMainCharacterAction.krakenJumpPercentage, 
+            componentMainCharacterAction.colliderKrakenSize, componentMainCharacterAction.colliderKrakenOffset,true);
+
         componentMainCharacterAction.isKraken = true;
-        componentMainCharacterState.speedMultiplier = componentMainCharacterAction.krakenSpeedPercentage;
-        componentMainCharacterState.jumpForceMultiplier = componentMainCharacterAction.krakenJumpPercentage;
-        collider2d.size = componentMainCharacterAction.colliderKrakenSize;
-        collider2d.offset = componentMainCharacterAction.colliderKrakenOffset;
-        anim.SetBool("isCrouching",true);
     }
 
-    private void transformToBat()
+    private void TransformToBat()
     {
         //do not transform if we do not have the bat or if we already are an creature
         if (!componentMainCharacterAction.hasBat || IsAlreadyTransformed()) return;
 
-        componentMainCharacterAction.timeUnTillNormal = Time.time + componentMainCharacterAction.durationTransformationBat;
+        //Handels all Variables
+        SetTransformationVariables(ComponentMainCharacterAction.durationTransformationBat,
+            ComponentMainCharacterAction.batSpeedPercentage, ComponentMainCharacterAction.batJumpPercentage,
+            componentMainCharacterAction.colliderBatSize, componentMainCharacterAction.colliderBatOffset,true);
 
-        //set kraken size and status
         componentMainCharacterAction.isBat = true;
-        componentMainCharacterState.speedMultiplier = componentMainCharacterAction.batSpeedPercentage;
-        componentMainCharacterState.jumpForceMultiplier = componentMainCharacterAction.batJumpPercentage;
-        rigidBody.gravityScale = componentMainCharacterState.normalGravity * componentMainCharacterAction.gravityPercentageHALFBat;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x,rigidBody.velocity.y * componentMainCharacterAction.gravityPercentageBat);
-        collider2d.size = componentMainCharacterAction.colliderBatSize;
-        collider2d.offset = componentMainCharacterAction.colliderBatOffset;
-        anim.SetBool("isCrouching", true);
+
+        //@Jannis die nächste Zeile verstehe ich nicht. Warum halfBat Values benutzen wenn es hier um die volle Transformation geht?
+        rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageHALFBat;
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.y * ComponentMainCharacterAction.gravityPercentageBat);
     }
 
-    private void transformToNormalCaracter()
+    private void TransformToNormalCaracter()
     {
+
+        //Handels all Variables
+        SetTransformationVariables(0, 1, 1, componentMainCharacterAction.colliderStandSize, componentMainCharacterAction.colliderStandOffset,false);
+
         //reset transformation status
-        componentMainCharacterAction.isKraken =  false;
+        componentMainCharacterAction.isKraken = false;
         componentMainCharacterAction.isGhost = false;
         componentMainCharacterAction.isBat = false;
         componentMainCharacterAction.isWolf = false;
 
-        //set normal size and status
-        componentMainCharacterAction.timeUnTillNormal = 0;
-        componentMainCharacterState.speedMultiplier = 1f;
-        componentMainCharacterState.jumpForceMultiplier = 1f;
+        //set normal gravity
         rigidBody.gravityScale = componentMainCharacterState.normalGravity;
-        collider2d.size = componentMainCharacterAction.colliderStandSize;
-        collider2d.offset = componentMainCharacterAction.colliderStandOffset;
-        anim.SetBool("isCrouching", false);
-
     }
+
+    #endregion
+
+    /*
+     * Sets the size, speed, duration and other information depending on the Form
+     */
+    private void SetTransformationVariables(float duration, float speedMultiplier, float jumpForceMultiplier, Vector2 size, Vector2 offset, bool isCrouching)
+    {
+        componentMainCharacterAction.timeUnTillNormal = Time.time + duration;
+
+        //set form size and statuses
+        componentMainCharacterState.speedMultiplier = speedMultiplier;
+        componentMainCharacterState.jumpForceMultiplier = jumpForceMultiplier;
+        collider2d.size = size;
+        collider2d.offset = offset;
+        anim.SetBool("isCrouching", isCrouching);
+    }
+
     private bool IsAlreadyTransformed()
     {
         return componentMainCharacterAction.isKraken || componentMainCharacterAction.isWolf || componentMainCharacterAction.isGhost || componentMainCharacterAction.isBat;
     }
-    public void Tick()
+
+    /*
+     * Check if there is enough room to stand up/transform back
+     */
+    #region FootAndHeadSpaceChecks
+
+    void SpaceCheck()
     {
-        
+        HeadSpaceCheck();
+        FootSpaceCheck();
     }
 
-    public void FixedTick()
+    /*
+     * Cast a ray to check above the player's head if there is enough room to stand up/transform back
+     */
+    void HeadSpaceCheck()
     {
-        PhysicsCheck();
-
-        if (componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
-            transformToNormalCaracter();
-        //check that the bat is not so high, that it touches the ceiling
-        //TODO can be buggy, dont know if this should work
-        if (componentMainCharacterAction.isBat && componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isFootBlocked)
-            transformToNormalCaracter();
+        headCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
+            new Vector2(0f, collider2d.size.y / 2), Vector2.up, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
+        componentMainCharacterAction.isHeadBlocked = headCheck;
     }
 
-    void PhysicsCheck()
+    /*
+     * Cast a ray to check below the player's feet if there is enough room to stand up/transform back
+     */
+    void FootSpaceCheck()
     {
-       componentMainCharacterAction.isHeadBlocked = false;
-       componentMainCharacterAction.isFootBlocked = false;
-
-        //Cast the ray to check above the player's head
-        RaycastHit2D headCheck = Raycast(new Vector2(0f, collider2d.size.y/2), Vector2.up, componentMainCharacterAction.headClearance, componentMainCharacterState.layerMask);
-        //Cast the ray to check below the player's feet
-        RaycastHit2D footCheck = Raycast(Vector2.zero, Vector2.down, componentMainCharacterAction.headClearance, componentMainCharacterState.layerMask);
-
-        //If that ray hits, the player's head is blocked
-        if (headCheck)
-            componentMainCharacterAction.isHeadBlocked = true;
-        if (footCheck)
-            componentMainCharacterAction.isFootBlocked = true;
+        footCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
+            Vector2.zero, Vector2.down, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
+        componentMainCharacterAction.isFootBlocked = footCheck;
     }
 
-    private RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, int layerMask)
-    {
-        //Record the player's position
-        Vector2 pos = mainCharacterGameObject.transform.position;
-
-        //Send out the desired raycasr and record the result
-        RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, layerMask);
-
-        //If we want to show debug raycasts in the scene...
-        if (drawDebugRaycasts)
-        {
-            //...determine the color based on if the raycast hit...
-            Color color = hit ? Color.red : Color.green;
-            //...and draw the ray in the scene view
-            Debug.DrawRay(pos + offset, rayDirection * length, color);
-        }
-
-        //Return the results of the raycast
-        return hit;
-    }
+    #endregion
 }

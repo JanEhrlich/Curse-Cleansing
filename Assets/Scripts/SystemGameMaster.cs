@@ -14,6 +14,7 @@ using UnityEngine;
 
 public class SystemGameMaster : MonoBehaviour
 {
+    public GameObject mainmainCharacterGameObject;
     public ComponentCameraState ComponentCameraState { get; } = new ComponentCameraState();
     public ComponentCutscene ComponentCutscene { get; } = new ComponentCutscene();
     public ComponentEnemyAction ComponentEnemyAction { get; } = new ComponentEnemyAction();
@@ -25,7 +26,7 @@ public class SystemGameMaster : MonoBehaviour
     public ComponentProgression ComponentProgression { get; } = new ComponentProgression();
     public ComponentScene ComponentScene { get; } = new ComponentScene();
     public ComponentSpawn ComponentSpawn { get; } = new ComponentSpawn();
-
+    public SystemUtility SystemUtility { get; } = new SystemUtility();
 
     private SystemInput systemInput;
     private SystemMainCharacterMovement systemMainCharacterMovement;
@@ -65,5 +66,8 @@ public class SystemGameMaster : MonoBehaviour
         systemMainCharacterMovementTransformed.Init(this);
     }
 
-
+    public GameObject getMainCharacterGameobject()
+    {
+        return mainmainCharacterGameObject;
+    }
 }

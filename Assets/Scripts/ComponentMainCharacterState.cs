@@ -25,13 +25,14 @@ public class ComponentMainCharacterState
      * Variables which will be set on Startup and never changed later
      */
     #region SetOnInitVariables
-    public float footOffset = .4f;                  //X Offset of feet raycast
+    public float footOffset = .4f;                  //X Offset of feet raycast (TODO: calculate dynamically)
     public float normalGravity;                     //normal gravity of the World
+    public float playerHeight;                      //Height of the player
     #endregion
 
 
     /*
-     * Dynamic Variables which will change very often depending on the game state and player actions
+     * Dynamic Variables which will change very often depending on the game state and player's actions
      */
     #region DynamictVariables
     public float speedMultiplier = 1f;              //adjusts speed based on form and state (normal,kraken,bat,...)
@@ -40,10 +41,9 @@ public class ComponentMainCharacterState
     public float currentSpeed;                      //current speed of the Player
     public float currentJumpForce;                  //current jumpForce of the Player
 
-    public bool hasJump;                         //Can the player intentionally jump once. Used to prevent edge case "doubleJump" during coyoteTime
+    public bool hasJump;                            //Can the player intentionally jump once. Used to prevent edge case "doubleJump" during coyoteTime
     public bool isOnGround;                         //Is the player on the ground?
     public float coyoteTime;                        //Variable to hold coyote duration
-    public float playerHeight;                      //Height of the player
 
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction player is facing
