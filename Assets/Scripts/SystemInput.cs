@@ -26,7 +26,8 @@ public class SystemInput : MonoBehaviour
     SystemGameMaster systemGameMaster;
 
     //Variables Used to to identify the Type of the connected Controller
-    int fingerprintXbox = 33;
+    int fingerprintXboxOne = 33;
+    int fingerprintXbox360Wireless = 51;
     int fingerptintSwitchPro = 16;
     int fingerprintOfLastState = -1;
     string[] controllerNames;
@@ -520,7 +521,7 @@ public class SystemInput : MonoBehaviour
     {
         for (int i = 0; i < controllerNames.Length; i++)
         {
-            if (controllerNames[i].Length != fingerprintXbox && controllerNames[i].Length != fingerptintSwitchPro)
+            if (controllerNames[i].Length != fingerprintXboxOne && controllerNames[i].Length != fingerptintSwitchPro)
             {
                 componentInput.setControllerTypeToNone();
                 componentInput.setConnectedStatus(false);
@@ -530,10 +531,10 @@ public class SystemInput : MonoBehaviour
             }
             else
             {               
-                if (controllerNames[i].Length == fingerprintXbox)
+                if (controllerNames[i].Length == fingerprintXboxOne || controllerNames[i].Length == fingerprintXbox360Wireless)
                 {
                     componentInput.setControllerTypeToXbox();
-                    fingerprintOfLastState = fingerprintXbox;
+                    fingerprintOfLastState = controllerNames[i].Length;
                     //Debug.Log("XBOX Controller connected || Slot: " + i + " of " + (controllerNames.Length - 1) + "  ||  String: " + controllerNames[i]);
                 }
 
