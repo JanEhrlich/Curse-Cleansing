@@ -27,7 +27,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     ComponentInput componentInput;
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
-    Animator anim;
+    //Animator anim;
 
     //Tmp Variables used for Calculations
     Vector2 movement;
@@ -43,7 +43,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
-        anim = mainCharacterGameObject.GetComponent<Animator>();
+        //anim = mainCharacterGameObject.GetComponent<Animator>();
         
         InitPlayerStuff();
         
@@ -154,7 +154,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentMainCharacterState.jumpForceMultiplier = jumpForceMultiplier;
         collider2d.size = size;
         collider2d.offset = offset;
-        anim.SetBool("isCrouching", isCrouching);
+        //anim.SetBool("isCrouching", isCrouching);
     }
 
     private bool IsAlreadyTransformed()
@@ -188,7 +188,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
      */
     void FootSpaceCheck()
     {
-        footCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
+        footCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.49F * componentMainCharacterState.playerHeight,
             Vector2.zero, Vector2.down, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
         componentMainCharacterAction.isFootBlocked = footCheck;
     }

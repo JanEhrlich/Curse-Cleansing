@@ -70,6 +70,9 @@ public class ComponentMainCharacterAction
     public bool isFootBlocked;                              //can the player transform back?
     public bool hasDoubleJump = true;                       //Is the player's double jump available
 
+    public bool batFlapImpulse = false;                     //Variable will be set to true for one Frame, to trigger bat Flap Animation
+    public bool batFlapDoubleJumpImpulse = false;           //Variable will be set to true for one Frame, to trigger bat Flap Animation in Double Jump
+
     public float timeUnTillNormal = 0;                      //Counter how long it takes until main character transforms back 
     #endregion
 }

@@ -31,6 +31,7 @@ public class SystemGameMaster : MonoBehaviour
     private SystemInput systemInput;
     private SystemMainCharacterMovement systemMainCharacterMovement;
     private SystemMainCharacterMovementTransformed systemMainCharacterMovementTransformed;
+    private SystemMainCharacterAnimation systemMainCharacterAnimation;
 
     void Start()
     {
@@ -41,6 +42,7 @@ public class SystemGameMaster : MonoBehaviour
     void Update()
     {
         systemInput.Tick();
+        systemMainCharacterAnimation.Tick();
     }
 
     void FixedUpdate()
@@ -64,6 +66,9 @@ public class SystemGameMaster : MonoBehaviour
 
         systemMainCharacterMovementTransformed = GetComponent<SystemMainCharacterMovementTransformed>();
         systemMainCharacterMovementTransformed.Init(this);
+
+        systemMainCharacterAnimation = GetComponent<SystemMainCharacterAnimation>();
+        systemMainCharacterAnimation.Init(this);
     }
 
     public GameObject getMainCharacterGameobject()

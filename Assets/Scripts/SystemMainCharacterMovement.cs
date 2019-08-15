@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,9 +47,12 @@ public class SystemMainCharacterMovement : MonoBehaviour
         systemGameMaster = gameMaster;
         mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
+
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
+
+        //Sets Layermask of mainCharacter
         componentMainCharacterState.layerMask = TransformToLayerMask(mainCharacterGameObject.layer);
 
         //Record the original x scale of the player
@@ -66,8 +70,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     public void FixedTick()
     {
-        UpdatedSpeedAndJumpForce();
+        ResetImpulses();
 
+        UpdatedSpeedAndJumpForce();
 
         if (skipNextFrame)
         {
@@ -114,12 +119,12 @@ public class SystemMainCharacterMovement : MonoBehaviour
     private void GroundedCheck()
     {
         //Cast rays for the left and right foot
-        leftCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position, 
-            new Vector2(-componentMainCharacterState.footOffset, 0f), Vector2.down, 
+        leftCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.49F * componentMainCharacterState.playerHeight, 
+            new Vector2(-ComponentMainCharacterState.footOffsetLeft, 0f), Vector2.down, 
             ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask, drawDebugRaycasts);
 
-        rightCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
-            new Vector2(componentMainCharacterState.footOffset, 0f), Vector2.down, 
+        rightCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.49F * componentMainCharacterState.playerHeight,
+            new Vector2(ComponentMainCharacterState.footOffsetRight, 0f), Vector2.down, 
             ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask, drawDebugRaycasts);
 
         //If either ray hit the ground, the player is on the ground and doubleJump gets enabled
@@ -139,6 +144,10 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         tmp_xVelocity = componentMainCharacterState.currentSpeed * componentInput.getCurrentHorizontalJoystickPosition();
         rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+
+        //Tracking of some State
+        componentMainCharacterState.currentVelocity = rigidBody.velocity;
+        componentMainCharacterState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
 
         //If the sign of the velocity and direction don't match, flip the character
         if (tmp_xVelocity * componentMainCharacterState.direction < 0f)
@@ -199,7 +208,15 @@ public class SystemMainCharacterMovement : MonoBehaviour
                 if ((componentMainCharacterAction.hasBat && componentMainCharacterAction.hasDoubleJump) || componentMainCharacterAction.isBat)
                 {
                     Jump();
-                    componentMainCharacterAction.hasDoubleJump = false;
+                    if (componentMainCharacterAction.isBat)
+                    {
+                        componentMainCharacterAction.batFlapImpulse = true;
+                    }
+                    else
+                    {
+                        componentMainCharacterAction.hasDoubleJump = false;
+                        componentMainCharacterAction.batFlapDoubleJumpImpulse = true;
+                    }
                 }
             }
         }
@@ -234,5 +251,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
     bool isJumpPossible()
     {
         return true;
+    }
+
+    /*
+     * Resets Variables in the Component which only need to be set fro one Frame to trigger other events like Animations
+     */
+    private void ResetImpulses()
+    {
+        componentMainCharacterAction.batFlapImpulse = false;
+        componentMainCharacterAction.batFlapDoubleJumpImpulse = false;
     }
 }

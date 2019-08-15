@@ -18,6 +18,9 @@ public class ComponentMainCharacterState
 
     public static float jumpForce = 12f;            //Initial force of jump
     public static float groundDistance = .2f;       //Distance from player to ground which is considered as grounded
+
+    public static float footOffsetLeft = .47f;           //X Offset of left foot raycast
+    public static float footOffsetRight = .3f;           //X Offset of right foot raycast
     #endregion
 
 
@@ -25,7 +28,6 @@ public class ComponentMainCharacterState
      * Variables which will be set on Startup and never changed later
      */
     #region SetOnInitVariables
-    public float footOffset = .4f;                  //X Offset of feet raycast (TODO: calculate dynamically)
     public float normalGravity;                     //normal gravity of the World
     public float playerHeight;                      //Height of the player
     #endregion
@@ -40,6 +42,9 @@ public class ComponentMainCharacterState
 
     public float currentSpeed;                      //current speed of the Player
     public float currentJumpForce;                  //current jumpForce of the Player
+
+    public bool isMoving;                           //Is the player currently moving horizontally or vertically
+    public Vector2 currentVelocity;                   //current velocity of the Player's rigidbody
 
     public bool hasJump;                            //Can the player intentionally jump once. Used to prevent edge case "doubleJump" during coyoteTime
     public bool isOnGround;                         //Is the player on the ground?
