@@ -29,7 +29,6 @@ public class ComponentMainCharacterState
      */
     #region SetOnInitVariables
     public float normalGravity;                     //normal gravity of the World
-    public float playerHeight;                      //Height of the player
     #endregion
 
 
@@ -37,6 +36,8 @@ public class ComponentMainCharacterState
      * Dynamic Variables which will change very often depending on the game state and player's actions
      */
     #region DynamictVariables
+    public float playerHeight;                      //Current Height of the player. May change on Transformation
+
     public float speedMultiplier = 1f;              //adjusts speed based on form and state (normal,kraken,bat,...)
     public float jumpForceMultiplier = 1f;          //adjusts jump height based on form and state (normal,kraken,bat,...)
 

@@ -202,6 +202,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
                 skipNextFrame = true;
                 componentMainCharacterState.isOnGround = false;
                 componentMainCharacterState.hasJump = false;
+
+                if (componentMainCharacterAction.isBat)
+                {
+                    componentMainCharacterAction.batFlapImpulse = true;
+                }               
             }
             else
             {

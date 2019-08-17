@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,18 +25,19 @@ public class SystemMainCharacterAnimation : MonoBehaviour
     #region AnimatorParameterStrings
     string isIdeling = "isIdeling";
     string isRunning = "isRunning";
-    string isJumping = "isJumping";
+    string isAirborn = "isAirborn";
     string isAttacking = "isAttacking";
     string isUsingKrakenSkill = "isUsingKrakenSkill";
     string isUsingGhostSkill = "isUsingGhostSkill";
     string isUsingBatDoubleJump = "isUsingBatDoubleJump";
     string isUsingBatSkill = "isUsingBatSkill";
-    string isBatIdle = "isBatIdle";
+    string isBat = "isBat";
     string isBatFlapping = "isBatFlapping";
-    string isKrakenIdle = "isKrakenIdle";
-    string isWolfIdle = "isWolfIdle";
+    string isKraken = "isKraken";
+    string isWolf = "isWolf";
     string isWolfRunning = "isWolfRunning";
     string isWolfDamageTaken = "isWolfDamageTaken";
+    string isTransformed = "isTransformed";
     #endregion
 
     public void Init(SystemGameMaster gameMaster)
@@ -51,14 +53,19 @@ public class SystemMainCharacterAnimation : MonoBehaviour
 
     public void Tick()
     {
+        /*
+         * Further TODOS:
+         * -Check Falling and Rising state in Airborn state depending on physical movement direction (up or down)
+         */
         #region Finished
         anim.SetBool(isIdeling, checkIdel());
         anim.SetBool(isRunning, checkRunning());
-        anim.SetBool(isJumping, checkJumping());
+        anim.SetBool(isAirborn, checkAirborn());
         anim.SetBool(isUsingBatDoubleJump, checkUsingBatDoubleJump());
-        anim.SetBool(isBatIdle, checkBatIdle());
+        anim.SetBool(isBat, checkBat());
         anim.SetBool(isBatFlapping, checkBatFlapping());
-        anim.SetBool(isKrakenIdle, checkKrakenIdle());
+        anim.SetBool(isKraken, checkKraken());
+        anim.SetBool(isTransformed, checkTransformed());
         #endregion
 
         //TODO
@@ -70,7 +77,7 @@ public class SystemMainCharacterAnimation : MonoBehaviour
 
         #region TODO_MAYHAVE
         anim.SetBool(isUsingGhostSkill, checkUsingGhostSkill());
-        anim.SetBool(isWolfIdle, checkWolfIdle());
+        anim.SetBool(isWolf, checkWolf());
         anim.SetBool(isWolfRunning, checkWolfRunning());
         anim.SetBool(isWolfDamageTaken, checkWolfDamageTaken());
         #endregion
@@ -86,7 +93,7 @@ public class SystemMainCharacterAnimation : MonoBehaviour
         return states.isOnGround && states.isMoving;
     }
 
-    private bool checkJumping()
+    private bool checkAirborn()
     {
         return !states.isOnGround && states.isMoving;
     }
@@ -116,7 +123,7 @@ public class SystemMainCharacterAnimation : MonoBehaviour
         return false;
     }
 
-    private bool checkBatIdle()
+    private bool checkBat()
     {
         return actions.isBat && !actions.batFlapImpulse;
     }
@@ -126,12 +133,12 @@ public class SystemMainCharacterAnimation : MonoBehaviour
         return actions.isBat && actions.batFlapImpulse;
     }
 
-    private bool checkKrakenIdle()
+    private bool checkKraken()
     {
         return actions.isKraken;
     }
 
-    private bool checkWolfIdle()
+    private bool checkWolf()
     {
         return false;
     }
@@ -144,5 +151,10 @@ public class SystemMainCharacterAnimation : MonoBehaviour
     private bool checkWolfDamageTaken()
     {
         return false;
+    }
+
+    private bool checkTransformed()
+    {
+        return checkBat() || checkKraken() || checkWolf();
     }
 }      
