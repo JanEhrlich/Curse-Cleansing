@@ -11,13 +11,40 @@ using UnityEngine;
  */
 public class SystemEnemy : MonoBehaviour
 {
-    void Tick()
+    //handles
+    GameObject enemyTest;
+    GameObject mainCharacterGameObject;
+    Rigidbody2D rigidBody;
+    BoxCollider2D collider2d;
+    SystemGameMaster systemGameMaster;
+    ComponentEnemyAction componentEnemyAction;
+    ComponentEnemyState componentEnemyState;
+    public void Init(SystemGameMaster gameMaster)
+    {
+        systemGameMaster = gameMaster;
+        enemyTest = systemGameMaster.getEnemyTest();
+        mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
+        componentEnemyState = systemGameMaster.ComponentEnemyState;
+        componentEnemyAction = systemGameMaster.ComponentEnemyAction;
+
+
+        //Sets Layermask of enemy
+        componentEnemyState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(enemyTest.layer);
+
+    }
+    public void Tick()
     {
         
     }
 
-    void FixedTick()
+    public void FixedTick()
     {
         
+    }
+
+    private bool WasHit()
+    {
+
+        return false;
     }
 }

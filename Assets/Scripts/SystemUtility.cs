@@ -33,4 +33,15 @@ public class SystemUtility
         //Return the results of the raycast
         return hit;
     }
+
+
+    /*
+     * Bit shift the index of the given layer to get a bit mask
+     * This would create a layermask with only the given layer index.
+     * We want a layermask with everything except the given layer index. The ~ operator does this, it inverts the bitmask.
+     */
+    public int TransformToLayerMask(int layer)
+    {
+        return ~(1 << layer);
+    }
 }

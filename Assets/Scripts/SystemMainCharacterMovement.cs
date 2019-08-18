@@ -53,7 +53,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
 
         //Sets Layermask of mainCharacter
-        componentMainCharacterState.layerMask = TransformToLayerMask(mainCharacterGameObject.layer);
+        componentMainCharacterState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(mainCharacterGameObject.layer);
 
         //Record the original x scale of the player
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
@@ -92,16 +92,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
 
         CapFallingSpeed();
-    }
-
-    /*
-     * Bit shift the index of the given layer to get a bit mask
-     * This would create a layermask with only the given layer index.
-     * We want a layermask with everything except the given layer index. The ~ operator does this, it inverts the bitmask.
-     */
-    private int TransformToLayerMask(int layer)
-    {
-        return ~(1 << layer);
     }
 
     /*

@@ -12,13 +12,13 @@ public class SystemEnemyClose : SystemEnemy
      *  -Interprete "AI" instructions and 
      *  -Attack Logic
      */
-    void Tick()
+    public void Tick()
     {
         
     }
 
     // Update is called once per frame
-    void FixedTick()
+    public void FixedTick()
     {
         
     }

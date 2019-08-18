@@ -521,7 +521,7 @@ public class SystemInput : MonoBehaviour
     {
         for (int i = 0; i < controllerNames.Length; i++)
         {
-            if (controllerNames[i].Length != fingerprintXboxOne && controllerNames[i].Length != fingerptintSwitchPro)
+            if (controllerNames[i].Length != fingerprintXboxOne && controllerNames[i].Length != fingerptintSwitchPro && controllerNames[i].Length != fingerprintXbox360Wireless)
             {
                 componentInput.setControllerTypeToNone();
                 componentInput.setConnectedStatus(false);

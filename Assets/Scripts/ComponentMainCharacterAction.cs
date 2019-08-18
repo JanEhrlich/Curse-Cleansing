@@ -69,6 +69,7 @@ public class ComponentMainCharacterAction
     public bool isHeadBlocked;                              //can the player transform back?
     public bool isFootBlocked;                              //can the player transform back?
     public bool hasDoubleJump = true;                       //Is the player's double jump available
+    public bool attack = false;                             //reveice attack button
 
     public bool batFlapImpulse = false;                     //Variable will be set to true for one Frame, to trigger bat Flap Animation
     public bool batFlapDoubleJumpImpulse = false;           //Variable will be set to true for one Frame, to trigger bat Flap Animation in Double Jump

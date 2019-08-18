@@ -15,6 +15,8 @@ using UnityEngine;
 public class SystemGameMaster : MonoBehaviour
 {
     public GameObject mainmainCharacterGameObject;
+
+    public GameObject enemyTest;
     public ComponentCameraState ComponentCameraState { get; } = new ComponentCameraState();
     public ComponentCutscene ComponentCutscene { get; } = new ComponentCutscene();
     public ComponentEnemyAction ComponentEnemyAction { get; } = new ComponentEnemyAction();
@@ -32,6 +34,8 @@ public class SystemGameMaster : MonoBehaviour
     private SystemMainCharacterMovement systemMainCharacterMovement;
     private SystemMainCharacterMovementTransformed systemMainCharacterMovementTransformed;
     private SystemMainCharacterAnimation systemMainCharacterAnimation;
+    private SystemEnemy systemEnemy;
+    private SystemMainCharacterAbilities systemMainCharacterAbilities;
 
     void Start()
     {
@@ -49,6 +53,8 @@ public class SystemGameMaster : MonoBehaviour
     {
         systemMainCharacterMovement.FixedTick();
         systemMainCharacterMovementTransformed.FixedTick();
+        systemMainCharacterAbilities.FixedTick();
+        systemEnemy.FixedTick();
     }
 
     private void InitComponents()
@@ -69,10 +75,24 @@ public class SystemGameMaster : MonoBehaviour
 
         systemMainCharacterAnimation = GetComponent<SystemMainCharacterAnimation>();
         systemMainCharacterAnimation.Init(this);
+
+        systemMainCharacterAbilities = GetComponent<SystemMainCharacterAbilities>();
+        systemMainCharacterAbilities.Init(this);
+
+        systemEnemy = GetComponent<SystemEnemy>();
+        systemEnemy.Init(this);
+
+
+        
     }
 
     public GameObject getMainCharacterGameobject()
     {
         return mainmainCharacterGameObject;
+    }
+
+    public GameObject getEnemyTest()
+    {
+        return enemyTest;
     }
 }
