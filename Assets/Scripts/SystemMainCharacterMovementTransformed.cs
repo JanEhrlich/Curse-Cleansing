@@ -154,7 +154,9 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentMainCharacterState.jumpForceMultiplier = jumpForceMultiplier;
         collider2d.size = size;
         collider2d.offset = offset;
-        //anim.SetBool("isCrouching", isCrouching);
+
+        //update playerHeight in ComponentMainCharacterStatus. Used for GroundCheck offset calculations
+        componentMainCharacterState.playerHeight = collider2d.size.y;
     }
 
     private bool IsAlreadyTransformed()
