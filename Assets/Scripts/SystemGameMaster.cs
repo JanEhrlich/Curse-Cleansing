@@ -14,7 +14,7 @@ using UnityEngine;
 
 public class SystemGameMaster : MonoBehaviour
 {
-    public GameObject mainmainCharacterGameObject;
+    public GameObject mainCharacterGameObject;
     //components for every enemy, update list on enemy spawn and enemy destroy
     public List<GameObject> enemys = new List<GameObject>();
     public ComponentCameraState ComponentCameraState { get; } = new ComponentCameraState();
@@ -91,7 +91,7 @@ public class SystemGameMaster : MonoBehaviour
 
     public GameObject getMainCharacterGameobject()
     {
-        return mainmainCharacterGameObject;
+        return mainCharacterGameObject;
     }
 
 }

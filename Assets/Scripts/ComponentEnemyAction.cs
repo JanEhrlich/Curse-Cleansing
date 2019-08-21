@@ -15,6 +15,7 @@ public class ComponentEnemyAction : MonoBehaviour
      * Variables which will be set on Startup and never changed later
      */
     #region SetOnInitVariables
+    public Vector3 attackPositionOffset;
     #endregion
 
 
@@ -23,4 +24,5 @@ public class ComponentEnemyAction : MonoBehaviour
      */
     #region DynamictVariables
     #endregion
+
 }

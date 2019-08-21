@@ -120,8 +120,8 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         componentMainCharacterAction.isBat = true;
 
         //@Jannis die nächste Zeile verstehe ich nicht. Warum halfBat Values benutzen wenn es hier um die volle Transformation geht?
-        rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageHALFBat;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.y * ComponentMainCharacterAction.gravityPercentageBat);
+        rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageBat;
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.y * ComponentMainCharacterAction.gravityPercentageBat/2);
     }
 
     private void TransformToNormalCaracter()

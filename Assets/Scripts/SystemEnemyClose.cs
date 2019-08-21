@@ -16,6 +16,8 @@ public class SystemEnemyClose : SystemEnemy
     float tmp_direction;
     bool leftEdge = false;
     bool rightEdge = false;
+    bool leftWall = false;
+    bool rightWall = false;
 
     /*
      * The Close Combat Enemies. Pirates and holy Order distinction in the ComponentEnemyState
@@ -41,6 +43,8 @@ public class SystemEnemyClose : SystemEnemy
 
         GroundedCheck();
 
+        WallCheck();
+
         SimpleMovement();
     }
 
@@ -55,10 +59,11 @@ public class SystemEnemyClose : SystemEnemy
      */
     private void SimpleMovement()
     {
-        if (leftEdge && !rightEdge || rightEdge && !leftEdge) 
+        if (leftEdge && !rightEdge || rightEdge && !leftEdge || leftWall || rightWall) 
         {
              FlipCharacterDirection();
         }
+
         //TODO fix the minus for componentEnemyState
         tmp_xVelocity = -componentEnemyState.currentSpeed * componentEnemyState.direction;
         rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
@@ -69,6 +74,9 @@ public class SystemEnemyClose : SystemEnemy
         componentEnemyState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
     }
 
+    /*
+     * check if enemy is on the ground use two ray burst, for checking left and right foot
+     */
     private void GroundedCheck()
     {
         //Cast rays for the left and right foot
@@ -92,17 +100,38 @@ public class SystemEnemyClose : SystemEnemy
     }
 
     /*
+     * check if enemy is abount to hit a wall, left or right
+     * TODO buggy, can bug into the wall
+     */
+    private void WallCheck()
+    {
+        //Cast rays for the left and right foot
+        leftCheck = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.down * 0.2F * componentEnemyState.enemyHeight,
+            new Vector2(-ComponentEnemyState.footOffsetLeft, 0f), Vector2.left,
+            ComponentEnemyState.groundDistance * 2, componentEnemyState.layerMask, drawDebugRaycasts);
+
+        rightCheck = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.down * 0.2F * componentEnemyState.enemyHeight,
+            new Vector2(ComponentEnemyState.footOffsetRight, 0f), Vector2.right,
+            ComponentEnemyState.groundDistance * 2, componentEnemyState.layerMask, drawDebugRaycasts);
+
+        leftWall = leftCheck;
+        rightWall = rightCheck;
+
+    }
+
+    /*
      * Flips the dierection of the Gameobject and the State in the Component
      */
     void FlipCharacterDirection()
     {
         //Turn the character by flipping the direction
         componentEnemyState.direction *= -1;
-        //componentEnemyAction.attackPositionOffset.x *= -1;
-       // tmp_scale = transform.localScale;
-       // tmp_scale.x = componentEnemyState.originalXScale * componentEnemyState.direction;
+        //TODO let enemy attack
+        componentEnemyAction.attackPositionOffset.x *= -1;
+        tmp_scale = transform.localScale;
+        tmp_scale.x = componentEnemyState.originalXScale * componentEnemyState.direction;
 
         //Apply the new scale
-        //transform.localScale = tmp_scale;
+        transform.localScale = tmp_scale;
     }
 }

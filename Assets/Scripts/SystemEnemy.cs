@@ -32,6 +32,7 @@ public class SystemEnemy : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         collider2d = GetComponentInChildren<BoxCollider2D>();
         componentEnemyState.enemyHeight = collider2d.size.y;
+        componentEnemyState.originalXScale = transform.localScale.x;
 
         //Sets Layermask of enemy
         componentEnemyState.layerMask = systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy"), true);
