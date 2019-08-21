@@ -15,8 +15,8 @@ using UnityEngine;
 public class SystemGameMaster : MonoBehaviour
 {
     public GameObject mainmainCharacterGameObject;
-
-    public GameObject enemyTest;
+    //components for every enemy, update list on enemy spawn and enemy destroy
+    public List<GameObject> enemys = new List<GameObject>();
     public ComponentCameraState ComponentCameraState { get; } = new ComponentCameraState();
     public ComponentCutscene ComponentCutscene { get; } = new ComponentCutscene();
     public ComponentEnemyAction ComponentEnemyAction { get; } = new ComponentEnemyAction();
@@ -34,8 +34,6 @@ public class SystemGameMaster : MonoBehaviour
     private SystemMainCharacterMovement systemMainCharacterMovement;
     private SystemMainCharacterMovementTransformed systemMainCharacterMovementTransformed;
     private SystemMainCharacterAnimation systemMainCharacterAnimation;
-    private SystemEnemy systemEnemy;
-    private SystemMainCharacterAbilities systemMainCharacterAbilities;
 
     void Start()
     {
@@ -53,8 +51,6 @@ public class SystemGameMaster : MonoBehaviour
     {
         systemMainCharacterMovement.FixedTick();
         systemMainCharacterMovementTransformed.FixedTick();
-        systemMainCharacterAbilities.FixedTick();
-        systemEnemy.FixedTick();
     }
 
     private void InitComponents()
@@ -76,14 +72,23 @@ public class SystemGameMaster : MonoBehaviour
         systemMainCharacterAnimation = GetComponent<SystemMainCharacterAnimation>();
         systemMainCharacterAnimation.Init(this);
 
-        systemMainCharacterAbilities = GetComponent<SystemMainCharacterAbilities>();
-        systemMainCharacterAbilities.Init(this);
+    }
 
-        systemEnemy = GetComponent<SystemEnemy>();
-        systemEnemy.Init(this);
+    /*
+     * Call this function from the enemy to register as new
+     */
+    public void RegisterNewEnemy(GameObject enemy)
+    {
+        enemys.Add(enemy);
+    }
 
-
-        
+    public void EnemyWasKilled(GameObject enemy)
+    {
+        if (!enemys.Remove(enemy))
+        {
+            //TODO what then?
+            Debug.Log("Enemy not in systemGameMaster enemyList");
+        }
     }
 
     public GameObject getMainCharacterGameobject()
@@ -91,8 +96,4 @@ public class SystemGameMaster : MonoBehaviour
         return mainmainCharacterGameObject;
     }
 
-    public GameObject getEnemyTest()
-    {
-        return enemyTest;
-    }
 }

@@ -54,6 +54,9 @@ public class ComponentMainCharacterState
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction player is facing
 
-    public int layerMask;                           //do not hit player with raycast
+    public int layerMask;                           //do not hit player with raycast (everything except the player)
+
+    public int health = 100;
+    public int damage = 20;
     #endregion
 }

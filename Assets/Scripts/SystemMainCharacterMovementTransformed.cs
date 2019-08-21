@@ -61,12 +61,12 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     {
         SpaceCheck();
 
-        if (componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
+        if (componentMainCharacterAction.timeUntillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
             TransformToNormalCaracter();
 
         //check that the bat is not so high, that it touches the ceiling
         //TODO can be buggy, dont know if this should work
-        if (componentMainCharacterAction.isBat && componentMainCharacterAction.timeUnTillNormal < Time.time && !componentMainCharacterAction.isFootBlocked)
+        if (componentMainCharacterAction.isBat && componentMainCharacterAction.timeUntillNormal < Time.time && !componentMainCharacterAction.isFootBlocked)
             TransformToNormalCaracter();
     }
 
@@ -147,7 +147,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
      */
     private void SetTransformationVariables(float duration, float speedMultiplier, float jumpForceMultiplier, Vector2 size, Vector2 offset, bool isCrouching)
     {
-        componentMainCharacterAction.timeUnTillNormal = Time.time + duration;
+        componentMainCharacterAction.timeUntillNormal = Time.time + duration;
 
         //set form size and statuses
         componentMainCharacterState.speedMultiplier = speedMultiplier;

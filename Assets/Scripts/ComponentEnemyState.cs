@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComponentEnemyState
+public class ComponentEnemyState : MonoBehaviour
 {
     /*
      * Hardcoded Variables which shape the games behaviour
@@ -15,6 +15,10 @@ public class ComponentEnemyState
 
     public static float footOffsetLeft = .47f;           //X Offset of left foot raycast
     public static float footOffsetRight = .3f;           //X Offset of right foot raycast
+
+
+    public int health = 100;
+    public int damage = 10;
     #endregion
 
 
@@ -24,6 +28,7 @@ public class ComponentEnemyState
     #region SetOnInitVariables
     public float normalGravity;                     //normal gravity of the World
     public float enemyrHeight;                      //Height of the enemy
+    public int layerMask;                           //do not hit enemy with raycast
     #endregion
 
 
@@ -46,6 +51,16 @@ public class ComponentEnemyState
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction enemy is facing
 
-    public int layerMask;                           //do not hit enemy with raycast
+
     #endregion
+
+    public ComponentEnemyState()
+    {
+
+    }
+    public ComponentEnemyState(int health, int damage)
+    {
+        this.health = health;
+        this.damage = damage;
+    }
 }

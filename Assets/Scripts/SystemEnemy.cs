@@ -11,40 +11,66 @@ using UnityEngine;
  */
 public class SystemEnemy : MonoBehaviour
 {
+    //drag an drop in inspector
+    public GameObject GameLogic;
+
+
     //handles
-    GameObject enemyTest;
     GameObject mainCharacterGameObject;
+    SystemGameMaster systemGameMaster;
     Rigidbody2D rigidBody;
     BoxCollider2D collider2d;
-    SystemGameMaster systemGameMaster;
     ComponentEnemyAction componentEnemyAction;
     ComponentEnemyState componentEnemyState;
-    public void Init(SystemGameMaster gameMaster)
+    void Start()
     {
-        systemGameMaster = gameMaster;
-        enemyTest = systemGameMaster.getEnemyTest();
+        systemGameMaster = GameLogic.GetComponent<SystemGameMaster>();
+        componentEnemyState = GetComponent<ComponentEnemyState>();
+        componentEnemyAction = GetComponent<ComponentEnemyAction>();
         mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
-        componentEnemyState = systemGameMaster.ComponentEnemyState;
-        componentEnemyAction = systemGameMaster.ComponentEnemyAction;
 
 
         //Sets Layermask of enemy
-        componentEnemyState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(enemyTest.layer);
+        componentEnemyState.layerMask = systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy"));
+
+        RegisterEnemy();
 
     }
-    public void Tick()
+
+    void RegisterEnemy()
+    {
+        systemGameMaster.RegisterNewEnemy(gameObject);
+    }
+
+    void Update()
     {
         
     }
 
-    public void FixedTick()
+    void FixedUpdate()
     {
         
     }
 
-    private bool WasHit()
-    {
 
-        return false;
+    /*
+     * let the enemy get hit
+     */
+    public void ReceiveDamage(int damage)
+    {
+        componentEnemyState.health -= damage;
+        Debug.Log("Was hit: " + componentEnemyState.health); //TEST
+        if (componentEnemyState.health <= 0)
+        {
+            HandleDieEnemy();
+        }
+    }
+
+    /*
+     * Handle the death of the enemy
+     */
+    private void HandleDieEnemy()
+    {
+        Destroy(gameObject);
     }
 }

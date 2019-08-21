@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 
 /*
@@ -27,10 +28,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
     ComponentInput componentInput;
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
+    Transform mainCharacterTransform;
 
     //Variable used to process jumping and gliding
     bool receivedJumpFlag;
     bool holdJumpButton;
+
+    //Variable used for attacking
+    bool receivedAttackFlag;
 
     //Used to avoid setting jupedOnce back to false because Jump couldn't build up distance to make GroundedCheck false
     bool skipNextFrame;
@@ -41,19 +46,28 @@ public class SystemMainCharacterMovement : MonoBehaviour
     float tmp_xVelocity;
     RaycastHit2D leftCheck;
     RaycastHit2D rightCheck;
+    float tmp_direction;
+
+    private float attackLength = 2f;
+
+    Collider2D[] enemyToDamageColliders;
+    GameObject[] enemys;
 
     public void Init(SystemGameMaster gameMaster)
     {
         systemGameMaster = gameMaster;
         mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
+        mainCharacterTransform = mainCharacterGameObject.transform;
 
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
 
+        InitPlayerAttackRanges();
+
         //Sets Layermask of mainCharacter
-        componentMainCharacterState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(mainCharacterGameObject.layer);
+        componentMainCharacterState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(mainCharacterGameObject.layer,true);
 
         //Record the original x scale of the player
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
@@ -61,6 +75,18 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //add button functions
         componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
         componentInput.AddJumpButtonCancelFunction(ReceiveJumpCancelInput);
+        componentInput.AddAttackButtonPressFunction(ReceiveAttackPressInput);
+    }
+
+    void InitPlayerAttackRanges()
+    {
+        componentMainCharacterAction.attackBoxNormal = new Vector2(attackLength, attackLength);
+        componentMainCharacterAction.attackBoxKraken = new Vector2(attackLength, attackLength * 2.5f);
+        componentMainCharacterAction.attackBoxBat = new Vector2(attackLength, attackLength * 2f);
+
+        componentMainCharacterAction.attackPositionHorizontalOffset = new Vector3(1f, 0f, 0f);
+        componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionHorizontalOffset;
+        componentMainCharacterAction.attackPositionVerticalOffset = new Vector3(0f, 1f, 0f);
     }
 
     public void Tick()
@@ -83,7 +109,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
             GroundedCheck();
         }
 
+
         HorizontalMovement();
+        VerticalLooking();
 
         if (receivedJumpFlag)
         {
@@ -91,9 +119,16 @@ public class SystemMainCharacterMovement : MonoBehaviour
             receivedJumpFlag = false;
         }
 
+        if (receivedAttackFlag)
+        {
+            HandleAttackInstruction();
+            
+        }
+
         CapFallingSpeed();
     }
 
+    #region handleMoving
     /*
      * Calculates the current speed and jumpForce based on set speedMultiplier and jumpForceMultiplier.
      */
@@ -149,19 +184,41 @@ public class SystemMainCharacterMovement : MonoBehaviour
     }
 
     /*
+     * Handles changing the hitbox if looking up or down
+     */
+    void VerticalLooking()
+    {
+        if (componentInput.getCurrentVerticalJoystickPosition() == 0)
+        {
+            componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionHorizontalOffset;
+            componentMainCharacterAction.attackPositionOffset.x *= componentMainCharacterState.direction;
+            return;
+        }
+
+        componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionVerticalOffset;
+        if (componentInput.getCurrentVerticalJoystickPosition() < 0)
+        {
+            componentMainCharacterAction.attackPositionOffset.y *= -1;
+        }
+    }
+
+    /*
      * Flips the dierection of the Gameobject and the State in the Component
      */
     void FlipCharacterDirection()
     {
         //Turn the character by flipping the direction
         componentMainCharacterState.direction *= -1;
+        componentMainCharacterAction.attackPositionOffset.x *= -1; 
         tmp_scale = mainCharacterGameObject.transform.localScale;
         tmp_scale.x = componentMainCharacterState.originalXScale * componentMainCharacterState.direction;
 
         //Apply the new scale
         mainCharacterGameObject.transform.localScale = tmp_scale;
     }
+    #endregion
 
+    #region handleJump
     /*
      * sets Jump flag to signal received Jump Instruction on Update
      */
@@ -256,4 +313,65 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentMainCharacterAction.batFlapImpulse = false;
         componentMainCharacterAction.batFlapDoubleJumpImpulse = false;
     }
+    #endregion
+
+    #region handleAttack
+    /*
+     * perform the attack
+     */
+    void HandleAttackInstruction()
+    {
+        //do not attack to often
+        if (componentMainCharacterAction.timeUntillNextAttack <= 0)
+        {
+        Debug.Log("DidAttack");
+            //compute overlapping colliders
+            enemyToDamageColliders = Physics2D.OverlapBoxAll(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
+
+            //transform them into GameObjects
+            enemys = enemyToDamageColliders.Select(enemy => enemy.gameObject).ToArray<GameObject>();
+
+            ApplyDamageToAllEnemys(enemys, componentMainCharacterState.damage);
+
+            componentMainCharacterAction.timeUntillNextAttack = componentMainCharacterAction.waitingTime;
+            receivedAttackFlag = false;
+        }
+        else
+        {
+            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
+        }
+    }
+
+    /*
+     * apply the damage to all enemys hit
+     */
+    void ApplyDamageToAllEnemys(GameObject[] enemys, int damage)
+    {
+        foreach (var enemy in enemys)
+        {
+            enemy.GetComponentInParent<SystemEnemy>().ReceiveDamage(damage);
+        }
+    }
+
+    /*
+     * set attack flag, if attacak button is pressed
+     */
+    void ReceiveAttackPressInput()
+    {
+        receivedAttackFlag = true;
+    }
+
+
+
+    /*
+     * just for debug purposes, draws the hitting area of the player
+     */
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.attackBoxNormal.x, componentMainCharacterAction.attackBoxNormal.y, 1f));
+    }
+    #endregion
+
+
 }

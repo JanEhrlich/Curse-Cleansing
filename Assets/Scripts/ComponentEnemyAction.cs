@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComponentEnemyAction
+public class ComponentEnemyAction : MonoBehaviour
 {
     /*
      * Hardcoded Variables which shape the games behaviour
@@ -22,6 +22,5 @@ public class ComponentEnemyAction
      * Dynamic Variables which will change very often depending on the game state and player's actions
      */
     #region DynamictVariables
-    float receiveHit = 0f; //receive this much dmg
     #endregion
 }

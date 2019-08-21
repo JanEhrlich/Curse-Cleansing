@@ -25,7 +25,10 @@ public class ComponentMainCharacterAction
     public static float batSpeedPercentage = 0.7f;         //Speed reduction while being a bat
 
     public static float headClearance = 1.5f;              //Space needed above the player's head
-    public static float foodClearance = 1.5f;		       //Space needed under the player's foot
+    public static float foodClearance = 1.5f;              //Space needed under the player's foot
+    public static float durationAttackNormal = 0.5f;
+    public static float durationAttackKraken = 0.5f;
+    public static float durationAttackBat = 0.5f;
     #endregion
 
 
@@ -42,6 +45,14 @@ public class ComponentMainCharacterAction
     public Vector2 colliderKrakenOffset;                    //Offset of the Kraken collider
     public Vector2 colliderBatSize;                         //Size of the Bat collider
     public Vector2 colliderBatOffset;                       //Offset of the Bat collider
+
+    public Vector2 attackBoxNormal;                         //attackBox ist the area of applying dmg
+    public Vector2 attackBoxKraken;                         //attackBox ist the area of applying dmg
+    public Vector2 attackBoxBat;                            //attackBox ist the area of applying dmg
+
+
+    public Vector3 attackPositionHorizontalOffset;                  //offset where to start the attack horizontal
+    public Vector3 attackPositionVerticalOffset;                    //offset where to start the attack above or below
     #endregion
 
 
@@ -69,11 +80,16 @@ public class ComponentMainCharacterAction
     public bool isHeadBlocked;                              //can the player transform back?
     public bool isFootBlocked;                              //can the player transform back?
     public bool hasDoubleJump = true;                       //Is the player's double jump available
-    public bool attack = false;                             //reveice attack button
+
+    public Vector3 attackPositionOffset;                  //offset where to start the attack horizontal
+
 
     public bool batFlapImpulse = false;                     //Variable will be set to true for one Frame, to trigger bat Flap Animation
     public bool batFlapDoubleJumpImpulse = false;           //Variable will be set to true for one Frame, to trigger bat Flap Animation in Double Jump
 
-    public float timeUnTillNormal = 0;                      //Counter how long it takes until main character transforms back 
+    public float timeUntillNormal = 0f;                     //Counter how long it takes until main character transforms back 
+    public float waitingTime = 0.3f;                        //how long do i need to wait before attacking again
+    public float timeUntillNextAttack = 0f;                 //counter how long to wait 
+
     #endregion
 }

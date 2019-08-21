@@ -38,10 +38,12 @@ public class SystemUtility
     /*
      * Bit shift the index of the given layer to get a bit mask
      * This would create a layermask with only the given layer index.
-     * We want a layermask with everything except the given layer index. The ~ operator does this, it inverts the bitmask.
+     * with allExceptOne = true, We want a layermask with everything except the given layer index. The ~ operator does this, it inverts the bitmask.
+     * otherwise we get a layermask with just the parameterLayer 
      */
-    public int TransformToLayerMask(int layer)
+    public int TransformToLayerMask(int layer, bool allExceptOne = false)
     {
-        return ~(1 << layer);
+        if(allExceptOne) return ~(1 << layer);
+        return 1 << layer;
     }
 }
