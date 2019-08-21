@@ -128,15 +128,17 @@ public class SystemMainCharacterMovement : MonoBehaviour
         CapFallingSpeed();
     }
 
-    #region handleMoving
     /*
-     * Calculates the current speed and jumpForce based on set speedMultiplier and jumpForceMultiplier.
-     */
+    * Calculates the current speed and jumpForce based on set speedMultiplier and jumpForceMultiplier.
+    */
     private void UpdatedSpeedAndJumpForce()
     {
         componentMainCharacterState.currentSpeed = ComponentMainCharacterState.speed * componentMainCharacterState.speedMultiplier;
         componentMainCharacterState.currentJumpForce = ComponentMainCharacterState.jumpForce * componentMainCharacterState.jumpForceMultiplier;
     }
+
+
+    #region handleMoving
 
     /*
     * Checks if Player is grounded using 2 raycasts

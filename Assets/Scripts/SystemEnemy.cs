@@ -12,26 +12,31 @@ using UnityEngine;
 public class SystemEnemy : MonoBehaviour
 {
     //drag an drop in inspector
-    public GameObject GameLogic;
+    GameObject gameLogic;
 
 
     //handles
-    GameObject mainCharacterGameObject;
-    SystemGameMaster systemGameMaster;
-    Rigidbody2D rigidBody;
-    BoxCollider2D collider2d;
-    ComponentEnemyAction componentEnemyAction;
-    ComponentEnemyState componentEnemyState;
-    void Start()
+    protected GameObject mainCharacterGameObject;
+    protected SystemGameMaster systemGameMaster;
+    protected Rigidbody2D rigidBody;
+    protected BoxCollider2D collider2d;
+    protected ComponentEnemyAction componentEnemyAction;
+    protected ComponentEnemyState componentEnemyState;
+    protected void Start()
     {
-        systemGameMaster = GameLogic.GetComponent<SystemGameMaster>();
         componentEnemyState = GetComponent<ComponentEnemyState>();
         componentEnemyAction = GetComponent<ComponentEnemyAction>();
+        gameLogic = GameObject.Find("GameLogic");
+        systemGameMaster = gameLogic.GetComponent<SystemGameMaster>();
         mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
-
+        rigidBody = GetComponent<Rigidbody2D>();
+        collider2d = GetComponentInChildren<BoxCollider2D>();
+        componentEnemyState.enemyHeight = collider2d.size.y;
 
         //Sets Layermask of enemy
-        componentEnemyState.layerMask = systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy"));
+        componentEnemyState.layerMask = systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy"), true);
+        //TODO fix that the camera is player layer, not good, messes with raycasts this
+        componentEnemyState.layerMask &= systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
 
         RegisterEnemy();
 
@@ -42,21 +47,10 @@ public class SystemEnemy : MonoBehaviour
         systemGameMaster.RegisterNewEnemy(gameObject);
     }
 
-    void Update()
-    {
-        
-    }
-
-    void FixedUpdate()
-    {
-        
-    }
-
-
     /*
      * let the enemy get hit
      */
-    public void ReceiveDamage(int damage)
+    public virtual void ReceiveDamage(int damage)
     {
         componentEnemyState.health -= damage;
         Debug.Log("Was hit: " + componentEnemyState.health); //TEST
@@ -69,8 +63,9 @@ public class SystemEnemy : MonoBehaviour
     /*
      * Handle the death of the enemy
      */
-    private void HandleDieEnemy()
+    protected virtual void HandleDieEnemy()
     {
         Destroy(gameObject);
     }
+
 }

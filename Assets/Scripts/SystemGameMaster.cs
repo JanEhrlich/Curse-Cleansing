@@ -19,8 +19,6 @@ public class SystemGameMaster : MonoBehaviour
     public List<GameObject> enemys = new List<GameObject>();
     public ComponentCameraState ComponentCameraState { get; } = new ComponentCameraState();
     public ComponentCutscene ComponentCutscene { get; } = new ComponentCutscene();
-    public ComponentEnemyAction ComponentEnemyAction { get; } = new ComponentEnemyAction();
-    public ComponentEnemyState ComponentEnemyState { get; } = new ComponentEnemyState();
     public ComponentGameState ComponentGameState { get; } = new ComponentGameState();
     public ComponentInput ComponentInput { get; } = new ComponentInput();
     public ComponentMainCharacterAction ComponentMainCharacterAction { get; } = new ComponentMainCharacterAction();

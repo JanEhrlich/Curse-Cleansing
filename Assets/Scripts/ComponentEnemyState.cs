@@ -8,7 +8,7 @@ public class ComponentEnemyState : MonoBehaviour
      * Hardcoded Variables which shape the games behaviour
      */
     #region StaticVariables
-    public static float speed = 6f;                 //Enemy speed
+    public static float speed = 3f;                 //Enemy speed
 
     public static float jumpForce = 12f;            //Initial force of jump
     public static float groundDistance = .2f;       //Distance from player to ground which is considered as grounded
@@ -27,7 +27,7 @@ public class ComponentEnemyState : MonoBehaviour
      */
     #region SetOnInitVariables
     public float normalGravity;                     //normal gravity of the World
-    public float enemyrHeight;                      //Height of the enemy
+    public float enemyHeight;                      //Height of the enemy
     public int layerMask;                           //do not hit enemy with raycast
     #endregion
 
@@ -53,14 +53,4 @@ public class ComponentEnemyState : MonoBehaviour
 
 
     #endregion
-
-    public ComponentEnemyState()
-    {
-
-    }
-    public ComponentEnemyState(int health, int damage)
-    {
-        this.health = health;
-        this.damage = damage;
-    }
 }
