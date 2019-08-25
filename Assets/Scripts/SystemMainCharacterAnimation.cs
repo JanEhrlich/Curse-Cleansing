@@ -40,6 +40,9 @@ public class SystemMainCharacterAnimation : MonoBehaviour
     string isTransformed = "isTransformed";
     #endregion
 
+    //Set this Vaiable to the length of the attack Animation Clip
+    float attackAnimationDuration = 0.3333333333333333F;
+
     public void Init(SystemGameMaster gameMaster)
     {
         systemGameMaster = gameMaster;
@@ -66,11 +69,11 @@ public class SystemMainCharacterAnimation : MonoBehaviour
         anim.SetBool(isBatFlapping, checkBatFlapping());
         anim.SetBool(isKraken, checkKraken());
         anim.SetBool(isTransformed, checkTransformed());
+        anim.SetBool(isAttacking, checkAttacking());
         #endregion
 
         //TODO
         #region TODO
-        anim.SetBool(isAttacking, checkAttacking());
         anim.SetBool(isUsingKrakenSkill, checkUsingKrakenSkill());
         anim.SetBool(isUsingBatSkill, checkUsingBatSkill());
         #endregion
@@ -100,7 +103,8 @@ public class SystemMainCharacterAnimation : MonoBehaviour
 
     private bool checkAttacking()
     {
-        return false;
+        anim.SetFloat("attackSpeed", attackAnimationDuration/actions.waitingTime);
+        return actions.attackImpulse;
     }
 
     private bool checkUsingKrakenSkill()

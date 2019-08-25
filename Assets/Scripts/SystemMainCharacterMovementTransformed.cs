@@ -49,7 +49,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
         
         //add button functions
         componentInput.AddQuickTransformKrakenButtonPressFunction(TransformToKraken);
-        componentInput.AddQuickTransformBatButtonPressFunction(TransformToBat);
+        componentInput.AddQuickTransformBatButtonPressFunction(TransformToBat);       
     }
 
     public void Tick()
@@ -105,6 +105,9 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
             componentMainCharacterAction.colliderKrakenSize, componentMainCharacterAction.colliderKrakenOffset,true);
 
         componentMainCharacterAction.isKraken = true;
+
+        //Kraken only Stuff
+        componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackKraken;
     }
 
     private void TransformToBat()
@@ -118,6 +121,9 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
             componentMainCharacterAction.colliderBatSize, componentMainCharacterAction.colliderBatOffset,true);
 
         componentMainCharacterAction.isBat = true;
+
+        //Bat only Stuff
+        componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackBat;
 
         //@Jannis die nächste Zeile verstehe ich nicht. Warum halfBat Values benutzen wenn es hier um die volle Transformation geht?
         rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageBat;
@@ -138,6 +144,9 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
 
         //set normal gravity
         rigidBody.gravityScale = componentMainCharacterState.normalGravity;
+
+        //Normal only Stuff
+        componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackNormal;
     }
 
     #endregion

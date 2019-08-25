@@ -76,6 +76,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
         componentInput.AddJumpButtonCancelFunction(ReceiveJumpCancelInput);
         componentInput.AddAttackButtonPressFunction(ReceiveAttackPressInput);
+
+        //Set normal Attack duration
+        componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackNormal;
     }
 
     void InitPlayerAttackRanges()
@@ -119,11 +122,21 @@ public class SystemMainCharacterMovement : MonoBehaviour
             receivedJumpFlag = false;
         }
 
-        if (receivedAttackFlag)
+        #region checkAttack
+
+        if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack <= 0)
         {
             HandleAttackInstruction();
             
         }
+        else
+        {
+            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
+            
+        }
+        receivedAttackFlag = false;
+
+        #endregion
 
         CapFallingSpeed();
     }
@@ -307,6 +320,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
         return true;
     }
 
+    #endregion
+
     /*
      * Resets Variables in the Component which only need to be set fro one Frame to trigger other events like Animations
      */
@@ -314,8 +329,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         componentMainCharacterAction.batFlapImpulse = false;
         componentMainCharacterAction.batFlapDoubleJumpImpulse = false;
+        componentMainCharacterAction.attackImpulse = false;
     }
-    #endregion
 
     #region handleAttack
     /*
@@ -324,24 +339,20 @@ public class SystemMainCharacterMovement : MonoBehaviour
     void HandleAttackInstruction()
     {
         //do not attack to often
-        if (componentMainCharacterAction.timeUntillNextAttack <= 0)
-        {
         Debug.Log("DidAttack");
-            //compute overlapping colliders
-            enemyToDamageColliders = Physics2D.OverlapBoxAll(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
 
-            //transform them into GameObjects
-            enemys = enemyToDamageColliders.Select(enemy => enemy.gameObject).ToArray<GameObject>();
+        //compute overlapping colliders
+        enemyToDamageColliders = Physics2D.OverlapBoxAll(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
 
-            ApplyDamageToAllEnemys(enemys, componentMainCharacterState.damage);
+        //transform them into GameObjects
+        enemys = enemyToDamageColliders.Select(enemy => enemy.gameObject).ToArray<GameObject>();
 
-            componentMainCharacterAction.timeUntillNextAttack = componentMainCharacterAction.waitingTime;
-            receivedAttackFlag = false;
-        }
-        else
-        {
-            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
-        }
+        ApplyDamageToAllEnemys(enemys, componentMainCharacterState.damage);
+
+        componentMainCharacterAction.timeUntillNextAttack = componentMainCharacterAction.waitingTime;
+
+        //trigger Animation
+        componentMainCharacterAction.attackImpulse = true;
     }
 
     /*
