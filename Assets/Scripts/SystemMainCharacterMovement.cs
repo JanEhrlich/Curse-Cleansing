@@ -81,6 +81,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
         componentInput.AddJumpButtonCancelFunction(ReceiveJumpCancelInput);
         componentInput.AddAttackButtonPressFunction(ReceiveAttackPressInput);
+
+        //Set normal Attack duration
+        componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackNormal;
     }
 
     void InitPlayerAttackRanges()
@@ -127,7 +130,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
             receivedJumpFlag = false;
         }
 
-        if (receivedAttackFlag)
+        #region checkAttack
+
+        if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack <= 0)
         {
            HandleAttackInstruction();  
         }
@@ -141,6 +146,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
         {
             componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
         }
+        else
+        {
+            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
+            
+        }
+        receivedAttackFlag = false;
+
+        #endregion
 
         CapFallingSpeed();
     }
@@ -324,6 +337,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
         return true;
     }
 
+    #endregion
+
     /*
      * Resets Variables in the Component which only need to be set fro one Frame to trigger other events like Animations
      */
@@ -331,8 +346,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         componentMainCharacterAction.batFlapImpulse = false;
         componentMainCharacterAction.batFlapDoubleJumpImpulse = false;
+        componentMainCharacterAction.attackImpulse = false;
     }
-    #endregion
 
     #region handleAttack
     /*
@@ -354,6 +369,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
             componentMainCharacterAction.timeUntillNextAttack = componentMainCharacterAction.waitingTime;
             receivedAttackFlag = false;
+
+            //trigger Animation
+            componentMainCharacterAction.attackImpulse = true;
         }
     }
 
@@ -366,6 +384,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         {
             enemyToDamageColliders[i] = null;
         }
+
     }
 
 

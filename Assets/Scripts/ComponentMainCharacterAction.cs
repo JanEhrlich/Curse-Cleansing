@@ -26,9 +26,10 @@ public class ComponentMainCharacterAction
 
     public static float headClearance = 1.5f;              //Space needed above the player's head
     public static float foodClearance = 1.5f;              //Space needed under the player's foot
-    public static float durationAttackNormal = 0.5f;
-    public static float durationAttackKraken = 0.5f;
-    public static float durationAttackBat = 0.5f;
+
+    public static float durationAttackNormal = 0.2f;
+    public static float durationAttackKraken = 0.2f;
+    public static float durationAttackBat = 0.2f;
 
     public static float knockBackTime = 1f;                 //time untill one can move again
     public static float knockBackPowerUp = 3f;              // velocity upwards on impact 
@@ -92,8 +93,10 @@ public class ComponentMainCharacterAction
     public bool batFlapDoubleJumpImpulse = false;           //Variable will be set to true for one Frame, to trigger bat Flap Animation in Double Jump
 
     public float timeUntillNormal = 0f;                     //Counter how long it takes until main character transforms back 
+
     public float waitingTime = 0.3f;                        //how long do i need to wait before attacking again
     public float timeUntillNextAttack = 0f;                 //counter how long to wait 
+    public bool attackImpulse = false;                      //Variable will be set to true for one Frame, to trigger Attack Animation
 
     public float timeUntillKnockBackEnd = 0f;               //current time left untill enemy can move again
     #endregion
