@@ -29,6 +29,10 @@ public class ComponentMainCharacterAction
     public static float durationAttackNormal = 0.5f;
     public static float durationAttackKraken = 0.5f;
     public static float durationAttackBat = 0.5f;
+
+    public static float knockBackTime = 1f;                 //time untill one can move again
+    public static float knockBackPowerUp = 3f;              // velocity upwards on impact 
+    public static float knowBackPowerHorizontal = 4f;       //horizontal velocity
     #endregion
 
 
@@ -81,7 +85,7 @@ public class ComponentMainCharacterAction
     public bool isFootBlocked;                              //can the player transform back?
     public bool hasDoubleJump = true;                       //Is the player's double jump available
 
-    public Vector3 attackPositionOffset;                  //offset where to start the attack horizontal
+    public Vector3 attackPositionOffset;                    //offset where to start the attack horizontal
 
 
     public bool batFlapImpulse = false;                     //Variable will be set to true for one Frame, to trigger bat Flap Animation
@@ -91,5 +95,6 @@ public class ComponentMainCharacterAction
     public float waitingTime = 0.3f;                        //how long do i need to wait before attacking again
     public float timeUntillNextAttack = 0f;                 //counter how long to wait 
 
+    public float timeUntillKnockBackEnd = 0f;               //current time left untill enemy can move again
     #endregion
 }

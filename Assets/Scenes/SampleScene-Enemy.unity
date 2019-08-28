@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 147220643}
   - component: {fileID: 147220645}
   m_Layer: 9
-  m_Name: EnemyOrderClose (1)
+  m_Name: EnemyOrderClose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -266,6 +266,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPositionOffset: {x: 0, y: 0, z: 0}
+  followRange: 7
+  timeUntillKnockBackEnd: 0
+  distanceToMainCharacter: 0
 --- !u!114 &147220645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,7 +373,7 @@ GameObject:
   m_Component:
   - component: {fileID: 339824791}
   - component: {fileID: 339824790}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Camera bounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -647,7 +650,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -972,7 +975,7 @@ GameObject:
   - component: {fileID: 603843886}
   - component: {fileID: 603843885}
   - component: {fileID: 603843887}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CamerafollowPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1048,11 +1051,11 @@ GameObject:
   - component: {fileID: 628993204}
   - component: {fileID: 628993203}
   - component: {fileID: 628993205}
-  - component: {fileID: 628993208}
   - component: {fileID: 628993207}
+  - component: {fileID: 628993208}
   - component: {fileID: 628993206}
   m_Layer: 9
-  m_Name: EnemyOrderClose
+  m_Name: EnemyOrderRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1096,7 +1099,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1ad405e4b5087404e8b8940269587891, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e96674afc2c68b6448d13091e9476250, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1152,6 +1155,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 628993202}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf92da833fd9ee147b67151afa6fefd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &628993207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628993202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 786058bb496cce346af1879655b0e0b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackPositionOffset: {x: 0, y: 0, z: 0}
+  followRange: 7
+  timeUntillKnockBackEnd: 0
+  distanceToMainCharacter: 0
+--- !u!114 &628993208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628993202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0f6ba38ad82f59468e2394d218c05cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -1170,32 +1201,6 @@ MonoBehaviour:
   isOnGround: 0
   originalXScale: 0
   direction: 1
---- !u!114 &628993207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 628993202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 786058bb496cce346af1879655b0e0b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackPositionOffset: {x: 0, y: 0, z: 0}
---- !u!114 &628993208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 628993202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29367f5f8e0cc284fa9d7081978bd458, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawDebugRaycasts: 1
 --- !u!1 &683703093
 GameObject:
   m_ObjectHideFlags: 0
@@ -1783,6 +1788,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1135992966}
   - component: {fileID: 1135992967}
+  - component: {fileID: 1135992968}
   m_Layer: 8
   m_Name: AttackHit
   m_TagString: Untagged
@@ -1816,7 +1822,7 @@ PolygonCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135992965}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -1840,6 +1846,18 @@ PolygonCollider2D:
       - {x: 0.08268089, y: -1.0101578}
       - {x: 0.7236342, y: -0.56695724}
       - {x: 0.8286059, y: 0.32448986}
+--- !u!114 &1135992968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135992965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d096ca2450b5e84889424fb69bbaabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1224931465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,7 +2006,7 @@ GameObject:
   - component: {fileID: 1275067913}
   - component: {fileID: 1275067915}
   - component: {fileID: 1275067914}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}

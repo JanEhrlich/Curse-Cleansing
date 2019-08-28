@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+    /*
+     * The Close Combat Enemies. Pirates and holy Order distinction in the ComponentEnemyState
+     * TODO:
+     *  -Overwrite Attack
+     *  -Overwrite some Movement
+     *  -Interprete "AI" instructions and 
+     *  -Attack Logic
+     */
 public class SystemEnemyClose : SystemEnemy
 {
     public bool drawDebugRaycasts = true;	//Should the environment checks be visualized
@@ -18,19 +26,23 @@ public class SystemEnemyClose : SystemEnemy
     bool rightEdge = false;
     bool leftWall = false;
     bool rightWall = false;
+    //should be equally long
+    Collider2D[] toDamageColliders = new Collider2D[10];
+    int numberOfOverlaps = 0;
+    bool isAttacking = false;
+    Vector2 attackDirection;
 
-    /*
-     * The Close Combat Enemies. Pirates and holy Order distinction in the ComponentEnemyState
-     * TODO:
-     *  -Overwrite Attack
-     *  -Overwrite some Movement
-     *  -Interprete "AI" instructions and 
-     *  -Attack Logic
-     */
-    void Start()
+    float attackLength = 2f;
+
+    private void Start()
     {
         base.Start();
+        //do not change direction if the player is hit
+        componentEnemyState.layerMask &= componentEnemyState.layerMask &= systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
+        componentEnemyAction.timeToAttack = 0.5f;
+        componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
     }
+
     void Update()
     {
         
@@ -46,32 +58,14 @@ public class SystemEnemyClose : SystemEnemy
         WallCheck();
 
         SimpleMovement();
+
+        Attack(); //TODO make it work
     }
 
     private void UpdatedSpeedAndJumpForce()
     {
         componentEnemyState.currentSpeed = ComponentEnemyState.speed * componentEnemyState.speedMultiplier;
         componentEnemyState.currentJumpForce = ComponentEnemyState.jumpForce * componentEnemyState.jumpForceMultiplier;
-    }
-
-    /*
-     * just run from left to right and vice versa, do not interact with player
-     */
-    private void SimpleMovement()
-    {
-        if (leftEdge && !rightEdge || rightEdge && !leftEdge || leftWall || rightWall) 
-        {
-             FlipCharacterDirection();
-        }
-
-        //TODO fix the minus for componentEnemyState
-        tmp_xVelocity = -componentEnemyState.currentSpeed * componentEnemyState.direction;
-        rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
-        
-
-        //Tracking of some State
-        componentEnemyState.currentVelocity = rigidBody.velocity;
-        componentEnemyState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
     }
 
     /*
@@ -101,7 +95,6 @@ public class SystemEnemyClose : SystemEnemy
 
     /*
      * check if enemy is abount to hit a wall, left or right
-     * TODO buggy, can bug into the wall
      */
     private void WallCheck()
     {
@@ -120,18 +113,102 @@ public class SystemEnemyClose : SystemEnemy
     }
 
     /*
+     * Trackplayermovent checks where the payer is, and if he is close enough tho attack
+     */
+     void TrackPlayerMovement()
+    {
+        componentEnemyAction.distanceToMainCharacter = Vector3.Distance(mainCharacterGameObject.transform.position, transform.position);
+    }
+
+    /*
+    * just run from left to right and vice versa, do not interact with player
+    */
+    private void SimpleMovement()
+    {
+        //dont move if knockedback
+        if (componentEnemyAction.timeUntillKnockBackEnd >= Time.time) return;
+
+        if (leftEdge && !rightEdge || leftWall)
+        {
+            FlipCharacterDirection(-1);
+        }
+        else if (rightEdge && !leftEdge || rightWall)
+        {
+            FlipCharacterDirection(1);
+        }
+
+        //TODO fix the minus for componentEnemyState
+        tmp_xVelocity = -componentEnemyState.currentSpeed * componentEnemyState.direction;
+        rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+
+
+        //Tracking of some State
+        componentEnemyState.currentVelocity = rigidBody.velocity;
+        componentEnemyState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
+    }
+
+    /*
+     * Attack the main character
+     */
+     void Attack()
+    {
+        if (!isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
+        {
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
+            isAttacking = true;
+            //delay the attackdirection of the enemy
+            attackDirection = new Vector2(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y);
+        }
+
+        if (isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
+        {
+            
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
+            isAttacking = false;
+            numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(transform.position + componentEnemyAction.attackPositionOffset, componentEnemyAction.attackBoxNormal, 0, toDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player")));
+
+            ApplyDamage(numberOfOverlaps);
+
+            ResetTempArrays();
+        }
+    }
+
+    /*
+     * applies damage to the player
+     */
+     void ApplyDamage(int numberOfOverlaps)
+    {
+        if (numberOfOverlaps == 0) return;
+
+        mainCharacterMovement.ReceiveDamage(componentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
+    }
+
+
+    /*
      * Flips the dierection of the Gameobject and the State in the Component
      */
-    void FlipCharacterDirection()
+    void FlipCharacterDirection(int newDirection)
     {
         //Turn the character by flipping the direction
-        componentEnemyState.direction *= -1;
+        componentEnemyState.direction = newDirection;
         //TODO let enemy attack
-        componentEnemyAction.attackPositionOffset.x *= -1;
+        componentEnemyAction.attackPositionOffset.x = newDirection;
         tmp_scale = transform.localScale;
         tmp_scale.x = componentEnemyState.originalXScale * componentEnemyState.direction;
 
         //Apply the new scale
         transform.localScale = tmp_scale;
     }
+
+    /*
+     * reset toDamageCollider and colliders array
+     */
+    void ResetTempArrays()
+    {
+        for (int i = 0; i < toDamageColliders.Length; i++)
+        {
+            toDamageColliders[i] = null;
+        }
+    }
+
 }

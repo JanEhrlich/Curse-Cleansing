@@ -28,7 +28,8 @@ public class ComponentEnemyState : MonoBehaviour
     #region SetOnInitVariables
     public float normalGravity;                     //normal gravity of the World
     public float enemyHeight;                      //Height of the enemy
-    public int layerMask;                           //do not hit enemy with raycast
+    public int layerMask;                           //do not hit enemy with raycast for ground checks etc.
+    public int hitLayerMask;                        //hit everything except the enemy and the camera for attacking
     #endregion
 
 

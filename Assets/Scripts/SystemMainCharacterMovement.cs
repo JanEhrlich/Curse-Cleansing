@@ -29,6 +29,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
     Transform mainCharacterTransform;
+    PolygonCollider2D attackArea;               // used if collider attack is used
 
     //Variable used to process jumping and gliding
     bool receivedJumpFlag;
@@ -50,8 +51,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     private float attackLength = 2f;
 
-    Collider2D[] enemyToDamageColliders;
-    GameObject[] enemys;
+    int numberOfOverlaps = 0;
+    //should be equally long
+    Collider2D[] enemyToDamageColliders = new Collider2D[10];
 
     public void Init(SystemGameMaster gameMaster)
     {
@@ -63,11 +65,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
+        //attackArea = mainCharacterGameObject.GetComponentInChildren<PolygonCollider2D>();     // used if collider attack is used
+        //attackArea.enabled = false;                                                           // used if collider attack is used
 
         InitPlayerAttackRanges();
 
         //Sets Layermask of mainCharacter
         componentMainCharacterState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(mainCharacterGameObject.layer,true);
+        componentMainCharacterState.layerMask &= gameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Camera"), true);
 
         //Record the original x scale of the player
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
@@ -109,6 +114,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
             GroundedCheck();
         }
 
+        //dont move if knockedback
+        //TODO change time of knock back, or create new timer, so that one can move if enemy squeezes you between a wall
+        if (componentMainCharacterAction.timeUntillKnockBackEnd >= Time.time) return;
 
         HorizontalMovement();
         VerticalLooking();
@@ -121,8 +129,17 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         if (receivedAttackFlag)
         {
-            HandleAttackInstruction();
-            
+           HandleAttackInstruction();  
+        }
+        //need to disable the attack area if the time of the attack is running out
+        if (componentMainCharacterAction.timeUntillNextAttack <= 0)
+        {
+           // attackArea.enabled = false;         // used if collider attack is used
+
+        }
+        else
+        {
+            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
         }
 
         CapFallingSpeed();
@@ -326,32 +343,42 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //do not attack to often
         if (componentMainCharacterAction.timeUntillNextAttack <= 0)
         {
-        Debug.Log("DidAttack");
+            Debug.Log("DidAttack");
+           // attackArea.enabled = true;                  // used if collider attack is used
             //compute overlapping colliders
-            enemyToDamageColliders = Physics2D.OverlapBoxAll(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
+           numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
 
-            //transform them into GameObjects
-            enemys = enemyToDamageColliders.Select(enemy => enemy.gameObject).ToArray<GameObject>();
+            ApplyDamageToAllEnemys(enemyToDamageColliders, componentMainCharacterState.damage);
 
-            ApplyDamageToAllEnemys(enemys, componentMainCharacterState.damage);
+            ResetTempArrays();
 
             componentMainCharacterAction.timeUntillNextAttack = componentMainCharacterAction.waitingTime;
             receivedAttackFlag = false;
         }
-        else
+    }
+
+    /*
+     * reset enemyToCollider and enemys array
+     */
+    void ResetTempArrays()
+    {
+        for (int i = 0; i < enemyToDamageColliders.Length; i++)
         {
-            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
+            enemyToDamageColliders[i] = null;
         }
     }
+
 
     /*
      * apply the damage to all enemys hit
      */
-    void ApplyDamageToAllEnemys(GameObject[] enemys, int damage)
+    void ApplyDamageToAllEnemys(Collider2D[] enemys, int damage)
     {
         foreach (var enemy in enemys)
         {
-            enemy.GetComponentInParent<SystemEnemy>().ReceiveDamage(damage);
+            if (enemy == null) break;
+            // arguments damage, and direction -1 if we hit from the left and 1 if we hit from th right
+            enemy.GetComponentInParent<SystemEnemy>().ReceiveDamage(damage, mainCharacterGameObject.transform.position.x <= enemy.transform.position.x ? -1 : 1);
         }
     }
 
@@ -364,17 +391,72 @@ public class SystemMainCharacterMovement : MonoBehaviour
     }
 
 
+    /*
+     *  --------------------------TEST----------------------------
+     *  used for attacking with a collider
+     */
+    public void AttackWithCollider(Collider2D collision)
+    {
+        int damage = componentMainCharacterState.damage;
+        if (collision.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
+
+        collision.GetComponentInParent<SystemEnemy>().ReceiveDamage(damage, mainCharacterGameObject.transform.position.x <= collision.transform.position.x ? -1 : 1);
+    }
 
     /*
-     * just for debug purposes, draws the hitting area of the player
+     * -----------------------------------------------------------------------------
      */
+
+    #endregion
+
+    #region handleHit
+
+    /*
+     * handles the case if the player receives damage
+     */
+     public void ReceiveDamage(int  damage, int direction)
+    {
+        //do not receive damage while knockbacked
+        if (componentMainCharacterAction.timeUntillKnockBackEnd >= Time.time) return;
+
+        componentMainCharacterState.health -= damage;
+        Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
+        if (componentMainCharacterState.health <= 0)
+        {
+            HandleDiePlayer();
+        }
+
+        //direction is the direction where the collision is originated
+        WasHitKnockBack(direction);
+    }
+
+     /*
+     * knocks back the player
+     */
+    private void WasHitKnockBack(int knockBackdirection)
+    {
+
+        if (componentMainCharacterAction.timeUntillKnockBackEnd < Time.time)
+        {
+            componentMainCharacterAction.timeUntillKnockBackEnd = Time.time + ComponentEnemyAction.knockBackTime;
+            rigidBody.velocity = Vector2.zero;
+            rigidBody.velocity = new Vector2(knockBackdirection * ComponentMainCharacterAction.knowBackPowerHorizontal, ComponentMainCharacterAction.knockBackPowerUp);
+        }
+    }
+
+    private void HandleDiePlayer()
+    {
+        //TODO Implement dieing
+    }
+    #endregion
+
+ /*
+ * just for debug purposes, draws the hitting area of the player
+ */
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         //The next line is causing an Error when not in Play mode
         Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.attackBoxNormal.x, componentMainCharacterAction.attackBoxNormal.y, 1f));
     }
-    #endregion
-
-
 }
