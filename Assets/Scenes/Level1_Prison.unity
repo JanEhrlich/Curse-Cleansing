@@ -243,6 +243,7 @@ MonoBehaviour:
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0
+  hitLayerMask: 0
   speedMultiplier: 1
   jumpForceMultiplier: 1
   currentSpeed: 0
@@ -266,6 +267,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPositionOffset: {x: 0, y: 0, z: 0}
+  followRange: 7
+  attackRange: 2
+  timeToAttack: 0.5
+  timeBetweenAttacks: 2
+  attackBoxNormal: {x: 0, y: 0}
+  followRangeMultiplier: 1
+  timeForNextAttack: 0
+  timeUntillKnockBackEnd: 0
+  distanceToMainCharacter: 0
 --- !u!114 &147220645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,7 +380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 339824791}
   - component: {fileID: 339824790}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Camera bounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5574,7 +5584,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -6087,6 +6097,7 @@ MonoBehaviour:
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0
+  hitLayerMask: 0
   speedMultiplier: 1
   jumpForceMultiplier: 1
   currentSpeed: 0
@@ -6110,6 +6121,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPositionOffset: {x: 0, y: 0, z: 0}
+  followRange: 7
+  attackRange: 2
+  timeToAttack: 0.5
+  timeBetweenAttacks: 2
+  attackBoxNormal: {x: 0, y: 0}
+  followRangeMultiplier: 1
+  timeForNextAttack: 0
+  timeUntillKnockBackEnd: 0
+  distanceToMainCharacter: 0
 --- !u!114 &628993208
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -145,10 +145,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
         else
         {
             componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
-        }
-        else
-        {
-            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
             
         }
         receivedAttackFlag = false;
