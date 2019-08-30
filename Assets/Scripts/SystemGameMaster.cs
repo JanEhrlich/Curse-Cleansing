@@ -26,14 +26,16 @@ public class SystemGameMaster : MonoBehaviour
     public ComponentProgression ComponentProgression { get; } = new ComponentProgression();
     public ComponentScene ComponentScene { get; } = new ComponentScene();
     public ComponentSpawn ComponentSpawn { get; } = new ComponentSpawn();
+    public ComponentKrakenMarker ComponentKrakenMarker { get; } = new ComponentKrakenMarker();
     public SystemUtility SystemUtility { get; } = new SystemUtility();
 
     private SystemInput systemInput;
     private SystemMainCharacterMovement systemMainCharacterMovement;
     private SystemMainCharacterMovementTransformed systemMainCharacterMovementTransformed;
     private SystemMainCharacterAnimation systemMainCharacterAnimation;
+    private SystemKrakenMarker systemKrakenMarker;
 
-    void Start()
+    void Awake()
     {
         InitComponents();
         InitSystems();
@@ -43,6 +45,7 @@ public class SystemGameMaster : MonoBehaviour
     {
         systemInput.Tick();
         systemMainCharacterAnimation.Tick();
+        systemKrakenMarker.Tick();
     }
 
     void FixedUpdate()
@@ -70,6 +73,8 @@ public class SystemGameMaster : MonoBehaviour
         systemMainCharacterAnimation = GetComponent<SystemMainCharacterAnimation>();
         systemMainCharacterAnimation.Init(this);
 
+        systemKrakenMarker = GetComponent<SystemKrakenMarker>();
+        systemKrakenMarker.Init(this);
     }
 
     /*
@@ -78,6 +83,11 @@ public class SystemGameMaster : MonoBehaviour
     public void RegisterNewEnemy(GameObject enemy)
     {
         enemys.Add(enemy);
+    }
+
+    public void RegisterNewKrakenMarker(GameObject marker)
+    {
+        systemKrakenMarker.AddMarker(marker);
     }
 
     public void EnemyWasKilled(GameObject enemy)
