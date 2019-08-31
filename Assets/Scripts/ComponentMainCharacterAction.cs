@@ -34,6 +34,9 @@ public class ComponentMainCharacterAction
     public static float knockBackTime = 1f;                 //time untill one can move again
     public static float knockBackPowerUp = 3f;              // velocity upwards on impact 
     public static float knowBackPowerHorizontal = 4f;       //horizontal velocity
+
+    public static float krakenPullSpeed = 10f;               //The speed with which the kraken ability is pulling the player towards the marker
+    public static float krakePullThresholdDistance = 0.3f;  //How far does the player need to be away from the marker to enter the isHangingOnMarker State
     #endregion
 
 
@@ -81,6 +84,10 @@ public class ComponentMainCharacterAction
     public bool isGhost = false;
     public bool isWolf = false;
 
+    public bool isUsingKrakenPull = false;                  //Is the player currently using the kraken ability
+    public bool isHangingOnMarker = false;                  //Is the player currently hanging on the kraken Marker
+    public bool krakenImpulse = false;
+
     public bool isGliding = false;                          //Is the player gliding?
     public bool isHeadBlocked;                              //can the player transform back?
     public bool isFootBlocked;                              //can the player transform back?
@@ -88,14 +95,13 @@ public class ComponentMainCharacterAction
 
     public Vector3 attackPositionOffset;                    //offset where to start the attack horizontal
 
-
     public bool batFlapImpulse = false;                     //Variable will be set to true for one Frame, to trigger bat Flap Animation
     public bool batFlapDoubleJumpImpulse = false;           //Variable will be set to true for one Frame, to trigger bat Flap Animation in Double Jump
 
     public float timeUntillNormal = 0f;                     //Counter how long it takes until main character transforms back 
 
     public float waitingTime = 0.3f;                        //how long do i need to wait before attacking again
-    public float timeUntillNextAttack = 0f;                 //counter how long to wait 
+    public float timeUntillNextAttack = 0f;                 //counter how long to wait. This variable is checked whether a new attack is possible or not
     public bool attackImpulse = false;                      //Variable will be set to true for one Frame, to trigger Attack Animation
 
     public float timeUntillKnockBackEnd = 0f;               //current time left untill enemy can move again
