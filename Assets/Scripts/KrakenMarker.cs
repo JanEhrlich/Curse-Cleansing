@@ -8,6 +8,8 @@ public class KrakenMarker : MonoBehaviour
     public GameObject krakenMarkerActive;
     public GameObject krakenMarkerPassive;
 
+    private bool isActive;
+
     GameObject gameLogic;
     SystemGameMaster systemGameMaster;
 
