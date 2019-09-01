@@ -28,6 +28,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     ComponentInput componentInput;
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
+    ComponentKrakenMarker componentKrakenMarker;
     Transform mainCharacterTransform;
     SystemUtility utility;
     PolygonCollider2D attackArea;               // used if collider attack is used
@@ -39,6 +40,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
     //Variable used for attacking
     bool receivedAttackFlag;
 
+    //Variable used for kraken ability
+    bool receivedKrakenFlag;
+
     //Used to avoid setting jupedOnce back to false because Jump couldn't build up distance to make GroundedCheck false
     bool skipNextFrame;
 
@@ -48,7 +52,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     float tmp_xVelocity;
     RaycastHit2D leftCheck;
     RaycastHit2D rightCheck;
-    float tmp_direction;
+    Vector2 tmp_direction;
 
     private float attackLength = 2f;
 
@@ -63,10 +67,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
         rigidBody = mainCharacterGameObject.GetComponent<Rigidbody2D>();
         mainCharacterTransform = mainCharacterGameObject.transform;
 
+        //Get Components
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
         utility = systemGameMaster.SystemUtility;
+        componentKrakenMarker = systemGameMaster.ComponentKrakenMarker;
+
         //attackArea = mainCharacterGameObject.GetComponentInChildren<PolygonCollider2D>();     // used if collider attack is used
         //attackArea.enabled = false;                                                           // used if collider attack is used
 
@@ -83,6 +90,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
         componentInput.AddJumpButtonCancelFunction(ReceiveJumpCancelInput);
         componentInput.AddAttackButtonPressFunction(ReceiveAttackPressInput);
+        componentInput.AddTentacleButtonPressFunction(ReceiveKrakenPressInput);
 
         //Set normal Attack duration
         componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackNormal;
@@ -107,7 +115,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
     public void FixedTick()
     {
         ResetImpulses();
-
         UpdatedSpeedAndJumpForce();
 
         if (skipNextFrame)
@@ -142,18 +149,30 @@ public class SystemMainCharacterMovement : MonoBehaviour
         if (componentMainCharacterAction.timeUntillNextAttack <= 0)
         {
            // attackArea.enabled = false;         // used if collider attack is used
-
         }
         else
         {
-            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;
-            
+            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;          
         }
         receivedAttackFlag = false;
 
         #endregion
 
         CheckTimers();
+        #region checkKrakenAbility
+
+        if (receivedKrakenFlag)
+        {
+            HandleKrakenInstruction();
+        }
+        receivedKrakenFlag = false;
+
+        if (componentMainCharacterAction.isUsingKrakenPull)
+        {
+            MoveToKrakenMarker();
+        }
+
+        #endregion
 
         CapFallingSpeed();
     }
@@ -283,9 +302,16 @@ public class SystemMainCharacterMovement : MonoBehaviour
     void HandelJumpInstruction()
     {
         if (isJumpPossible())
-        {
-            if (componentMainCharacterState.hasJump && (componentMainCharacterState.isOnGround || Time.time < componentMainCharacterState.coyoteTime))
+        {           
+            if ((componentMainCharacterState.hasJump && (componentMainCharacterState.isOnGround || Time.time < componentMainCharacterState.coyoteTime))
+                || componentMainCharacterState.hasJump && componentMainCharacterAction.isHangingOnMarker)
             {
+                if (componentMainCharacterAction.isHangingOnMarker)
+                {
+                    componentMainCharacterAction.isHangingOnMarker = false;
+                    rigidBody.bodyType = RigidbodyType2D.Dynamic;
+                }
+
                 Jump();
                 skipNextFrame = true;
                 componentMainCharacterState.isOnGround = false;
@@ -348,6 +374,73 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     #endregion
 
+    #region handleKraken
+
+    private void HandleKrakenInstruction()
+    {
+        //If ability was not unlocked ==> do nothing
+        if (componentMainCharacterAction.hasKraken == false)
+        {
+            return;
+        }
+
+        //If no marker is in range ==> do nothing
+        if (componentKrakenMarker.closestMarkerInRange == null)
+        {
+            return;
+        }
+
+        //If player is currently attackign ==> do nothing
+        if (componentMainCharacterAction.timeUntillNextAttack > 0)
+        {
+            return;
+        }
+
+        //If player is transformed in something other than kraken ==> do nothing
+        if (componentMainCharacterAction.isBat || componentMainCharacterAction.isGhost || componentMainCharacterAction.isWolf)
+        {
+            return;
+        }
+
+        //If player is transformed in kraken ==> TODO make something usefull
+        if (componentMainCharacterAction.isKraken)
+        {
+            return;
+        }
+        else
+        {
+            componentMainCharacterAction.krakenImpulse = true;
+            componentMainCharacterAction.isUsingKrakenPull = true;
+            Vector2.MoveTowards(mainCharacterTransform.position, componentKrakenMarker.closestMarkerInRange.transform.position,componentKrakenMarker.distanceThreshold);
+        }    
+    }
+
+    private void MoveToKrakenMarker()
+    {
+        tmp_direction = (Vector2)(componentKrakenMarker.closestMarkerInRange.transform.position - mainCharacterTransform.position);
+
+        //Checking player distance to the krakenMarker
+        if (tmp_direction.sqrMagnitude < ComponentMainCharacterAction.krakePullThresholdDistance * ComponentMainCharacterAction.krakePullThresholdDistance)
+        {
+            rigidBody.velocity = Vector2.zero;
+            rigidBody.bodyType = RigidbodyType2D.Static;
+            componentMainCharacterAction.isUsingKrakenPull = false;
+            componentMainCharacterAction.isHangingOnMarker = true;
+            componentMainCharacterAction.hasDoubleJump = true;
+            componentMainCharacterState.hasJump = true;
+        }
+        else
+        {
+            rigidBody.MovePosition((Vector2)mainCharacterTransform.position + tmp_direction * ComponentMainCharacterAction.krakenPullSpeed * Time.deltaTime);
+        }  
+    }
+
+    void ReceiveKrakenPressInput()
+    {
+        receivedKrakenFlag = true;
+    }
+    #endregion
+
     /*
      * Resets Variables in the Component which only need to be set fro one Frame to trigger other events like Animations
      */
@@ -356,6 +449,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentMainCharacterAction.batFlapImpulse = false;
         componentMainCharacterAction.batFlapDoubleJumpImpulse = false;
         componentMainCharacterAction.attackImpulse = false;
+        componentMainCharacterAction.krakenImpulse = false;
     }
 
     #region handleAttack
@@ -484,9 +578,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
     }
     #endregion
 
- /*
- * just for debug purposes, draws the hitting area of the player
- */
+    /*
+     * just for debug purposes, draws the hitting area of the player
+     */
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

@@ -23,25 +23,31 @@ public class SystemMainCharacterAnimation : MonoBehaviour
     Animator anim;
 
     #region AnimatorParameterStrings
-    string isIdeling = "isIdeling";
-    string isRunning = "isRunning";
-    string isAirborn = "isAirborn";
-    string isAttacking = "isAttacking";
-    string isUsingKrakenSkill = "isUsingKrakenSkill";
-    string isUsingGhostSkill = "isUsingGhostSkill";
-    string isUsingBatDoubleJump = "isUsingBatDoubleJump";
-    string isUsingBatSkill = "isUsingBatSkill";
-    string isBat = "isBat";
-    string isBatFlapping = "isBatFlapping";
-    string isKraken = "isKraken";
-    string isWolf = "isWolf";
-    string isWolfRunning = "isWolfRunning";
-    string isWolfDamageTaken = "isWolfDamageTaken";
-    string isTransformed = "isTransformed";
-    string isLookingRight = "isLookingRight";
-    string isLookingLeft = "isLookingLeft";
-    string isLookingUp = "isLookingUp";
-    string isLookingDown = "isLookingDown";
+
+    /*
+     * Animator.StringToHash is more efficient then passing strings
+     */
+    int isIdeling = Animator.StringToHash("isIdeling");
+    int isRunning = Animator.StringToHash("isRunning");
+    int isAirborn = Animator.StringToHash("isAirborn");
+    int isAttacking = Animator.StringToHash("isAttacking");
+    int isUsingKrakenSkill = Animator.StringToHash("isUsingKrakenSkill");
+    int isUsingGhostSkill = Animator.StringToHash("isUsingGhostSkill");
+    int isUsingBatDoubleJump = Animator.StringToHash("isUsingBatDoubleJump");
+    int isUsingBatSkill = Animator.StringToHash("isUsingBatSkill");
+    int isBat = Animator.StringToHash("isBat");
+    int isBatFlapping = Animator.StringToHash("isBatFlapping");
+    int isKraken = Animator.StringToHash("isKraken");
+    int isWolf = Animator.StringToHash("isWolf");
+    int isWolfRunning = Animator.StringToHash("isWolfRunning");
+    int isWolfDamageTaken = Animator.StringToHash("isWolfDamageTaken");
+    int isTransformed = Animator.StringToHash("isTransformed");
+    int isLookingRight = Animator.StringToHash("isLookingRight");
+    int isLookingLeft = Animator.StringToHash("isLookingLeft");
+    int isLookingUp = Animator.StringToHash("isLookingUp");
+    int isLookingDown = Animator.StringToHash("isLookingDown");
+    int isUsingKrakenPull = Animator.StringToHash("isUsingKrakenPull");
+    int isHangingOnMarker = Animator.StringToHash("isHangingOnMarker");
     #endregion
 
     //Set these Vaiables to the length of the attack Animation Clip
@@ -68,8 +74,8 @@ public class SystemMainCharacterAnimation : MonoBehaviour
          * Further TODOS:
          * -Check Falling and Rising state in Airborn state depending on physical movement direction (up or down)
          */
-        #region Finished
-        checkLookingDirection();
+    #region Finished
+    checkLookingDirection();
         anim.SetBool(isIdeling, checkIdel());
         anim.SetBool(isRunning, checkRunning());
         anim.SetBool(isAirborn, checkAirborn());
@@ -79,6 +85,8 @@ public class SystemMainCharacterAnimation : MonoBehaviour
         anim.SetBool(isKraken, checkKraken());
         anim.SetBool(isTransformed, checkTransformed());
         anim.SetBool(isAttacking, checkAttacking());
+        anim.SetBool(isUsingKrakenPull, checkUsingKrakenPull());
+        anim.SetBool(isHangingOnMarker, checkHangingOnMarker());
         #endregion
 
         //TODO
@@ -93,6 +101,16 @@ public class SystemMainCharacterAnimation : MonoBehaviour
         anim.SetBool(isWolfRunning, checkWolfRunning());
         anim.SetBool(isWolfDamageTaken, checkWolfDamageTaken());
         #endregion
+    }
+
+    private bool checkHangingOnMarker()
+    {
+        return actions.isHangingOnMarker;
+    }
+
+    private bool checkUsingKrakenPull()
+    {
+        return actions.isUsingKrakenPull;
     }
 
     private void checkLookingDirection()
