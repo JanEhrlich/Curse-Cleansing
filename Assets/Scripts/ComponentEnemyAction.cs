@@ -37,6 +37,8 @@ public class ComponentEnemyAction : MonoBehaviour
     public float timeForNextAttack = 0f;                        //time when the next attack occurs
     public float timeUntillKnockBackEnd = 0f;                   //current time left untill enemy can move again
     public float distanceToMainCharacter;                       //current distance to the main character
+
+    public bool isAttacking = false;
     #endregion
 
 }

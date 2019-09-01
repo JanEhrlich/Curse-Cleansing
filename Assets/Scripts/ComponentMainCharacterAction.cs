@@ -31,7 +31,7 @@ public class ComponentMainCharacterAction
     public static float durationAttackKraken = 0.2f;
     public static float durationAttackBat = 0.2f;
 
-    public static float knockBackTime = 1f;                 //time untill one can move again
+    public static float knockBackTime = 1.5f;                 //time untill one can move again
     public static float knockBackPowerUp = 3f;              // velocity upwards on impact 
     public static float knowBackPowerHorizontal = 4f;       //horizontal velocity
     #endregion

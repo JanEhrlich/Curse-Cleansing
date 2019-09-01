@@ -76,7 +76,7 @@ public class SystemEnemy : MonoBehaviour
     /*
      * knocks back the enemy
      */
-    private void WasHitKnockBack(int knockBackdirection)
+    protected void WasHitKnockBack(int knockBackdirection)
     {
 
         if (componentEnemyAction.timeUntillKnockBackEnd < Time.time)

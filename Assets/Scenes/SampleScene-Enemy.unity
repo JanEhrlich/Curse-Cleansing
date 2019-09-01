@@ -243,6 +243,7 @@ MonoBehaviour:
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0
+  hitLayerMask: 0
   speedMultiplier: 1
   jumpForceMultiplier: 1
   currentSpeed: 0
@@ -267,8 +268,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPositionOffset: {x: 0, y: 0, z: 0}
   followRange: 7
+  attackRange: 2
+  timeToAttack: 0.5
+  timeBetweenAttacks: 2
+  attackBoxNormal: {x: 0, y: 0}
+  followRangeMultiplier: 1
+  timeForNextAttack: 0
   timeUntillKnockBackEnd: 0
   distanceToMainCharacter: 0
+  isAttacking: 0
 --- !u!114 &147220645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +446,7 @@ GameObject:
   - component: {fileID: 437925225}
   - component: {fileID: 437925226}
   - component: {fileID: 437925227}
+  - component: {fileID: 437925228}
   m_Layer: 0
   m_Name: GameLogic
   m_TagString: Untagged
@@ -525,6 +534,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f5a5b3bcbd9cb444b23a4cb25037dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &437925228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437925221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d62d3bdd7a3eb849b82bfb9526d936f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &445147433
@@ -1172,8 +1193,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPositionOffset: {x: 0, y: 0, z: 0}
   followRange: 7
+  attackRange: 2
+  timeToAttack: 0.5
+  timeBetweenAttacks: 2
+  attackBoxNormal: {x: 0, y: 0}
+  followRangeMultiplier: 1
+  timeForNextAttack: 0
   timeUntillKnockBackEnd: 0
   distanceToMainCharacter: 0
+  isAttacking: 0
 --- !u!114 &628993208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1191,6 +1219,7 @@ MonoBehaviour:
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0
+  hitLayerMask: 0
   speedMultiplier: 1
   jumpForceMultiplier: 1
   currentSpeed: 0

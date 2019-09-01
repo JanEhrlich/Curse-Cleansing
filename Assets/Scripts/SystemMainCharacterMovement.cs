@@ -29,6 +29,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     ComponentMainCharacterAction componentMainCharacterAction;
     ComponentMainCharacterState componentMainCharacterState;
     Transform mainCharacterTransform;
+    SystemUtility utility;
     PolygonCollider2D attackArea;               // used if collider attack is used
 
     //Variable used to process jumping and gliding
@@ -65,6 +66,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentInput = systemGameMaster.ComponentInput;
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         componentMainCharacterAction = systemGameMaster.ComponentMainCharacterAction;
+        utility = systemGameMaster.SystemUtility;
         //attackArea = mainCharacterGameObject.GetComponentInChildren<PolygonCollider2D>();     // used if collider attack is used
         //attackArea.enabled = false;                                                           // used if collider attack is used
 
@@ -117,9 +119,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
             GroundedCheck();
         }
 
-        //dont move if knockedback
-        //TODO change time of knock back, or create new timer, so that one can move if enemy squeezes you between a wall
-        if (componentMainCharacterAction.timeUntillKnockBackEnd >= Time.time) return;
+        //dont move if knockedback, but let move after knock back is finished
+        //TODO maybe make own vairable for this
+        if (componentMainCharacterAction.timeUntillKnockBackEnd-1f >= Time.time) return;
 
         HorizontalMovement();
         VerticalLooking();
@@ -131,7 +133,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
 
         #region checkAttack
-
+        //TODO make other timer
         if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack <= 0)
         {
            HandleAttackInstruction();  
@@ -151,6 +153,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         #endregion
 
+        CheckTimers();
+
         CapFallingSpeed();
     }
 
@@ -161,6 +165,15 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         componentMainCharacterState.currentSpeed = ComponentMainCharacterState.speed * componentMainCharacterState.speedMultiplier;
         componentMainCharacterState.currentJumpForce = ComponentMainCharacterState.jumpForce * componentMainCharacterState.jumpForceMultiplier;
+    }
+
+    private void CheckTimers()
+    {
+        //make player not move through enemys, as the damage protection is running out
+        if (componentMainCharacterAction.timeUntillKnockBackEnd < Time.time)
+        {
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
+        }
     }
 
 
@@ -216,7 +229,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
      */
     void VerticalLooking()
     {
-        if (componentInput.getCurrentVerticalJoystickPosition() == 0)
+        if (componentInput.getCurrentJoystickAxis().y == 0)
         {
             componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionHorizontalOffset;
             componentMainCharacterAction.attackPositionOffset.x *= componentMainCharacterState.direction;
@@ -224,7 +237,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
 
         componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionVerticalOffset;
-        if (componentInput.getCurrentVerticalJoystickPosition() < 0)
+        if (componentInput.getCurrentJoystickAxis().y < 0)
         {
             componentMainCharacterAction.attackPositionOffset.y *= -1;
         }
@@ -434,12 +447,18 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //do not receive damage while knockbacked
         if (componentMainCharacterAction.timeUntillKnockBackEnd >= Time.time) return;
 
+        Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
+
         componentMainCharacterState.health -= damage;
         Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
         if (componentMainCharacterState.health <= 0)
         {
             HandleDiePlayer();
         }
+
+        //make player move while he can not receive damage
+        Debug.Log("GOD");
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
 
         //direction is the direction where the collision is originated
         WasHitKnockBack(direction);
@@ -453,7 +472,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         if (componentMainCharacterAction.timeUntillKnockBackEnd < Time.time)
         {
-            componentMainCharacterAction.timeUntillKnockBackEnd = Time.time + ComponentEnemyAction.knockBackTime;
+            componentMainCharacterAction.timeUntillKnockBackEnd = Time.time + ComponentMainCharacterAction.knockBackTime;
             rigidBody.velocity = Vector2.zero;
             rigidBody.velocity = new Vector2(knockBackdirection * ComponentMainCharacterAction.knowBackPowerHorizontal, ComponentMainCharacterAction.knockBackPowerUp);
         }

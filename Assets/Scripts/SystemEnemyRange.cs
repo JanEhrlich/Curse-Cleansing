@@ -15,6 +15,9 @@ public class SystemEnemyRange : SystemEnemy
 {
     bool debugRayCasts = true;
 
+    //handles
+    GameObject rangeAttackMisslePrefab;
+
     //Tmp Variables used for Calculations
     Vector3 tmp_scale;
     float tmp_direction;
@@ -26,6 +29,7 @@ public class SystemEnemyRange : SystemEnemy
         base.Start();
         componentEnemyState.currentSpeed = 0;
         componentEnemyAction.followRange = 15f;
+        rangeAttackMisslePrefab = Resources.Load("Bullet") as GameObject;
     }
     void Update()
     {
@@ -66,10 +70,12 @@ public class SystemEnemyRange : SystemEnemy
      */
      void Attack()
     {
+
         if (!isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             isAttacking = true;
+            Instantiate(rangeAttackMisslePrefab, transform.position+ componentEnemyAction.attackPositionOffset,transform.rotation);
             //delay the attackdirection of the enemy
             attackDirection = new Vector2(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y);
         }
@@ -102,7 +108,6 @@ public class SystemEnemyRange : SystemEnemy
         componentEnemyAction.attackPositionOffset.x = newDirection;
         tmp_scale = transform.localScale;
         tmp_scale.x = componentEnemyState.originalXScale * componentEnemyState.direction;
-
         //Apply the new scale
         transform.localScale = tmp_scale;
     }

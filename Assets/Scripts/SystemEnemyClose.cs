@@ -29,7 +29,6 @@ public class SystemEnemyClose : SystemEnemy
     //should be equally long
     Collider2D[] toDamageColliders = new Collider2D[10];
     int numberOfOverlaps = 0;
-    bool isAttacking = false;
     Vector2 attackDirection;
 
     float attackLength = 2f;
@@ -41,6 +40,9 @@ public class SystemEnemyClose : SystemEnemy
         componentEnemyState.layerMask &= componentEnemyState.layerMask &= systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
         componentEnemyAction.timeToAttack = 0.5f;
         componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
+        componentEnemyAction.isAttacking = false;
+        //TODO check - for the sprite direction
+        componentEnemyAction.attackPositionOffset = new Vector3(-1f,0,0f);
     }
 
     void Update()
@@ -52,6 +54,8 @@ public class SystemEnemyClose : SystemEnemy
     void FixedUpdate()
     {
         UpdatedSpeedAndJumpForce();
+
+        TrackPlayerMovement();
 
         GroundedCheck();
 
@@ -152,24 +156,25 @@ public class SystemEnemyClose : SystemEnemy
      */
      void Attack()
     {
-        if (!isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
+            Debug.Log("Attack");
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
-            isAttacking = true;
+            componentEnemyAction.isAttacking = true;
             //delay the attackdirection of the enemy
             attackDirection = new Vector2(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y);
-        }
 
-        if (isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
-        {
-            
-            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
-            isAttacking = false;
             numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(transform.position + componentEnemyAction.attackPositionOffset, componentEnemyAction.attackBoxNormal, 0, toDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player")));
 
             ApplyDamage(numberOfOverlaps);
 
             ResetTempArrays();
+        }
+
+        if (componentEnemyAction.isAttacking && componentEnemyAction.timeForNextAttack < Time.time)
+        {
+            componentEnemyAction.isAttacking = false;
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
         }
     }
 
@@ -183,6 +188,29 @@ public class SystemEnemyClose : SystemEnemy
         mainCharacterMovement.ReceiveDamage(componentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
     }
 
+    /*
+ * let the enemy get hit
+ */
+    override public void ReceiveDamage(int damage, int direction)
+    {
+        if (direction != componentEnemyState.direction)
+        {
+            Debug.Log("Was Block Time:" + Time.time); //TEST
+        }
+        else
+        {
+            componentEnemyState.health -= damage;
+            Debug.Log("Was hit: " + componentEnemyState.health + " Time:" + Time.time); //TEST
+            if (componentEnemyState.health <= 0)
+            {
+                HandleDieEnemy();
+            }
+
+        }
+        //direction is the direction where the hit was coming from, so we need to bounce the other direction: - direction
+        WasHitKnockBack(-direction);
+    }
+
 
     /*
      * Flips the dierection of the Gameobject and the State in the Component
@@ -191,8 +219,8 @@ public class SystemEnemyClose : SystemEnemy
     {
         //Turn the character by flipping the direction
         componentEnemyState.direction = newDirection;
-        //TODO let enemy attack
-        componentEnemyAction.attackPositionOffset.x = newDirection;
+        //TODO check - for the sprite direction
+        componentEnemyAction.attackPositionOffset.x = -newDirection;
         tmp_scale = transform.localScale;
         tmp_scale.x = componentEnemyState.originalXScale * componentEnemyState.direction;
 
@@ -211,4 +239,14 @@ public class SystemEnemyClose : SystemEnemy
         }
     }
 
+
+    /*
+     * just for debug purposes, draws the hitting area of the player
+     */
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        //The next line is causing an Error when not in Play mode
+        Gizmos.DrawWireSphere(transform.position, componentEnemyAction.attackRange);
+    }
 }
