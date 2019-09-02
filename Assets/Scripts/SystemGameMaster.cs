@@ -34,6 +34,7 @@ public class SystemGameMaster : MonoBehaviour
     private SystemMainCharacterMovementTransformed systemMainCharacterMovementTransformed;
     private SystemMainCharacterAnimation systemMainCharacterAnimation;
     private SystemKrakenMarker systemKrakenMarker;
+    private SystemProgression systemProgression;
 
     void Awake()
     {
@@ -46,6 +47,7 @@ public class SystemGameMaster : MonoBehaviour
         systemInput.Tick();
         systemMainCharacterAnimation.Tick();
         systemKrakenMarker.Tick();
+        systemProgression.Tick();
     }
 
     void FixedUpdate()
@@ -75,6 +77,9 @@ public class SystemGameMaster : MonoBehaviour
 
         systemKrakenMarker = GetComponent<SystemKrakenMarker>();
         systemKrakenMarker.Init(this);
+
+        systemProgression = GetComponent<SystemProgression>();
+        systemProgression.Init(this);
     }
 
     /*

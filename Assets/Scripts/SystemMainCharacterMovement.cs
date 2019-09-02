@@ -320,7 +320,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
                 if (componentMainCharacterAction.isBat)
                 {
                     componentMainCharacterAction.batFlapImpulse = true;
-                }               
+                    //TODO change to bat flap audio if found good sound
+                    AudioManager.PlayJumpAudio();
+                }
+                else
+                {
+                    AudioManager.PlayJumpAudio();
+                }
             }
             else
             {
@@ -330,11 +336,15 @@ public class SystemMainCharacterMovement : MonoBehaviour
                     if (componentMainCharacterAction.isBat)
                     {
                         componentMainCharacterAction.batFlapImpulse = true;
+                        //TODO change to bat flap audio if found good sound
+                        AudioManager.PlayJumpAudio();
                     }
                     else
                     {
                         componentMainCharacterAction.hasDoubleJump = false;
                         componentMainCharacterAction.batFlapDoubleJumpImpulse = true;
+                        //TODO change to BIG bat flap audio if found good sound
+                        AudioManager.PlayJumpAudio();
                     }
                 }
             }
@@ -409,6 +419,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
         else
         {
+            AudioManager.PlayKrakenSquishSFXAudio();
             componentMainCharacterAction.krakenImpulse = true;
             componentMainCharacterAction.isUsingKrakenPull = true;
             Vector2.MoveTowards(mainCharacterTransform.position, componentKrakenMarker.closestMarkerInRange.transform.position,componentKrakenMarker.distanceThreshold);
@@ -475,6 +486,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
             //trigger Animation
             componentMainCharacterAction.attackImpulse = true;
+            AudioManager.PlaySwordAttackAudio();
         }
     }
 
@@ -543,10 +555,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
 
+        AudioManager.PlayHurtAudio();
         componentMainCharacterState.health -= damage;
         Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
         if (componentMainCharacterState.health <= 0)
         {
+            AudioManager.PlayDeathAudio();
+            AudioManager.PlayDeathSFXAudio();
             HandleDiePlayer();
         }
 

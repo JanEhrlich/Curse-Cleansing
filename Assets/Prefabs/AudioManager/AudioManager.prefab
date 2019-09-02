@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3939259903853236088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8129389886935067097}
+  - component: {fileID: 950222921916475172}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8129389886935067097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939259903853236088}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.2592742, y: 3.6128833, z: -8.8942375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &950222921916475172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939259903853236088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc7a6550ab2b7974e840eef44800e64f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ambientClipLevel1: {fileID: 8300000, guid: f3ee770f13bf9eb4b9adbb3cc8382d1f, type: 3}
+  musicClipLevel1: {fileID: 8300000, guid: 2dfa7dc88baaa2340804ba9e6c510d3c, type: 3}
+  ambientClipLevel2: {fileID: 0}
+  musicClipLevel2: {fileID: 8300000, guid: 416f2571c5532c44785519b881ad7533, type: 3}
+  ambientClipLevel3: {fileID: 0}
+  musicClipLevel3: {fileID: 8300000, guid: cf09a76412d926f4eb1b726e0b035af4, type: 3}
+  ambientClipLevel4: {fileID: 0}
+  musicClipLevel4: {fileID: 8300000, guid: dfe6790b6d8f948479b012eaca4102b7, type: 3}
+  ambientClipLevel5_1: {fileID: 8300000, guid: 5e303bda44ba1184da9bb867f70ca027, type: 3}
+  musicClipLevel5_1: {fileID: 8300000, guid: aaef1984d7a30e34988b677ce97ed13d, type: 3}
+  ambientClipLevel5_2: {fileID: 0}
+  musicClipLevel5_2: {fileID: 8300000, guid: 15532d3a33abd1c4bbf477024432f384, type: 3}
+  ambientClipLevel6: {fileID: 8300000, guid: c56ce6a553807234e8e6e14fdf08423c, type: 3}
+  musicClipLevel6: {fileID: 8300000, guid: bbae3fd5a63415c41badaad7074aa27d, type: 3}
+  ambientClipLevel7_1: {fileID: 8300000, guid: 91c66031b7c411743aa0e8bdcd95aa0f, type: 3}
+  musicClipLevel7_1: {fileID: 0}
+  ambientClipLevel7_2: {fileID: 8300000, guid: 85e46098903f5224cb294e2ef1037a67, type: 3}
+  musicClipLevel7_2: {fileID: 8300000, guid: 716024a72a7b5ba478260dc86ce1cb62, type: 3}
+  krakenSquishesClips:
+  - {fileID: 8300000, guid: 8ed29259068ec4b40aa1f2b26a007070, type: 3}
+  - {fileID: 8300000, guid: 5ee778649583e494abbdceeb1bf04c96, type: 3}
+  moveOnWoodSFXClips:
+  - {fileID: 8300000, guid: 5bd184a61d037ad47bce33bbd2fee780, type: 3}
+  hitFleshSFXClips:
+  - {fileID: 8300000, guid: 8e9cf04fff99d8046b6f61301ec7b5d1, type: 3}
+  - {fileID: 8300000, guid: 6e70c44ad5332c549a8e8867ecbd7301, type: 3}
+  levelStartSFXClip: {fileID: 8300000, guid: 8551ec8217622164cb1dcf625f1f5da9, type: 3}
+  deathSFXClip: {fileID: 8300000, guid: 98e9afa50ce90d34cbbc34b76ee6f555, type: 3}
+  doorOpenSFXClip: {fileID: 8300000, guid: d813b3661223ea44ba4e800333c8fad5, type: 3}
+  exhaustedSFXClip: {fileID: 8300000, guid: cb03fe0ec22f63f469759166a557143b, type: 3}
+  grabSFXClip: {fileID: 8300000, guid: 41b92115e47c7554e9affbdba58bb336, type: 3}
+  waterBlastSFXClip: {fileID: 8300000, guid: d813b3661223ea44ba4e800333c8fad5, type: 3}
+  walkStepClips:
+  - {fileID: 8300000, guid: 9ab2d0d377080fe4c82f30d41b020fa4, type: 3}
+  - {fileID: 8300000, guid: 16fd8abe39a162a459250814eed89be6, type: 3}
+  - {fileID: 8300000, guid: ccff3d4743653684694e7480f6446571, type: 3}
+  - {fileID: 8300000, guid: f852962c3c1334948b96037bb9bda7f2, type: 3}
+  swordAttackClips:
+  - {fileID: 8300000, guid: cf609260ccedf1a4f9b8aa74d712d8c6, type: 3}
+  deathClip: {fileID: 8300000, guid: cb03fe0ec22f63f469759166a557143b, type: 3}
+  jumpClip: {fileID: 8300000, guid: 703035cb4c2b73d40aeb97f32c6eaed3, type: 3}
+  attackVoiceClip: {fileID: 8300000, guid: e855248df3cd26046b2b4dfc0e3e7727, type: 3}
+  deathVoiceClip: {fileID: 8300000, guid: a00cf4d650916724bb4d926fea180e27, type: 3}
+  jumpVoiceClip: {fileID: 8300000, guid: c3fce7949d06f834cb8371b62e67f777, type: 3}
+  hurtVoiceClip: {fileID: 8300000, guid: 160d69d91be3ac44d9d534e1d47b41ec, type: 3}
+  bossTauntClips:
+  - {fileID: 8300000, guid: d00f7298227226e45afd1b2090b79590, type: 3}
+  - {fileID: 8300000, guid: 10384947e58a1dd449ceba43bc6c2581, type: 3}
+  bossAttack1Clip: {fileID: 8300000, guid: 72d84f6138173964989075472efb9585, type: 3}
+  bossAttack2Clip: {fileID: 8300000, guid: 583b47602b3259f4ea802a31ab3b8ecf, type: 3}
+  bossAttack3Clip: {fileID: 8300000, guid: cd306335fae81db4eace27f14e098a25, type: 3}
+  ambientGroup: {fileID: 725119846391863183, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
+  musicGroup: {fileID: -2009115382441219138, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
+  soundEffectsGroup: {fileID: -258142469982903232, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
+  playerGroup: {fileID: -2512938506809226638, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
+  voiceGroup: {fileID: 529775967381961403, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
+  enemyGroup: {fileID: 6771338529990291521, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
+  bossGroup: {fileID: 7607024843739596211, guid: 0cd7f1367fce43a43afc5b801f841622,
+    type: 2}
