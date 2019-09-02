@@ -185,7 +185,7 @@ public class SystemEnemyClose : SystemEnemy
     {
         if (numberOfOverlaps == 0) return;
 
-        mainCharacterMovement.ReceiveDamage(componentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
+        mainCharacterMovement.ReceiveDamage(ComponentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
     }
 
     /*
@@ -199,9 +199,9 @@ public class SystemEnemyClose : SystemEnemy
         }
         else
         {
-            componentEnemyState.health -= damage;
-            Debug.Log("Was hit: " + componentEnemyState.health + " Time:" + Time.time); //TEST
-            if (componentEnemyState.health <= 0)
+            ComponentEnemyState.health -= damage;
+            Debug.Log("Was hit: " + ComponentEnemyState.health + " Time:" + Time.time); //TEST
+            if (ComponentEnemyState.health <= 0)
             {
                 HandleDieEnemy();
             }

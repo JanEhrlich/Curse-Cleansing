@@ -22,14 +22,16 @@ public class SystemEnemyRange : SystemEnemy
     Vector3 tmp_scale;
     float tmp_direction;
     RaycastHit2D attackHit;
-    bool isAttacking = false;
-    Vector2 attackDirection;
+    Vector3 attackDirection;
+    GameObject bullet;
+    Quaternion rotation;
     void Start()
     {
         base.Start();
         componentEnemyState.currentSpeed = 0;
         componentEnemyAction.followRange = 15f;
         rangeAttackMisslePrefab = Resources.Load("Bullet") as GameObject;
+        componentEnemyAction.isAttacking = false;
     }
     void Update()
     {
@@ -71,27 +73,29 @@ public class SystemEnemyRange : SystemEnemy
      void Attack()
     {
 
-        if (!isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
-            isAttacking = true;
-            Instantiate(rangeAttackMisslePrefab, transform.position+ componentEnemyAction.attackPositionOffset,transform.rotation);
-            //delay the attackdirection of the enemy
-            attackDirection = new Vector2(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y);
+            componentEnemyAction.isAttacking = true;
+
+            
+            attackDirection = new Vector3(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y,0f);
+            attackDirection.Normalize();
+
+            //rotate the bullet
+            //roate only around z, this math-formula give us the angle between the maincaracter and the enemy
+            float rotZ = Mathf.Atan2(attackDirection.y,attackDirection.x) * Mathf.Rad2Deg;
+            rotation = Quaternion.Euler(0f, 0f, rotZ);
+
+            //create the bullet
+            bullet = Instantiate(rangeAttackMisslePrefab, transform.position+ 2f* attackDirection.normalized, rotation);
+            bullet.GetComponent<SystemBullet>().SetDirection(attackDirection.normalized);
         }
 
-        if(isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if(componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
-            attackHit = systemGameMaster.SystemUtility.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.zero, attackDirection,Mathf.Infinity,componentEnemyState.layerMask, debugRayCasts);
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
-            isAttacking = false;
-            Debug.Log(attackHit.collider.gameObject.layer);
-
-            //TODO fix the dirty check for layer, into something better
-            if (attackHit && attackHit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                mainCharacterMovement.ReceiveDamage(componentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x? 1: -1);
-            }
+            componentEnemyAction.isAttacking = false;
         }
 
     }
