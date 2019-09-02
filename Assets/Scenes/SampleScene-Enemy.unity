@@ -224,7 +224,7 @@ Transform:
   m_Children:
   - {fileID: 2014811734}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &147220643
 MonoBehaviour:
@@ -238,8 +238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f6ba38ad82f59468e2394d218c05cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  damage: 10
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0
@@ -430,7 +428,7 @@ Transform:
   m_LocalScale: {x: 3.9793, y: 3.9793, z: 3.9793}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &437925221
 GameObject:
@@ -768,11 +766,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 28, z: -15}
+  m_LocalPosition: {x: -6.877428, y: 27.49322, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &543074865
 GameObject:
@@ -843,6 +841,7 @@ GameObject:
   - component: {fileID: 552024660}
   - component: {fileID: 552024659}
   - component: {fileID: 552024658}
+  - component: {fileID: 552024661}
   m_Layer: 8
   m_Name: Player_Placeholder
   m_TagString: Untagged
@@ -955,6 +954,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &552024661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552024656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971e9ca970cdda0489c0c2e25b4a9165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &581342572
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +994,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &603843884
 GameObject:
@@ -1042,7 +1053,7 @@ Transform:
   m_Children:
   - {fileID: 1275067913}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &603843887
 MonoBehaviour:
@@ -1144,7 +1155,7 @@ Transform:
   m_Children:
   - {fileID: 1673605499}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &628993205
 Rigidbody2D:
@@ -1214,8 +1225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f6ba38ad82f59468e2394d218c05cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  damage: 10
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0

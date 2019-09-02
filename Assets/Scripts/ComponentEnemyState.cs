@@ -17,8 +17,8 @@ public class ComponentEnemyState : MonoBehaviour
     public static float footOffsetRight = .3f;           //X Offset of right foot raycast
 
 
-    public int health = 100;
-    public int damage = 10;
+    public static int health = 100;
+    public static int damage = 10;
     #endregion
 
 

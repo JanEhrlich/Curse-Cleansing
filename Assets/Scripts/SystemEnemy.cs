@@ -54,9 +54,9 @@ public class SystemEnemy : MonoBehaviour
      */
     public virtual void ReceiveDamage(int damage, int direction)
     {
-        componentEnemyState.health -= damage;
-        Debug.Log("Was hit: " + componentEnemyState.health + " Time:"+Time.time); //TEST
-        if (componentEnemyState.health <= 0)
+        ComponentEnemyState.health -= damage;
+        Debug.Log("Was hit: " + ComponentEnemyState.health + " Time:"+Time.time); //TEST
+        if (ComponentEnemyState.health <= 0)
         {
             HandleDieEnemy();
         }
@@ -99,7 +99,7 @@ public class SystemEnemy : MonoBehaviour
             componentEnemyAction.timeUntillKnockBackEnd = Time.time + ComponentEnemyAction.knockBackTime/2;
 
             //throw the player back
-            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(componentEnemyState.damage, mainCharacterGameObject.transform.position.x <= transform.position.x ? -1 : 1);
+            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(ComponentEnemyState.damage, mainCharacterGameObject.transform.position.x <= transform.position.x ? -1 : 1);
         }
     }
 

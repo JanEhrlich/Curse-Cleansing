@@ -534,6 +534,17 @@ public class SystemMainCharacterMovement : MonoBehaviour
     #region handleHit
 
     /*
+     * handle the bullet hit
+     */
+     public void BulletHit(Collision2D collision)
+    {
+        Destroy(collision.gameObject);
+
+        ReceiveDamage(ComponentEnemyState.damage,collision.gameObject.GetComponent<SystemBullet>().getAttackDirection().x > 0? 1 : -1);
+    }
+
+
+    /*
      * handles the case if the player receives damage
      */
      public void ReceiveDamage(int  damage, int direction)
@@ -587,4 +598,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //The next line is causing an Error when not in Play mode
         Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.attackBoxNormal.x, componentMainCharacterAction.attackBoxNormal.y, 1f));
     }
+
+
 }
