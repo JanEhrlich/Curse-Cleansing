@@ -14,41 +14,59 @@ public class AudioManager : MonoBehaviour
 
     [Header("Ambient Audio Prison")]
     public AudioClip ambientClipLevel1;		
-    public AudioClip musicClipLevel1;       
+    public AudioClip musicClipLevel1;
+    public int ambientVolumeLevel1;
+    public int musicVolumeLevel1;
 
     [Header("Ambient Audio Escape")]
     public AudioClip ambientClipLevel2;		
-    public AudioClip musicClipLevel2;      
+    public AudioClip musicClipLevel2;
+    public int ambientVolumeLevel2;
+    public int musicVolumeLevel2;
 
     [Header("Ambient Audio Hideout")]
     public AudioClip ambientClipLevel3;		
-    public AudioClip musicClipLevel3;      
+    public AudioClip musicClipLevel3;
+    public int ambientVolumeLevel3;
+    public int musicVolumeLevel3;
 
     [Header("Ambient Audio Way2Tavern")]
     public AudioClip ambientClipLevel4;		
-    public AudioClip musicClipLevel4;       
+    public AudioClip musicClipLevel4;
+    public int ambientVolumeLevel4;
+    public int musicVolumeLevel4;
 
     [Header("Ambient Audio Tavern")]
     //5_1 is the Sound of the Tavern without a fight
     public AudioClip ambientClipLevel5_1;   
-    public AudioClip musicClipLevel5_1;     
+    public AudioClip musicClipLevel5_1;
+    public int ambientVolumeLevel5_1;
+    public int musicVolumeLevel5_1;
 
     //5_2 is the Sound of the Tavern with a fight
     public AudioClip ambientClipLevel5_2;   
-    public AudioClip musicClipLevel5_2;     
+    public AudioClip musicClipLevel5_2;
+    public int ambientVolumeLevel5_2;
+    public int musicVolumeLevel5_2;
 
     [Header("Ambient Audio Harbor")]
     public AudioClip ambientClipLevel6;		
-    public AudioClip musicClipLevel6;        
+    public AudioClip musicClipLevel6;
+    public int ambientVolumeLevel6;
+    public int musicVolumeLevel6;
 
     [Header("Ambient Audio Ship")]
     //7_1 is the Sound of the Ship without a fight
     public AudioClip ambientClipLevel7_1;  
-    public AudioClip musicClipLevel7_1;      
+    public AudioClip musicClipLevel7_1;
+    public int ambientVolumeLevel7_1;
+    public int musicVolumeLevel7_1;
 
     //7_2 is the Sound of the Ship with a fight
     public AudioClip ambientClipLevel7_2;   
-    public AudioClip musicClipLevel7_2;     
+    public AudioClip musicClipLevel7_2;
+    public int ambientVolumeLevel7_2;
+    public int musicVolumeLevel7_2;
 
     [Header("Sound Effects")]
     public AudioClip[] krakenSquishesClips;     //The effect is played when the kraken is squishing
@@ -132,6 +150,9 @@ public class AudioManager : MonoBehaviour
     #region StartPlayLevelXYAudio
     public static void StartLevel1Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel1, current.ambientVolumeLevel1);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel1;
         current.ambientSource.loop = true;
@@ -148,6 +169,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel2Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel2, current.ambientVolumeLevel2);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel2;
         current.ambientSource.loop = true;
@@ -164,6 +188,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel3Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel3, current.ambientVolumeLevel3);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel3;
         current.ambientSource.loop = true;
@@ -180,6 +207,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel4Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel4, current.ambientVolumeLevel4);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel4;
         current.ambientSource.loop = true;
@@ -196,6 +226,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel5_1Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel5_1, current.ambientVolumeLevel5_1);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel5_1;
         current.ambientSource.loop = true;
@@ -212,6 +245,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel5_2Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel5_2, current.ambientVolumeLevel5_2);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel5_2;
         current.ambientSource.loop = true;
@@ -228,6 +264,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel6Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel6, current.ambientVolumeLevel6);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel6;
         current.ambientSource.loop = true;
@@ -523,4 +562,30 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    #region ModifyVolumePerLevel
+    /*
+     * Only Values between -80 and 20 possible
+     */
+    private static void setLevelBackgroundVolume(int musicVolume, int ambientVolume)
+    {
+        setMusicVolume(musicVolume);
+        setAmbientVolume(ambientVolume);
+    }
+
+    /*
+     * Only Values between -80 and 20 possible
+     */
+    private static void setMusicVolume(int value)
+    {
+        current.musicGroup.audioMixer.SetFloat("musicVol", value);
+    }
+
+    /*
+     * Only Values between -80 and 20 possible
+     */
+    private static void setAmbientVolume(int value)
+    {
+        current.ambientGroup.audioMixer.SetFloat("ambientVol", value);
+    }
+    #endregion
 }

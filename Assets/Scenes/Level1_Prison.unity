@@ -313,8 +313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f6ba38ad82f59468e2394d218c05cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  damage: 10
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0
@@ -6338,8 +6336,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f6ba38ad82f59468e2394d218c05cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  damage: 10
   normalGravity: 0
   enemyHeight: 0
   layerMask: 0

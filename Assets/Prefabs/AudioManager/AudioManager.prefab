@@ -45,22 +45,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ambientClipLevel1: {fileID: 8300000, guid: f3ee770f13bf9eb4b9adbb3cc8382d1f, type: 3}
   musicClipLevel1: {fileID: 8300000, guid: 2dfa7dc88baaa2340804ba9e6c510d3c, type: 3}
+  ambientVolumeLevel1: -15
+  musicVolumeLevel1: 2
   ambientClipLevel2: {fileID: 0}
   musicClipLevel2: {fileID: 8300000, guid: 416f2571c5532c44785519b881ad7533, type: 3}
+  ambientVolumeLevel2: 0
+  musicVolumeLevel2: -5
   ambientClipLevel3: {fileID: 0}
   musicClipLevel3: {fileID: 8300000, guid: cf09a76412d926f4eb1b726e0b035af4, type: 3}
+  ambientVolumeLevel3: 0
+  musicVolumeLevel3: -10
   ambientClipLevel4: {fileID: 0}
   musicClipLevel4: {fileID: 8300000, guid: dfe6790b6d8f948479b012eaca4102b7, type: 3}
+  ambientVolumeLevel4: 0
+  musicVolumeLevel4: -15
   ambientClipLevel5_1: {fileID: 8300000, guid: 5e303bda44ba1184da9bb867f70ca027, type: 3}
   musicClipLevel5_1: {fileID: 8300000, guid: aaef1984d7a30e34988b677ce97ed13d, type: 3}
+  ambientVolumeLevel5_1: -25
+  musicVolumeLevel5_1: 0
   ambientClipLevel5_2: {fileID: 0}
   musicClipLevel5_2: {fileID: 8300000, guid: 15532d3a33abd1c4bbf477024432f384, type: 3}
+  ambientVolumeLevel5_2: 0
+  musicVolumeLevel5_2: -8
   ambientClipLevel6: {fileID: 8300000, guid: c56ce6a553807234e8e6e14fdf08423c, type: 3}
   musicClipLevel6: {fileID: 8300000, guid: bbae3fd5a63415c41badaad7074aa27d, type: 3}
+  ambientVolumeLevel6: -15
+  musicVolumeLevel6: -5
   ambientClipLevel7_1: {fileID: 8300000, guid: 91c66031b7c411743aa0e8bdcd95aa0f, type: 3}
   musicClipLevel7_1: {fileID: 0}
+  ambientVolumeLevel7_1: -8
+  musicVolumeLevel7_1: 0
   ambientClipLevel7_2: {fileID: 8300000, guid: 85e46098903f5224cb294e2ef1037a67, type: 3}
   musicClipLevel7_2: {fileID: 8300000, guid: 716024a72a7b5ba478260dc86ce1cb62, type: 3}
+  ambientVolumeLevel7_2: -30
+  musicVolumeLevel7_2: -20
   krakenSquishesClips:
   - {fileID: 8300000, guid: 8ed29259068ec4b40aa1f2b26a007070, type: 3}
   - {fileID: 8300000, guid: 5ee778649583e494abbdceeb1bf04c96, type: 3}
