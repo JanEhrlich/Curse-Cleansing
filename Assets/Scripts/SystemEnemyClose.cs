@@ -63,7 +63,17 @@ public class SystemEnemyClose : SystemEnemy
 
         WallCheck();
 
-        SimpleMovement();
+        switch (enemyType)
+        {
+            case EnemyType.SIMPLE:
+                SimpleMovement();
+                break;
+            case EnemyType.ZOMBIE:
+                ZombieMovement();
+                break;
+            default:
+                break;
+        }
 
         Attack(); //TODO make it work
     }
@@ -154,9 +164,38 @@ public class SystemEnemyClose : SystemEnemy
     }
 
     /*
+    * follow the player if he comes close enough
+    * TODO implement
+    */
+    private void ZombieMovement()
+    {
+        //dont move if knockedback
+        if (componentEnemyAction.timeUntillKnockBackEnd >= Time.time) return;
+
+        if (leftEdge && !rightEdge || leftWall)
+        {
+            FlipCharacterDirection(-1);
+        }
+        else if (rightEdge && !leftEdge || rightWall)
+        {
+            FlipCharacterDirection(1);
+        }
+
+        //TODO fix the minus for componentEnemyState
+        tmp_xVelocity = -componentEnemyState.currentSpeed * componentEnemyState.direction;
+        rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+
+
+        //Tracking of some State
+        componentEnemyState.currentVelocity = rigidBody.velocity;
+        componentEnemyState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
+    }
+
+
+    /*
      * Attack the main character
      */
-     void Attack()
+    void Attack()
     {
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
