@@ -28,11 +28,10 @@ public class SystemEnemyClose : SystemEnemy
     bool rightEdge = false;
     bool leftWall = false;
     bool rightWall = false;
-    //should be equally long
     Collider2D[] toDamageColliders = new Collider2D[10];
     int numberOfOverlaps = 0;
     Vector2 attackDirection;
-
+    int lastDirectionOfZombie = 0;
     float attackLength = 2f;
 
     private void Start()
@@ -43,6 +42,7 @@ public class SystemEnemyClose : SystemEnemy
         componentEnemyAction.timeToAttack = 0.5f;
         componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
         componentEnemyAction.isAttacking = false;
+        componentEnemyAction.followRange = 5f;
         //TODO check - for the sprite direction
         componentEnemyAction.attackPositionOffset = new Vector3(-1f,0,0f);
     }
@@ -75,15 +75,20 @@ public class SystemEnemyClose : SystemEnemy
                 break;
         }
 
-        Attack(); //TODO make it work
+        Attack(); 
     }
 
+    /*
+     * simply update the current speed and jump force of the enemy
+     */
     private void UpdatedSpeedAndJumpForce()
     {
         componentEnemyState.currentSpeed = ComponentEnemyState.speed * componentEnemyState.speedMultiplier;
         componentEnemyState.currentJumpForce = ComponentEnemyState.jumpForce * componentEnemyState.jumpForceMultiplier;
     }
 
+
+    #region movement
     /*
      * check if enemy is on the ground use two ray burst, for checking left and right foot
      */
@@ -169,7 +174,7 @@ public class SystemEnemyClose : SystemEnemy
     */
     private void ZombieMovement()
     {
-        //dont move if knockedback
+        //dont move if knockedback, check edges
         if (componentEnemyAction.timeUntillKnockBackEnd >= Time.time) return;
 
         if (leftEdge && !rightEdge || leftWall)
@@ -179,6 +184,24 @@ public class SystemEnemyClose : SystemEnemy
         else if (rightEdge && !leftEdge || rightWall)
         {
             FlipCharacterDirection(1);
+        }
+
+        //check for the player position and flip if needed
+        if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
+        {
+            //maintain last direction when it was not following the player
+            lastDirectionOfZombie = lastDirectionOfZombie == 0 ? componentEnemyState.direction : lastDirectionOfZombie;
+            if (mainCharacterGameObject.transform.position.x < transform.position.x)
+            {
+                FlipCharacterDirection(1);
+            }
+            else
+            {
+                FlipCharacterDirection(-1);
+            }
+        }else if(lastDirectionOfZombie != 0 && componentEnemyState.direction != lastDirectionOfZombie){
+            FlipCharacterDirection(lastDirectionOfZombie);
+            lastDirectionOfZombie = 0;
         }
 
         //TODO fix the minus for componentEnemyState
@@ -191,15 +214,19 @@ public class SystemEnemyClose : SystemEnemy
         componentEnemyState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
     }
 
-
+    #endregion
+    
+    #region attack
     /*
      * Attack the main character
      */
     void Attack()
     {
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time && componentEnemyState.direction !=  (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1))
         {
             Debug.Log("Attack");
+            Debug.Log(componentEnemyState.direction);
+            Debug.Log(componentMainCharacterState.direction);
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
             //delay the attackdirection of the enemy
@@ -228,10 +255,12 @@ public class SystemEnemyClose : SystemEnemy
 
         mainCharacterMovement.ReceiveDamage(ComponentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
     }
-
+    #endregion
+    
+    #region hit
     /*
- * let the enemy get hit
- */
+     * let the enemy get hit
+     */
     override public void ReceiveDamage(int damage, int direction)
     {
         if (direction != componentEnemyState.direction)
@@ -252,6 +281,7 @@ public class SystemEnemyClose : SystemEnemy
         WasHitKnockBack(-direction);
     }
 
+    #endregion
 
     /*
      * Flips the dierection of the Gameobject and the State in the Component

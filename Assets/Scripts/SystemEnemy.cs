@@ -21,6 +21,7 @@ public class SystemEnemy : MonoBehaviour
     protected BoxCollider2D collider2d;
     protected ComponentEnemyAction componentEnemyAction;
     protected ComponentEnemyState componentEnemyState;
+    protected ComponentMainCharacterState componentMainCharacterState;
     protected SystemMainCharacterMovement mainCharacterMovement;
     protected void Start()
     {
@@ -30,6 +31,7 @@ public class SystemEnemy : MonoBehaviour
         systemGameMaster = gameLogic.GetComponent<SystemGameMaster>();
         mainCharacterMovement = gameLogic.GetComponent<SystemMainCharacterMovement>();
         mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
+        componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         rigidBody = GetComponent<Rigidbody2D>();
         collider2d = GetComponentInChildren<BoxCollider2D>();
         componentEnemyState.enemyHeight = collider2d.size.y;

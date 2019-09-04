@@ -44,9 +44,9 @@ public class SystemEnemyRange : SystemEnemy
         Attack();
     }
 
- /*
- * Trackplayermovent checks where the payer is, and if he is close enough tho attack
- */
+    /*
+    * Trackplayermovent checks where the payer is, and if he is close enough to attack
+    */
     void TrackPlayerMovement()
     {
         componentEnemyAction.distanceToMainCharacter = Vector3.Distance(mainCharacterGameObject.transform.position, transform.position);
@@ -63,8 +63,6 @@ public class SystemEnemyRange : SystemEnemy
                 FlipCharacterDirection(1);
             }
         }
-
-
     }
 
     /*
@@ -77,7 +75,6 @@ public class SystemEnemyRange : SystemEnemy
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
-
             
             attackDirection = new Vector3(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y,0f);
             attackDirection.Normalize();
