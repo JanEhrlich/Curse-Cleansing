@@ -12,8 +12,10 @@ using UnityEngine;
      */
 public class SystemEnemyClose : SystemEnemy
 {
-    public bool drawDebugRaycasts = true;	//Should the environment checks be visualized
-
+    public bool drawDebugRaycasts = true;   //Should the environment checks be visualized
+    public enum EnemyType{SIMPLE,ZOMBIE};
+    //define the movement of this enemy
+    public EnemyType enemyType = EnemyType.SIMPLE;
 
     //Tmp Variables used for Calculations
     Vector2 movement;
@@ -250,3 +252,4 @@ public class SystemEnemyClose : SystemEnemy
         Gizmos.DrawWireSphere(transform.position, componentEnemyAction.attackRange);
     }
 }
+
