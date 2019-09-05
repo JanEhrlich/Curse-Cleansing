@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6656268717975594073}
   - component: {fileID: -1938953496013610583}
   - component: {fileID: 4119412309175974622}
+  - component: {fileID: 3348056024914199101}
   m_Layer: 9
   m_Name: Bullet
   m_TagString: Untagged
@@ -119,7 +120,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.45, y: 0.1}
+  m_Size: {x: 0.33, y: 0.04}
   m_Direction: 1
 --- !u!114 &-1938953496013610583
 MonoBehaviour:
@@ -146,3 +147,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeUntilVanish: 0
+--- !u!61 &3348056024914199101
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6656268717975594078}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.4, y: 0.04}
+    newSize: {x: 0.4, y: 0.04}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.37, y: 0.03}
+  m_EdgeRadius: 0

@@ -18,7 +18,7 @@ public class SystemBullet : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         componentBullet = GetComponent<ComponentBullet>();
         componentBullet.timeUntilVanish = ComponentBullet.lifetime + Time.time;
-       
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Camera"), LayerMask.NameToLayer("Enemy"));
     }
 
     private void Update()
@@ -45,5 +45,13 @@ public class SystemBullet : MonoBehaviour
     public Vector3 getAttackDirection()
     {
         return attackDirection;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision.gameObject.layer);
+        if(collision.gameObject.layer != LayerMask.NameToLayer("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Camera")){
+            Destroy(gameObject);
+        }
     }
 }
