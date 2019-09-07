@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public bool isPlayerTransformed = false;
-    public float currentKrakenLoadValue = 0;
-    public float currentBatLoadValue = 0;
+    //Link to the GameMaster
+    GameObject gameLogic;
+    SystemGameMaster systemGameMaster;
+    ComponentMainCharacterAction action;
 
-    public float curseDecaySpeed;
-    public float transformDecayTime;
+    //Set if you want to display the remaining Time to Transform back
+    public bool showTimeWhileTransformed = true;
 
+    //Link to the UI images
     public List<GameObject> heartImagesFull;
 
     public Image batImage;
@@ -24,10 +27,19 @@ public class UIManager : MonoBehaviour
     public Image batRingTransparent;
     public Image krakenRingTransparent;
 
+    public TextMeshProUGUI krakenLockTimer;
+    public TextMeshProUGUI batLockTimer;
+
+    //Tmp Values for Calculations
     private int lastHealth;
     public int currentHealth = 8;
     private int maxHealth = 8;
+
+    private bool isPlayerTransformed;
     private bool wasPlayerTransformedLastFrame;
+
+    private float currentDecayValueKraken;
+    private float currentDecayValueBat;
 
     // Color Code for disabled State used everywhere else 7B7B7B with 200 Alpha
     public Color disabledColor;
@@ -36,39 +48,81 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameLogic = GameObject.Find("GameLogic");
+        systemGameMaster = gameLogic.GetComponent<SystemGameMaster>();
+        action = systemGameMaster.ComponentMainCharacterAction;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("space"))
-        {
-            currentKrakenLoadValue += 0.2f;
-            currentBatLoadValue += 0.2f;
+        UpdateHearts();
 
-            if (currentKrakenLoadValue == 1)
-            {
-                currentKrakenLoadValue = 0;
-                currentBatLoadValue = 0;
-                isPlayerTransformed = !isPlayerTransformed;
-            }
+        #region CheckIfCurseWasAlreadyUnlocked
+        if (!action.hasKraken)
+        {
+            //disable Kraken UI
+            krakenImage.enabled = false;
+            krakenRingTransparent.enabled = false;
+            krakenRingWhite.enabled = false;
+            krakenLockTimer.enabled = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Equals))
+        if (!action.hasBat)
         {
-            currentHealth++;
+            //disable Bat UI
+            batImage.enabled = false;
+            batRingTransparent.enabled = false;
+            batRingWhite.enabled = false;
+            batLockTimer.enabled = false;
         }
-        if (Input.GetKeyDown(KeyCode.Minus))
-        {
-            currentHealth--;
-        }
+        #endregion
 
-        updateHearts();
-        updateCurses();
+        if (action.hasKraken ||action.hasBat || action.hasGhost || action.hasWolf)
+        {
+            UpdateVariables();
+            UpdateCurses();
+        }
     }
 
-    private void updateHearts()
+    private void UpdateVariables()
+    {
+        isPlayerTransformed = action.isBat || action.isKraken || action.isWolf || action.isGhost;
+
+        if (isPlayerTransformed)
+        {
+            if (action.isKraken)
+            {
+                currentDecayValueKraken = (action.timeUntillNormal - Time.time) / ComponentMainCharacterAction.durationTransformationKrake;
+                currentDecayValueKraken = 1 - currentDecayValueKraken;
+                currentDecayValueBat = (action.timeUntillNormal - Time.time) / ComponentMainCharacterAction.durationTransformationKrake;
+                currentDecayValueBat = 1 - currentDecayValueBat;
+            }
+            else
+            {
+                if (action.isBat)
+                {
+                    currentDecayValueKraken = (action.timeUntillNormal - Time.time) / ComponentMainCharacterAction.durationTransformationBat;
+                    currentDecayValueKraken = 1 - currentDecayValueKraken;
+                    currentDecayValueBat = (action.timeUntillNormal - Time.time) / ComponentMainCharacterAction.durationTransformationBat;
+                    currentDecayValueBat = 1 - currentDecayValueBat;
+                }
+            }
+
+            if (currentDecayValueKraken > 1)
+            {
+                currentDecayValueKraken = 1;
+                currentDecayValueBat = 1;
+            }
+        }
+        else
+        {
+            currentDecayValueKraken = 1;
+            currentDecayValueBat = 1;
+        }
+    }
+
+    private void UpdateHearts()
     {
         if (lastHealth == currentHealth)
             return;
@@ -91,47 +145,111 @@ public class UIManager : MonoBehaviour
         lastHealth = currentHealth;
     }
 
-    private void updateCurses()
+    private void UpdateCurses()
     {
-        checkedTransformed();
+        CheckedTransformed();
         if (isPlayerTransformed)
         {
-            setCurrentValueOfRing(currentKrakenLoadValue, krakenRingTransparent);
-            setCurrentValueOfRing(currentBatLoadValue, batRingTransparent);
+            setCurrentValueOfRing(currentDecayValueKraken, krakenRingTransparent);
+            setCurrentValueOfRing(currentDecayValueBat, batRingTransparent);
+            setTimerText((action.timeUntillNormal - Time.time), krakenLockTimer);
+            setTimerText((action.timeUntillNormal - Time.time), batLockTimer);
         }
         else
         {
-            setCurrentValueOfRing(currentKrakenLoadValue, krakenRingWhite);
-            setCurrentValueOfRing(currentBatLoadValue, batRingWhite);
+            setCurrentValueOfRing(action.currentKrakenCounter, krakenRingWhite);
+            setCurrentValueOfRing(action.currentBatCounter, batRingWhite);
         }
 
     }
 
-    private void checkedTransformed()
+    private void CheckedTransformed()
     {
         if (wasPlayerTransformedLastFrame != isPlayerTransformed)
         {
             if (isPlayerTransformed)
             {
-                batImage.color = disabledColor;
-                batRingWhite.fillAmount = 0;
-                batRingTransparent.fillAmount = 0;
-                batRingWhite.enabled = false;
+                if (action.hasBat)
+                {
+                    batImage.enabled = true;
+                    batImage.color = disabledColor;
 
-                krakenImage.color = disabledColor;
-                krakenRingWhite.fillAmount = 0;
-                krakenRingTransparent.fillAmount = 0;
-                krakenRingWhite.enabled = false;
+                    batRingTransparent.enabled = true;
+                    batRingTransparent.fillAmount = 0;
+
+                    batRingWhite.fillAmount = 0;
+                    batRingWhite.enabled = false;
+
+                    batLockTimer.enabled = true;
+                }
+                else
+                {
+                    batImage.enabled = false;
+                    batRingTransparent.enabled = false;
+                    batRingWhite.enabled = false;
+                    batLockTimer.enabled = false;
+                }
+
+                if (action.hasKraken)
+                {
+                    krakenImage.enabled = true;
+                    krakenImage.color = disabledColor;
+
+                    krakenRingTransparent.enabled = true;
+                    krakenRingTransparent.fillAmount = 0;
+
+                    krakenRingWhite.fillAmount = 0;
+                    krakenRingWhite.enabled = false;
+
+                    krakenLockTimer.enabled = true;
+                }
+                else
+                {
+                    krakenImage.enabled = false;
+                    krakenRingTransparent.enabled = false;
+                    krakenRingWhite.enabled = false;
+                    krakenLockTimer.enabled = false;
+                }
             }
             else
             {
-                batImage.color = enabledColor;
-                batRingTransparent.fillAmount = 1;
-                batRingWhite.enabled = true;
+                if (action.hasBat)
+                {
+                    batImage.enabled = true;
+                    batImage.color = enabledColor;
 
-                krakenImage.color = enabledColor;
-                krakenRingTransparent.fillAmount = 1;
-                krakenRingWhite.enabled = true;
+                    batRingTransparent.enabled = true;
+                    batRingTransparent.fillAmount = 1;
+
+                    batRingWhite.enabled = true;
+
+                    batLockTimer.enabled = false;
+                }
+                else
+                {
+                    batImage.enabled = false;
+                    batRingTransparent.enabled = false;
+                    batRingWhite.enabled = false;
+                }
+
+                if (action.hasKraken)
+                {
+                    krakenImage.enabled = true;
+                    krakenImage.color = enabledColor;
+
+                    krakenRingTransparent.enabled = true;
+                    krakenRingTransparent.fillAmount = 1;
+
+                    krakenRingWhite.enabled = true;
+
+                    krakenLockTimer.enabled = false;
+                }
+                else
+                {
+                    krakenImage.enabled = false;
+                    krakenRingTransparent.enabled = false;
+                    krakenRingWhite.enabled = false;
+                }
             } 
             
         }
@@ -139,11 +257,23 @@ public class UIManager : MonoBehaviour
         wasPlayerTransformedLastFrame = isPlayerTransformed;
     }
 
+    private void setTimerText(float decayValue, TextMeshProUGUI lockTimerText)
+    {
+        if (decayValue > 0 && showTimeWhileTransformed)
+        {
+            lockTimerText.SetText(decayValue.ToString("0.0").Replace(",", "."));
+        }
+        else
+        {
+            lockTimerText.SetText("");
+        }
+    }
+
     private void setCurrentValueOfRing(float percentage, Image ring)
     {
         if (0 <= percentage && percentage <= 1)
         {
-            ring.fillAmount = Mathf.Lerp(ring.fillAmount,percentage,5*Time.deltaTime);
+            ring.fillAmount = Mathf.Lerp(ring.fillAmount, percentage, 5 * Time.deltaTime);
         }
     }
 }

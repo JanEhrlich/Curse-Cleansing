@@ -330,6 +330,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
             }
             else
             {
+                if (componentMainCharacterAction.isKraken || componentMainCharacterAction.isWolf || componentMainCharacterAction.isGhost)
+                    return;
+
                 if ((componentMainCharacterAction.hasBat && componentMainCharacterAction.hasDoubleJump) || componentMainCharacterAction.isBat)
                 {
                     Jump();
@@ -343,6 +346,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
                     {
                         componentMainCharacterAction.hasDoubleJump = false;
                         componentMainCharacterAction.batFlapDoubleJumpImpulse = true;
+                        increaseCurseCounterBat();
                         //TODO change to BIG bat flap audio if found good sound
                         AudioManager.PlayJumpAudio();
                     }
@@ -422,6 +426,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
             AudioManager.PlayKrakenSquishSFXAudio();
             componentMainCharacterAction.krakenImpulse = true;
             componentMainCharacterAction.isUsingKrakenPull = true;
+            increaseCurseCounterKraken();
             Vector2.MoveTowards(mainCharacterTransform.position, componentKrakenMarker.closestMarkerInRange.transform.position,componentKrakenMarker.distanceThreshold);
         }    
     }
@@ -433,12 +438,20 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //Checking player distance to the krakenMarker
         if (tmp_direction.sqrMagnitude < ComponentMainCharacterAction.krakePullThresholdDistance * ComponentMainCharacterAction.krakePullThresholdDistance)
         {
-            rigidBody.velocity = Vector2.zero;
-            rigidBody.bodyType = RigidbodyType2D.Static;
-            componentMainCharacterAction.isUsingKrakenPull = false;
-            componentMainCharacterAction.isHangingOnMarker = true;
-            componentMainCharacterAction.hasDoubleJump = true;
-            componentMainCharacterState.hasJump = true;
+            if (!componentMainCharacterAction.isKraken)
+            {
+                rigidBody.velocity = Vector2.zero;
+                rigidBody.bodyType = RigidbodyType2D.Static;
+                componentMainCharacterAction.isUsingKrakenPull = false;
+                componentMainCharacterAction.isHangingOnMarker = true;
+                componentMainCharacterAction.hasDoubleJump = true;
+                componentMainCharacterState.hasJump = true;
+            }
+            else
+            {
+                componentMainCharacterAction.isUsingKrakenPull = false;
+                componentMainCharacterAction.isHangingOnMarker = false;
+            }
         }
         else
         {
@@ -614,5 +627,25 @@ public class SystemMainCharacterMovement : MonoBehaviour
         Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.attackBoxNormal.x, componentMainCharacterAction.attackBoxNormal.y, 1f));
     }
 
+    #region IncreaseCurseCounters
+    private void increaseCurseCounterKraken()
+    {
+        componentMainCharacterAction.currentKrakenCounter += ComponentMainCharacterAction.costKrakenAbility;
+        
+        if (componentMainCharacterAction.currentKrakenCounter > 1)
+        {
+            componentMainCharacterAction.currentKrakenCounter = 1;
+        }
+    }
 
+    private void increaseCurseCounterBat()
+    {
+        componentMainCharacterAction.currentBatCounter += ComponentMainCharacterAction.costBatAbility;
+
+        if (componentMainCharacterAction.currentBatCounter > 1)
+        {
+            componentMainCharacterAction.currentBatCounter = 1;
+        }
+    }
+    #endregion
 }

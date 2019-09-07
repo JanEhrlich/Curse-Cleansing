@@ -54,7 +54,8 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
 
     public void Tick()
     {
-
+        DecayCurseCounters();
+        CheckCountersForForcedTransformation();
     }
 
     public void FixedTick()
@@ -108,6 +109,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
 
         //Kraken only Stuff
         componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackKraken;
+        componentMainCharacterAction.currentKrakenCounter = 0;
     }
 
     private void TransformToBat()
@@ -124,8 +126,8 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
 
         //Bat only Stuff
         componentMainCharacterAction.waitingTime = ComponentMainCharacterAction.durationAttackBat;
+        componentMainCharacterAction.currentBatCounter = 0;
 
-        //@Jannis die nächste Zeile verstehe ich nicht. Warum halfBat Values benutzen wenn es hier um die volle Transformation geht?
         rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageBat;
         rigidBody.velocity = new Vector2(rigidBody.velocity.x, rigidBody.velocity.y * ComponentMainCharacterAction.gravityPercentageBat/2);
     }
@@ -205,4 +207,43 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     }
 
     #endregion
+
+    private void DecayCurseCounters()
+    {
+        if (componentMainCharacterAction.currentKrakenCounter > 0 && componentMainCharacterAction.currentKrakenCounter < 1)
+        {
+            componentMainCharacterAction.currentKrakenCounter -= ComponentMainCharacterAction.decaySpeedKraken * Time.deltaTime;
+            
+            if (componentMainCharacterAction.currentKrakenCounter < 0)
+            {
+                componentMainCharacterAction.currentKrakenCounter = 0;
+            }
+        }
+
+        if (componentMainCharacterAction.currentBatCounter > 0 && componentMainCharacterAction.currentBatCounter < 1)
+        {
+            componentMainCharacterAction.currentBatCounter -= ComponentMainCharacterAction.decaySpeedBat * Time.deltaTime;
+
+            if (componentMainCharacterAction.currentBatCounter < 0)
+            {
+                componentMainCharacterAction.currentBatCounter = 0;
+            }
+        }
+    }
+
+    private void CheckCountersForForcedTransformation()
+    {
+        if (componentMainCharacterAction.currentKrakenCounter >= 1)
+        {
+            TransformToKraken();
+            return;
+        }
+
+        if (componentMainCharacterAction.currentBatCounter >= 1)
+        {
+            TransformToBat();
+            componentMainCharacterAction.currentBatCounter = 0;
+            return;
+        }
+    }
 }
