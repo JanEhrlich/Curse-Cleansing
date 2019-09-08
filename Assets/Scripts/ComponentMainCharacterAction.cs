@@ -31,7 +31,7 @@ public class ComponentMainCharacterAction
     public static float durationAttackKraken = 0.2f;
     public static float durationAttackBat = 0.2f;
 
-    public static float knockBackTime = 1.5f;                 //time for invulnerable
+    public static float knockBackTime = 1.5f;               //time for invulnerable
     public static float knockBackPowerUp = 3f;              // velocity upwards on impact 
     public static float knowBackPowerHorizontal = 4f;       //horizontal velocity
 
@@ -42,6 +42,12 @@ public class ComponentMainCharacterAction
 
     public static float krakenPullSpeed = 10f;               //The speed with which the kraken ability is pulling the player towards the marker
     public static float krakePullThresholdDistance = 0.3f;  //How far does the player need to be away from the marker to enter the isHangingOnMarker State
+
+    public static float costKrakenAbility = 0.2f;              //How much will the kraken counter be increased per use. Value has to be between 0 and 1.
+    public static float costBatAbility = 0.2f;                 //How much will the bat counter be increased per use. Value has to be between 0 and 1.
+
+    public static float decaySpeedKraken = 0.02f;               //How fast will the Kraken counter decay (Normal Form)
+    public static float decaySpeedBat = 0.02f;                  //How fast will the Bat counter decay (Normal Form)
     #endregion
 
 
@@ -116,5 +122,8 @@ public class ComponentMainCharacterAction
     public Vector2 currentAttackBox;
 
     public float timeUntillKnockBackEnd = 0f;               //current time left untill enemy can move again
+
+    public float currentKrakenCounter = 0f;                 //Current Kraken Curse Counter. When this value reaches 1, the player will transform into a kraken
+    public float currentBatCounter = 0f;                    //Current Kraken Bat Counter. When this value reaches 1, the player will transform into a bat
     #endregion
 }

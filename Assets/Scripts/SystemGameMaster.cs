@@ -45,6 +45,7 @@ public class SystemGameMaster : MonoBehaviour
     void Update()
     {
         systemInput.Tick();
+        systemMainCharacterMovementTransformed.Tick();
         systemMainCharacterAnimation.Tick();
         systemKrakenMarker.Tick();
         systemProgression.Tick();
