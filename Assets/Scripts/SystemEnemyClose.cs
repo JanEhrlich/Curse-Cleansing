@@ -224,9 +224,9 @@ public class SystemEnemyClose : SystemEnemy
     {
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time && componentEnemyState.direction !=  (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1))
         {
-            Debug.Log("Attack");
-            Debug.Log(componentEnemyState.direction);
-            Debug.Log(componentMainCharacterState.direction);
+            //Debug.Log("Attack");
+            //Debug.Log(componentEnemyState.direction);
+            //Debug.Log(componentMainCharacterState.direction);
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
             //delay the attackdirection of the enemy

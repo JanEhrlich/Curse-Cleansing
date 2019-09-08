@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     //Link to the GameMaster
     GameObject gameLogic;
     SystemGameMaster systemGameMaster;
+    ComponentMainCharacterState state;
     ComponentMainCharacterAction action;
 
     //Set if you want to display the remaining Time to Transform back
@@ -32,7 +33,6 @@ public class UIManager : MonoBehaviour
 
     //Tmp Values for Calculations
     private int lastHealth;
-    public int currentHealth = 8;
     private int maxHealth = 8;
 
     private bool isPlayerTransformed;
@@ -50,6 +50,7 @@ public class UIManager : MonoBehaviour
     {
         gameLogic = GameObject.Find("GameLogic");
         systemGameMaster = gameLogic.GetComponent<SystemGameMaster>();
+        state = systemGameMaster.ComponentMainCharacterState;
         action = systemGameMaster.ComponentMainCharacterAction;
     }
 
@@ -124,15 +125,15 @@ public class UIManager : MonoBehaviour
 
     private void UpdateHearts()
     {
-        if (lastHealth == currentHealth)
+        if (lastHealth == state.health)
             return;
 
-        if (currentHealth > maxHealth)
+        if (state.health > maxHealth)
             return;
 
         for (int i = 0; i < heartImagesFull.Count; ++i)
         {
-            if (i < currentHealth)
+            if (i < state.health)
             {
                 heartImagesFull[i].SetActive(true);
             }
@@ -142,7 +143,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        lastHealth = currentHealth;
+        lastHealth = state.health;
     }
 
     private void UpdateCurses()

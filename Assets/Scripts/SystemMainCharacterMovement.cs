@@ -485,7 +485,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //do not attack to often
         if (componentMainCharacterAction.timeUntillNextAttack <= 0)
         {
-            Debug.Log("DidAttack");
+           // Debug.Log("DidAttack");
            // attackArea.enabled = true;                  // used if collider attack is used
             //compute overlapping colliders
            numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
@@ -577,11 +577,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //do not receive damage while knockbacked
         if (componentMainCharacterAction.timeUntillKnockBackEnd >= Time.time) return;
 
-        Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
+        //Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
 
         AudioManager.PlayHurtAudio();
         componentMainCharacterState.health -= damage;
-        Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
+        //Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
         if (componentMainCharacterState.health <= 0)
         {
             AudioManager.PlayDeathAudio();
@@ -590,7 +590,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
 
         //make player move while he can not receive damage
-        Debug.Log("GOD");
+        //Debug.Log("GOD");
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
 
         //direction is the direction where the collision is originated
