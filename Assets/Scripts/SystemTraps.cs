@@ -12,7 +12,7 @@ public class SystemTraps : SystemEnemy
 
     void FixedUpdate(){
         if(Physics2D.IsTouchingLayers(mainCharacterGameObject.GetComponentInChildren<BoxCollider2D>(), systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Traps")))){
-            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(ComponentEnemyState.damage, 0);
+            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(componentEnemyState.damage, 0);
         }
     }
 
@@ -24,7 +24,7 @@ public class SystemTraps : SystemEnemy
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             //throw the player back
-            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(ComponentEnemyState.damage, 0);
+            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(componentEnemyState.damage, 0);
         }
     }
 

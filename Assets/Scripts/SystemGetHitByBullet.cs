@@ -16,10 +16,9 @@ public class SystemGetHitByBullet : MonoBehaviour
      */
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         if (collision.gameObject.name.Contains("Bullet"))
         {
-            systemMainCharacterMovement.BulletHit(collision);
+            systemMainCharacterMovement.BulletHit(collision, ComponentBullet.damage);
         }
 
     }

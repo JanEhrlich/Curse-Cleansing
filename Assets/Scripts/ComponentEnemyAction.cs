@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComponentEnemyAction : MonoBehaviour
+public class ComponentEnemyAction
 {
     /*
      * Hardcoded Variables which shape the games behaviour
@@ -21,10 +21,10 @@ public class ComponentEnemyAction : MonoBehaviour
      */
     #region SetOnInitVariables
     public Vector3 attackPositionOffset;                        // position of the enemys attack 
-    public float followRange = 7f;                       //range where the enemy can follow the player
+    public float followRange = 5f;                       //range where the enemy can follow the player
     public float attackRange = 2f;                       //mostly for close combat
     public float timeToAttack = 0.5f;                 //time for attack, if the player enters the viewfield of the enemy
-    public float timeBetweenAttacks = 2f;                //time between consecutive attacks, needs again timeToAttack
+    public float timeBetweenAttacks = 3f;                //time between consecutive attacks, needs again timeToAttack
     public Vector2 attackBoxNormal;                         //attackBox ist the area of applying dmg
     #endregion
 

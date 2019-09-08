@@ -86,8 +86,6 @@ GameObject:
   - component: {fileID: 2147842118832004661}
   - component: {fileID: 2147842118832004660}
   - component: {fileID: 2147842118832004663}
-  - component: {fileID: 2147842118832004667}
-  - component: {fileID: 2147842118832004666}
   m_Layer: 9
   m_Name: FlyingSkull
   m_TagString: Untagged
@@ -192,52 +190,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad806883b868c28439b36efc34619a6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2147842118832004667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2147842118832004665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 786058bb496cce346af1879655b0e0b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackPositionOffset: {x: 0, y: 0, z: 0}
-  followRange: 7
-  attackRange: 2
-  timeToAttack: 0.5
-  timeBetweenAttacks: 2
-  attackBoxNormal: {x: 0, y: 0}
-  followRangeMultiplier: 1
-  timeForNextAttack: 0
-  timeUntillKnockBackEnd: 0
-  distanceToMainCharacter: 0
-  isAttacking: 0
---- !u!114 &2147842118832004666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2147842118832004665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0f6ba38ad82f59468e2394d218c05cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  normalGravity: 0
-  enemyHeight: 0
-  layerMask: 0
-  hitLayerMask: 0
-  speedMultiplier: 1
-  jumpForceMultiplier: 1
-  currentSpeed: 0
-  currentJumpForce: 0
-  isMoving: 0
-  currentVelocity: {x: 0, y: 0}
-  hasJump: 0
-  isOnGround: 0
-  originalXScale: 0
-  direction: 1
+  flyingDirection: 1
