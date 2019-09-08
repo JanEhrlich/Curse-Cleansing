@@ -31,9 +31,14 @@ public class ComponentMainCharacterAction
     public static float durationAttackKraken = 0.2f;
     public static float durationAttackBat = 0.2f;
 
-    public static float knockBackTime = 1.5f;                 //time untill one can move again
+    public static float knockBackTime = 1.5f;                 //time for invulnerable
     public static float knockBackPowerUp = 3f;              // velocity upwards on impact 
     public static float knowBackPowerHorizontal = 4f;       //horizontal velocity
+
+
+    public static float krakenAttackRangeMultiplier = 3f;                 //offset where to start the attack above or below for kraken
+    public static float batAttackRangeMultiplier = 2f;                    //offset where to start the attack above or below for bat
+
 
     public static float krakenPullSpeed = 10f;               //The speed with which the kraken ability is pulling the player towards the marker
     public static float krakePullThresholdDistance = 0.3f;  //How far does the player need to be away from the marker to enter the isHangingOnMarker State
@@ -54,6 +59,8 @@ public class ComponentMainCharacterAction
     public Vector2 colliderBatSize;                         //Size of the Bat collider
     public Vector2 colliderBatOffset;                       //Offset of the Bat collider
 
+
+    
     public Vector2 attackBoxNormal;                         //attackBox ist the area of applying dmg
     public Vector2 attackBoxKraken;                         //attackBox ist the area of applying dmg
     public Vector2 attackBoxBat;                            //attackBox ist the area of applying dmg
@@ -61,6 +68,8 @@ public class ComponentMainCharacterAction
 
     public Vector3 attackPositionHorizontalOffset;                  //offset where to start the attack horizontal
     public Vector3 attackPositionVerticalOffset;                    //offset where to start the attack above or below
+
+
     #endregion
 
 
@@ -103,6 +112,8 @@ public class ComponentMainCharacterAction
     public float waitingTime = 0.3f;                        //how long do i need to wait before attacking again
     public float timeUntillNextAttack = 0f;                 //counter how long to wait. This variable is checked whether a new attack is possible or not
     public bool attackImpulse = false;                      //Variable will be set to true for one Frame, to trigger Attack Animation
+
+    public Vector2 currentAttackBox;
 
     public float timeUntillKnockBackEnd = 0f;               //current time left untill enemy can move again
     #endregion

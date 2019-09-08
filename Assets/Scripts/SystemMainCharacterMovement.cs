@@ -39,9 +39,10 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     //Variable used for attacking
     bool receivedAttackFlag;
+    bool receivedAttackFlag = false;
 
     //Variable used for kraken ability
-    bool receivedKrakenFlag;
+    bool receivedKrakenFlag = false;
 
     //Used to avoid setting jupedOnce back to false because Jump couldn't build up distance to make GroundedCheck false
     bool skipNextFrame;
@@ -85,6 +86,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         //Record the original x scale of the player
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
+        componentMainCharacterState.isAttacking = false;
 
         //add button functions
         componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
@@ -99,8 +101,10 @@ public class SystemMainCharacterMovement : MonoBehaviour
     void InitPlayerAttackRanges()
     {
         componentMainCharacterAction.attackBoxNormal = new Vector2(attackLength, attackLength);
-        componentMainCharacterAction.attackBoxKraken = new Vector2(attackLength, attackLength * 2.5f);
-        componentMainCharacterAction.attackBoxBat = new Vector2(attackLength, attackLength * 2f);
+        componentMainCharacterAction.attackBoxKraken = new Vector2(attackLength * 3f, attackLength);
+        componentMainCharacterAction.attackBoxBat = new Vector2(attackLength * 2f, attackLength);
+
+        componentMainCharacterAction.currentAttackBox = componentMainCharacterAction.attackBoxNormal;
 
         componentMainCharacterAction.attackPositionHorizontalOffset = new Vector3(1f, 0f, 0f);
         componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionHorizontalOffset;
@@ -116,6 +120,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         ResetImpulses();
         UpdatedSpeedAndJumpForce();
+        UpdateAttackRange();
 
         if (skipNextFrame)
         {
@@ -128,7 +133,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         //dont move if knockedback, but let move after knock back is finished
         //TODO maybe make own vairable for this
-        if (componentMainCharacterAction.timeUntillKnockBackEnd-1f >= Time.time) return;
+        if (componentMainCharacterAction.timeUntillKnockBackEnd-1.15f >= Time.time) return;
 
         HorizontalMovement();
         VerticalLooking();
@@ -138,26 +143,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
             HandelJumpInstruction();
             receivedJumpFlag = false;
         }
-
-        #region checkAttack
-        //TODO make other timer
-        if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack <= 0)
-        {
-           HandleAttackInstruction();  
-        }
-        //need to disable the attack area if the time of the attack is running out
-        if (componentMainCharacterAction.timeUntillNextAttack <= 0)
-        {
-           // attackArea.enabled = false;         // used if collider attack is used
-        }
-        else
-        {
-            componentMainCharacterAction.timeUntillNextAttack -= Time.deltaTime;          
-        }
-        receivedAttackFlag = false;
-
-        #endregion
-
+        
+        HandleAttackInstruction();  
+        
         CheckTimers();
         #region checkKrakenAbility
 
@@ -184,6 +172,18 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         componentMainCharacterState.currentSpeed = ComponentMainCharacterState.speed * componentMainCharacterState.speedMultiplier;
         componentMainCharacterState.currentJumpForce = ComponentMainCharacterState.jumpForce * componentMainCharacterState.jumpForceMultiplier;
+    }
+
+    void UpdateAttackRange()
+    {
+        if (receivedKrakenFlag)
+        {
+            componentMainCharacterAction.currentAttackBox = componentMainCharacterAction.attackBoxKraken;
+        }
+        else
+        {
+            componentMainCharacterAction.currentAttackBox = componentMainCharacterAction.attackBoxNormal;
+        }
     }
 
     private void CheckTimers()
@@ -252,13 +252,20 @@ public class SystemMainCharacterMovement : MonoBehaviour
         {
             componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionHorizontalOffset;
             componentMainCharacterAction.attackPositionOffset.x *= componentMainCharacterState.direction;
-            return;
+        }
+        else
+        {
+            componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionVerticalOffset;
+            componentMainCharacterAction.currentAttackBox = new Vector2(componentMainCharacterAction.currentAttackBox.y, componentMainCharacterAction.currentAttackBox.x);
+            if (componentInput.getCurrentJoystickAxis().y < 0)
+            {
+                componentMainCharacterAction.attackPositionOffset.y *= -1;
+            }
         }
 
-        componentMainCharacterAction.attackPositionOffset = componentMainCharacterAction.attackPositionVerticalOffset;
-        if (componentInput.getCurrentJoystickAxis().y < 0)
+        if (receivedKrakenFlag)
         {
-            componentMainCharacterAction.attackPositionOffset.y *= -1;
+            componentMainCharacterAction.attackPositionOffset *= ComponentMainCharacterAction.krakenAttackRangeMultiplier;
         }
     }
 
@@ -394,14 +401,15 @@ public class SystemMainCharacterMovement : MonoBehaviour
             return;
         }
 
-        //If no marker is in range ==> do nothing
+        //If no marker is in range ==> do nothing (TODO do krakenAttack)
         if (componentKrakenMarker.closestMarkerInRange == null)
         {
+            HandleKrakenAttack();
             return;
         }
 
         //If player is currently attackign ==> do nothing
-        if (componentMainCharacterAction.timeUntillNextAttack > 0)
+        if (componentMainCharacterState.isAttacking)
         {
             return;
         }
@@ -450,6 +458,32 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         receivedKrakenFlag = true;
     }
+
+
+    void HandleKrakenAttack()
+    {
+        if (componentMainCharacterAction.timeUntillNextAttack < Time.time)
+        {
+            Debug.Log("DidAttack");
+            componentMainCharacterState.isAttacking = true;
+            numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.currentAttackBox, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
+
+            ApplyDamageToAllEnemys(enemyToDamageColliders, componentMainCharacterState.damage);
+
+            ResetTempArrays();
+
+            componentMainCharacterAction.timeUntillNextAttack = Time.time + componentMainCharacterAction.waitingTime;
+
+            //trigger Animation
+            //TODO make right animation
+            componentMainCharacterAction.attackImpulse = true;
+            //AudioManager.PlaySwordAttackAudio();
+        }
+        if (componentMainCharacterAction.timeUntillNextAttack < Time.time)
+        {
+            componentMainCharacterState.isAttacking = false;
+        }
+    }
     #endregion
 
     /*
@@ -469,25 +503,29 @@ public class SystemMainCharacterMovement : MonoBehaviour
      */
     void HandleAttackInstruction()
     {
-        //do not attack to often
-        if (componentMainCharacterAction.timeUntillNextAttack <= 0)
+        if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack < Time.time)
         {
             Debug.Log("DidAttack");
-           // attackArea.enabled = true;                  // used if collider attack is used
-            //compute overlapping colliders
-           numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.attackBoxNormal, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
+            componentMainCharacterState.isAttacking = true;
+            numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.currentAttackBox, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
 
             ApplyDamageToAllEnemys(enemyToDamageColliders, componentMainCharacterState.damage);
 
             ResetTempArrays();
 
-            componentMainCharacterAction.timeUntillNextAttack = componentMainCharacterAction.waitingTime;
+            componentMainCharacterAction.timeUntillNextAttack = Time.time + componentMainCharacterAction.waitingTime;
             receivedAttackFlag = false;
 
             //trigger Animation
             componentMainCharacterAction.attackImpulse = true;
             AudioManager.PlaySwordAttackAudio();
         }
+
+        if (componentMainCharacterAction.timeUntillNextAttack < Time.time)
+        {
+            componentMainCharacterState.isAttacking = false;
+        }
+
     }
 
     /*
@@ -523,8 +561,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         receivedAttackFlag = true;
     }
-
-
+    
+    
     /*
      *  --------------------------TEST----------------------------
      *  used for attacking with a collider
@@ -548,11 +586,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
     /*
      * handle the bullet hit
      */
-     public void BulletHit(Collision2D collision)
+     public void BulletHit(Collision2D collision, int damage)
     {
         Destroy(collision.gameObject);
 
-        ReceiveDamage(ComponentEnemyState.damage,collision.gameObject.GetComponent<SystemBullet>().getAttackDirection().x > 0? 1 : -1);
+        ReceiveDamage(damage,collision.gameObject.GetComponent<SystemBullet>().getAttackDirection().x > 0? 1 : -1);
     }
 
 
@@ -564,7 +602,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //do not receive damage while knockbacked
         if (componentMainCharacterAction.timeUntillKnockBackEnd >= Time.time) return;
 
-        Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
+        //Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
 
         AudioManager.PlayHurtAudio();
         componentMainCharacterState.health -= damage;
@@ -604,6 +642,26 @@ public class SystemMainCharacterMovement : MonoBehaviour
     }
     #endregion
 
+    #region handleTransformation
+    /*
+     * for every use of a special ability, add energy to the transformation bar
+     */
+     void AddEnergy(int amount)
+    {
+
+    }
+
+    /*
+     * decreas the energy over time
+     */
+    void DecreaseEneryOverTime()
+    {
+
+    }
+
+
+    #endregion
+
     /*
      * just for debug purposes, draws the hitting area of the player
      */
@@ -611,7 +669,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         Gizmos.color = Color.red;
         //The next line is causing an Error when not in Play mode
-        Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.attackBoxNormal.x, componentMainCharacterAction.attackBoxNormal.y, 1f));
+        Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.currentAttackBox.x, componentMainCharacterAction.currentAttackBox.y, 1f));
     }
 
 

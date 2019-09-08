@@ -224,9 +224,7 @@ public class SystemEnemyClose : SystemEnemy
     {
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time && componentEnemyState.direction !=  (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1))
         {
-            Debug.Log("Attack");
-            Debug.Log(componentEnemyState.direction);
-            Debug.Log(componentMainCharacterState.direction);
+            Debug.Log("Enemy Attack");
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
             //delay the attackdirection of the enemy
@@ -253,7 +251,7 @@ public class SystemEnemyClose : SystemEnemy
     {
         if (numberOfOverlaps == 0) return;
 
-        mainCharacterMovement.ReceiveDamage(ComponentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
+        mainCharacterMovement.ReceiveDamage(componentEnemyState.damage, transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1);
     }
     #endregion
     
@@ -269,9 +267,9 @@ public class SystemEnemyClose : SystemEnemy
         }
         else
         {
-            ComponentEnemyState.health -= damage;
-            Debug.Log("Was hit: " + ComponentEnemyState.health + " Time:" + Time.time); //TEST
-            if (ComponentEnemyState.health <= 0)
+            componentEnemyState.health -= damage;
+            Debug.Log("Was hit: " + componentEnemyState.health + " Time:" + Time.time); //TEST
+            if (componentEnemyState.health <= 0)
             {
                 HandleDieEnemy();
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComponentEnemyState : MonoBehaviour
+public class ComponentEnemyState
 {
     /*
      * Hardcoded Variables which shape the games behaviour
@@ -17,8 +17,8 @@ public class ComponentEnemyState : MonoBehaviour
     public static float footOffsetRight = .3f;           //X Offset of right foot raycast
 
 
-    public static int health = 100;
-    public static int damage = 10;
+    
+    
     #endregion
 
 
@@ -30,6 +30,7 @@ public class ComponentEnemyState : MonoBehaviour
     public float enemyHeight;                      //Height of the enemy
     public int layerMask;                           //do not hit enemy with raycast for ground checks etc.
     public int hitLayerMask;                        //hit everything except the enemy and the camera for attacking
+    public int damage = 1;
     #endregion
 
 
@@ -52,6 +53,7 @@ public class ComponentEnemyState : MonoBehaviour
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction enemy is facing
 
+    public int health = 3;
 
     #endregion
 }

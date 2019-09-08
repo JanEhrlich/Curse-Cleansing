@@ -50,13 +50,14 @@ public class ComponentMainCharacterState
     public bool hasJump;                            //Can the player intentionally jump once. Used to prevent edge case "doubleJump" during coyoteTime
     public bool isOnGround;                         //Is the player on the ground?
     public float coyoteTime;                        //Variable to hold coyote duration
+    public bool isAttacking = false;
 
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction player is facing
 
     public int layerMask;                           //do not hit player with raycast (everything except the player)
 
-    public int health = 100;
-    public int damage = 20;
+    public int health = 5;
+    public int damage = 1;
     #endregion
 }

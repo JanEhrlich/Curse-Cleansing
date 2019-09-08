@@ -15,14 +15,22 @@ public class SystemEnemyFlyingSkull : SystemEnemy
     int direction;
 
     // Start is called before the first frame update
-    void Start()
+
+    //has error, that collider2d is null, if base.Start is called from the Start method
+    private void Awake()
     {
         base.Start();
-        if(flyingDirection == Direction.RIGHT){
+        if (flyingDirection == Direction.RIGHT)
+        {
             direction = 1;
-        }else{
+        }
+        else
+        {
             direction = -1;
         }
+    }
+    void Start()
+    {
     }
 
     // Update is called once per frame
@@ -69,9 +77,25 @@ public class SystemEnemyFlyingSkull : SystemEnemy
             componentEnemyAction.timeUntillKnockBackEnd = Time.time + ComponentEnemyAction.knockBackTime/2;
 
             //throw the player back
-            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(ComponentEnemyState.damage, mainCharacterGameObject.transform.position.x <= transform.position.x ? -1 : 1);
+            gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(componentEnemyState.damage, mainCharacterGameObject.transform.position.x <= transform.position.x ? -1 : 1);
 
             Destroy(gameObject);
+        }
+        else
+        {
+            Physics2D.IgnoreCollision(collider2d, collision.collider);
+        }
+    }
+
+    public void UpdateDirection(Direction update)
+    {
+        if (update == Direction.RIGHT)
+        {
+           direction = 1;
+        }
+        else
+        {
+           direction = -1;
         }
     }
 

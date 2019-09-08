@@ -18,6 +18,9 @@ public class SystemEnemyRange : SystemEnemy
     //handles
     GameObject rangeAttackMisslePrefab;
 
+    //set attack range multiplier in inspector
+    public float attackrangeMultiplier = 3f;
+
     //Tmp Variables used for Calculations
     Vector3 tmp_scale;
     float tmp_direction;
@@ -25,11 +28,13 @@ public class SystemEnemyRange : SystemEnemy
     Vector3 attackDirection;
     GameObject bullet;
     Quaternion rotation;
+    float rotZ;
+
     void Start()
     {
         base.Start();
         componentEnemyState.currentSpeed = 0;
-        componentEnemyAction.followRange = 15f;
+        componentEnemyAction.followRange *= attackrangeMultiplier;
         rangeAttackMisslePrefab = Resources.Load("Bullet") as GameObject;
         componentEnemyAction.isAttacking = false;
     }
@@ -81,7 +86,7 @@ public class SystemEnemyRange : SystemEnemy
 
             //rotate the bullet
             //roate only around z, this math-formula give us the angle between the maincaracter and the enemy
-            float rotZ = Mathf.Atan2(attackDirection.y,attackDirection.x) * Mathf.Rad2Deg;
+            rotZ = Mathf.Atan2(attackDirection.y,attackDirection.x) * Mathf.Rad2Deg;
             rotation = Quaternion.Euler(0f, 0f, rotZ);
 
             //create the bullet
