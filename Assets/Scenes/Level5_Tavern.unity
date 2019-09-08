@@ -15407,6 +15407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showTimeWhileTransformed: 1
+  maxHealth: 8
   heartImagesFull:
   - {fileID: 2084442503}
   - {fileID: 987055213}
@@ -15416,6 +15417,15 @@ MonoBehaviour:
   - {fileID: 1382822671}
   - {fileID: 780408311}
   - {fileID: 1517032164}
+  heartImagesEmpty:
+  - {fileID: 1824491404}
+  - {fileID: 1142463089}
+  - {fileID: 917008426}
+  - {fileID: 688619366}
+  - {fileID: 461582478}
+  - {fileID: 1081335065}
+  - {fileID: 1912021159}
+  - {fileID: 1112548781}
   batImage: {fileID: 1102341738}
   krakenImage: {fileID: 2110932273}
   batRingWhite: {fileID: 1107606738}

@@ -16,8 +16,12 @@ public class UIManager : MonoBehaviour
     //Set if you want to display the remaining Time to Transform back
     public bool showTimeWhileTransformed = true;
 
+    //The Max amount of health. Don't use a greater Value than 8 because there are no more grafics for this.
+    public int maxHealth = 8;
+
     //Link to the UI images
     public List<GameObject> heartImagesFull;
+    public List<GameObject> heartImagesEmpty;
 
     public Image batImage;
     public Image krakenImage;
@@ -33,7 +37,6 @@ public class UIManager : MonoBehaviour
 
     //Tmp Values for Calculations
     private int lastHealth;
-    private int maxHealth = 8;
 
     private bool isPlayerTransformed;
     private bool wasPlayerTransformedLastFrame;
@@ -52,6 +55,8 @@ public class UIManager : MonoBehaviour
         systemGameMaster = gameLogic.GetComponent<SystemGameMaster>();
         state = systemGameMaster.ComponentMainCharacterState;
         action = systemGameMaster.ComponentMainCharacterAction;
+
+        UpdateHeartAmount();
     }
 
     // Update is called once per frame
@@ -83,6 +88,18 @@ public class UIManager : MonoBehaviour
         {
             UpdateVariables();
             UpdateCurses();
+        }
+    }
+
+    private void UpdateHeartAmount()
+    {
+        for (int i = 0; i < heartImagesFull.Count; ++i)
+        {
+            if (i >= maxHealth)
+            {
+                heartImagesFull[i].SetActive(false);
+                heartImagesEmpty[i].SetActive(false);
+            }
         }
     }
 
