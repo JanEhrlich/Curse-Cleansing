@@ -10,13 +10,18 @@ public class UIManager : MonoBehaviour
     //Link to the GameMaster
     GameObject gameLogic;
     SystemGameMaster systemGameMaster;
+    ComponentMainCharacterState state;
     ComponentMainCharacterAction action;
 
     //Set if you want to display the remaining Time to Transform back
     public bool showTimeWhileTransformed = true;
 
+    //The Max amount of health. Don't use a greater Value than 8 because there are no more grafics for this.
+    public int maxHealth = 8;
+
     //Link to the UI images
     public List<GameObject> heartImagesFull;
+    public List<GameObject> heartImagesEmpty;
 
     public Image batImage;
     public Image krakenImage;
@@ -32,8 +37,6 @@ public class UIManager : MonoBehaviour
 
     //Tmp Values for Calculations
     private int lastHealth;
-    public int currentHealth = 8;
-    private int maxHealth = 8;
 
     private bool isPlayerTransformed;
     private bool wasPlayerTransformedLastFrame;
@@ -50,7 +53,10 @@ public class UIManager : MonoBehaviour
     {
         gameLogic = GameObject.Find("GameLogic");
         systemGameMaster = gameLogic.GetComponent<SystemGameMaster>();
+        state = systemGameMaster.ComponentMainCharacterState;
         action = systemGameMaster.ComponentMainCharacterAction;
+
+        UpdateHeartAmount();
     }
 
     // Update is called once per frame
@@ -82,6 +88,18 @@ public class UIManager : MonoBehaviour
         {
             UpdateVariables();
             UpdateCurses();
+        }
+    }
+
+    private void UpdateHeartAmount()
+    {
+        for (int i = 0; i < heartImagesFull.Count; ++i)
+        {
+            if (i >= maxHealth)
+            {
+                heartImagesFull[i].SetActive(false);
+                heartImagesEmpty[i].SetActive(false);
+            }
         }
     }
 
@@ -124,15 +142,15 @@ public class UIManager : MonoBehaviour
 
     private void UpdateHearts()
     {
-        if (lastHealth == currentHealth)
+        if (lastHealth == state.health)
             return;
 
-        if (currentHealth > maxHealth)
+        if (state.health > maxHealth)
             return;
 
         for (int i = 0; i < heartImagesFull.Count; ++i)
         {
-            if (i < currentHealth)
+            if (i < state.health)
             {
                 heartImagesFull[i].SetActive(true);
             }
@@ -142,7 +160,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        lastHealth = currentHealth;
+        lastHealth = state.health;
     }
 
     private void UpdateCurses()

@@ -515,7 +515,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         if (componentMainCharacterAction.timeUntillNextAttack < Time.time)
         {
-            Debug.Log("DidAttack");
+            //Debug.Log("DidAttack");
             componentMainCharacterState.isAttacking = true;
             numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.currentAttackBox, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
 
@@ -524,6 +524,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
             ResetTempArrays();
 
             componentMainCharacterAction.timeUntillNextAttack = Time.time + componentMainCharacterAction.waitingTime;
+
+            increaseCurseCounterKraken();
 
             //trigger Animation
             //TODO make right animation
@@ -660,7 +662,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         if (componentMainCharacterState.isGliding) EndGlide();
 
-        Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
+        //Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
         if (componentMainCharacterState.health <= 0)
         {
             AudioManager.PlayDeathAudio();
@@ -669,7 +671,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
 
         //make player move while he can not receive damage
-        Debug.Log("GOD");
+        //Debug.Log("GOD");
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
 
         //direction is the direction where the collision is originated

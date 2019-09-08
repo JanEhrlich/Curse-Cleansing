@@ -15,10 +15,6 @@ public class ComponentEnemyState
 
     public static float footOffsetLeft = .47f;           //X Offset of left foot raycast
     public static float footOffsetRight = .3f;           //X Offset of right foot raycast
-
-
-    
-    
     #endregion
 
 
@@ -54,6 +50,5 @@ public class ComponentEnemyState
     public int direction = 1;                       //Direction enemy is facing
 
     public int health = 3;
-
     #endregion
 }

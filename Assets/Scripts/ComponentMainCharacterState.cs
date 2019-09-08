@@ -58,7 +58,7 @@ public class ComponentMainCharacterState
 
     public int layerMask;                           //do not hit player with raycast (everything except the player)
 
-    public int health = 5;
+    public int health = 8;
     public int damage = 1;
     #endregion
 }
