@@ -38,7 +38,6 @@ public class SystemMainCharacterMovement : MonoBehaviour
     bool holdJumpButton;
 
     //Variable used for attacking
-    bool receivedAttackFlag;
     bool receivedAttackFlag = false;
 
     //Variable used for kraken ability
