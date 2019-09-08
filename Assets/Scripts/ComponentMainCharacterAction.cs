@@ -16,7 +16,7 @@ public class ComponentMainCharacterAction
     public static float krakenJumpPercentage = 0.6f;       //Jump force reduction while being a kraken
     public static float batJumpPercentage = 0.3f;          //Jump force reduction while being a bat
     public static float gravityPercentageBat = 0.3f;       //falling slower while being a bat
-    public static float gravityPercentageHALFBat = 0.3f;   //falling slower while being a HALF-bat
+    public static float gravityPercentageHALFBat = 0.1f;   //falling slower while being a HALF-bat
 
     public static float krakenSizePercentage = 0.3f;       //ration of kraken to player
     public static float batSizePercentage = 0.3f;          //ration of bat to player

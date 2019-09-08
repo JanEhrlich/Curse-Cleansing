@@ -62,7 +62,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     {
         SpaceCheck();
 
-        if (componentMainCharacterAction.timeUntillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
+        if (IsAlreadyTransformed() && componentMainCharacterAction.timeUntillNormal < Time.time && !componentMainCharacterAction.isHeadBlocked)
             TransformToNormalCaracter();
 
         //check that the bat is not so high, that it touches the ceiling

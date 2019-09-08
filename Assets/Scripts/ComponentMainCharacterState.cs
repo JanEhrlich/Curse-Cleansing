@@ -51,6 +51,7 @@ public class ComponentMainCharacterState
     public bool isOnGround;                         //Is the player on the ground?
     public float coyoteTime;                        //Variable to hold coyote duration
     public bool isAttacking = false;
+    public bool isGliding = false;
 
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction player is facing

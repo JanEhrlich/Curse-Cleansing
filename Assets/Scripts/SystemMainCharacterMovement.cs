@@ -86,6 +86,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //Record the original x scale of the player
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
         componentMainCharacterState.isAttacking = false;
+        componentMainCharacterState.isGliding = false;
+        componentMainCharacterState.normalGravity = rigidBody.gravityScale;
 
         //add button functions
         componentInput.AddJumpButtonPressFunction(ReceiveJumpPressInput);
@@ -142,6 +144,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
             HandelJumpInstruction();
             receivedJumpFlag = false;
         }
+
+        HandleGliding();
         
         HandleAttackInstruction();  
         
@@ -213,6 +217,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         //If either ray hit the ground, the player is on the ground and doubleJump gets enabled
         componentMainCharacterState.isOnGround = leftCheck || rightCheck;
+
 
         if (componentMainCharacterState.isOnGround)
         {
@@ -390,6 +395,40 @@ public class SystemMainCharacterMovement : MonoBehaviour
     bool isJumpPossible()
     {
         return true;
+    }
+
+    /*
+     * glide if someone is falling, fether the falling
+     */
+    void HandleGliding()
+    {
+        if (!componentMainCharacterAction.hasBat) return;
+
+        if (holdJumpButton &&!componentMainCharacterState.isGliding &&rigidBody.velocity.y < 0)
+        {
+            StartGlide();
+        }
+        else if(componentMainCharacterState.isGliding && (!holdJumpButton || componentMainCharacterState.isOnGround))
+        {
+            EndGlide();
+        }
+    }
+
+    void StartGlide()
+    {
+        rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageHALFBat;
+        componentMainCharacterState.speedMultiplier = 0.6f;
+
+        rigidBody.velocity = Vector2.zero;//new Vector2(rigidBody.velocity.x * 0.6f,rigidBody.velocity.y*0.3f);
+        componentMainCharacterState.isGliding = true;
+    }
+
+    void EndGlide()
+    {
+        rigidBody.gravityScale = componentMainCharacterState.normalGravity;
+        componentMainCharacterState.speedMultiplier = 1f;
+        componentMainCharacterState.isGliding = false;
+        holdJumpButton = false;
     }
 
     #endregion
@@ -618,6 +657,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         AudioManager.PlayHurtAudio();
         componentMainCharacterState.health -= damage;
+
+        if (componentMainCharacterState.isGliding) EndGlide();
+
         Debug.Log("Was hit: " + componentMainCharacterState.health + " Time:" + Time.time); //TEST
         if (componentMainCharacterState.health <= 0)
         {
