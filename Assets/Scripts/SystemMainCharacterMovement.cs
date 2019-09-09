@@ -53,6 +53,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     RaycastHit2D leftCheck;
     RaycastHit2D rightCheck;
     Vector2 tmp_direction;
+    bool glidingAllowed = false;
 
     private float attackLength = 2f;
 
@@ -347,6 +348,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
                 if ((componentMainCharacterAction.hasBat && componentMainCharacterAction.hasDoubleJump) || componentMainCharacterAction.isBat)
                 {
                     Jump();
+                    glidingAllowed = true;
                     if (componentMainCharacterAction.isBat)
                     {
                         componentMainCharacterAction.batFlapImpulse = true;
@@ -404,7 +406,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         if (!componentMainCharacterAction.hasBat) return;
 
-        if (holdJumpButton &&!componentMainCharacterState.isGliding &&rigidBody.velocity.y < 0)
+        if (holdJumpButton &&!componentMainCharacterState.isGliding &&rigidBody.velocity.y < 0 && glidingAllowed)
         {
             StartGlide();
         }
@@ -428,6 +430,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         rigidBody.gravityScale = componentMainCharacterState.normalGravity;
         componentMainCharacterState.speedMultiplier = 1f;
         componentMainCharacterState.isGliding = false;
+        glidingAllowed = false;
         holdJumpButton = false;
     }
 
