@@ -80,13 +80,31 @@ MonoBehaviour:
   ambientVolumeLevel7_2: -30
   musicVolumeLevel7_2: -20
   krakenSquishesClips:
-  - {fileID: 8300000, guid: 8ed29259068ec4b40aa1f2b26a007070, type: 3}
-  - {fileID: 8300000, guid: 5ee778649583e494abbdceeb1bf04c96, type: 3}
+  - {fileID: 8300000, guid: 5ae218394a4d5834ca3b1de79bc206d5, type: 3}
+  - {fileID: 8300000, guid: 6b2123ef53667ee4595cc01778ebc316, type: 3}
+  - {fileID: 8300000, guid: 69bf7846a51336f4cbcac6d4449e7f3e, type: 3}
+  - {fileID: 8300000, guid: a0ae0083e29b27a459e691c8777bcd16, type: 3}
+  - {fileID: 8300000, guid: 009b54fd814da5842a6cbbf2fb6cc480, type: 3}
+  - {fileID: 8300000, guid: 341ea80cc5224b54bbee122352fd8a11, type: 3}
+  - {fileID: 8300000, guid: d5aff52ec57ee64419739643578eefc0, type: 3}
+  - {fileID: 8300000, guid: f95a8cceaf65f8946bac53ec9534b248, type: 3}
+  - {fileID: 8300000, guid: 5451891520ec57c42b88ddb28a77e4c1, type: 3}
+  - {fileID: 8300000, guid: 6ac5334eee8cf4a4fa549986be3427c9, type: 3}
+  - {fileID: 8300000, guid: 579e1f55fe12c834f827517653a9b626, type: 3}
   moveOnWoodSFXClips:
-  - {fileID: 8300000, guid: 5bd184a61d037ad47bce33bbd2fee780, type: 3}
+  - {fileID: 8300000, guid: 4112237e89cb7624a9f15c2bc33544cc, type: 3}
+  - {fileID: 8300000, guid: 8e2157b8d3f30434c98b8d76cb636a08, type: 3}
+  - {fileID: 8300000, guid: e16d0d703a93ca747848428c2956ef49, type: 3}
+  - {fileID: 8300000, guid: efc9e14feb4bde2468190c723eb3167d, type: 3}
+  - {fileID: 8300000, guid: 125e3bd1ed2619341a38daf27d7cb401, type: 3}
+  - {fileID: 8300000, guid: f12b03a7392a67e4896ff7e502749fe6, type: 3}
+  - {fileID: 8300000, guid: 583a07215178b1644927274668594999, type: 3}
+  - {fileID: 8300000, guid: 992989d86f6cbeb44ab428c8fb419e54, type: 3}
+  - {fileID: 8300000, guid: 670d63d2a403f574186bf25f70037cf7, type: 3}
+  - {fileID: 8300000, guid: 1da0fa2ed15772c41a16a9b80de4f111, type: 3}
   hitFleshSFXClips:
-  - {fileID: 8300000, guid: 8e9cf04fff99d8046b6f61301ec7b5d1, type: 3}
-  - {fileID: 8300000, guid: 6e70c44ad5332c549a8e8867ecbd7301, type: 3}
+  - {fileID: 8300000, guid: ade0cbe122bfe644894f80a312532ab1, type: 3}
+  - {fileID: 8300000, guid: acd93daa6e192d047a4c9eddf8884b45, type: 3}
   levelStartSFXClip: {fileID: 8300000, guid: 8551ec8217622164cb1dcf625f1f5da9, type: 3}
   deathSFXClip: {fileID: 8300000, guid: 98e9afa50ce90d34cbbc34b76ee6f555, type: 3}
   doorOpenSFXClip: {fileID: 8300000, guid: d813b3661223ea44ba4e800333c8fad5, type: 3}
@@ -109,9 +127,9 @@ MonoBehaviour:
   bossTauntClips:
   - {fileID: 8300000, guid: d00f7298227226e45afd1b2090b79590, type: 3}
   - {fileID: 8300000, guid: 10384947e58a1dd449ceba43bc6c2581, type: 3}
-  bossAttack1Clip: {fileID: 8300000, guid: 72d84f6138173964989075472efb9585, type: 3}
-  bossAttack2Clip: {fileID: 8300000, guid: 583b47602b3259f4ea802a31ab3b8ecf, type: 3}
-  bossAttack3Clip: {fileID: 8300000, guid: cd306335fae81db4eace27f14e098a25, type: 3}
+  bossAttack1Clip: {fileID: 8300000, guid: 559a9a0941d9aca4d8c8d7abee9ec807, type: 3}
+  bossAttack2Clip: {fileID: 8300000, guid: 55242a677e80c1c4eb4842a78ed5d690, type: 3}
+  bossAttack3Clip: {fileID: 8300000, guid: 30bbfd6e527ce204eab7f392d50e716a, type: 3}
   ambientGroup: {fileID: 725119846391863183, guid: 0cd7f1367fce43a43afc5b801f841622,
     type: 2}
   musicGroup: {fileID: -2009115382441219138, guid: 0cd7f1367fce43a43afc5b801f841622,
