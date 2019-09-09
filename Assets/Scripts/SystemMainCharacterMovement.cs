@@ -83,6 +83,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //Sets Layermask of mainCharacter
         componentMainCharacterState.layerMask = gameMaster.SystemUtility.TransformToLayerMask(mainCharacterGameObject.layer,true);
         componentMainCharacterState.layerMask &= gameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Camera"), true);
+        componentMainCharacterState.layerMask &= gameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Notification"), true);
 
         //Record the original x scale of the player
         componentMainCharacterState.originalXScale = mainCharacterGameObject.transform.localScale.x;
