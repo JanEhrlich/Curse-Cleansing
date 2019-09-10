@@ -6,9 +6,7 @@ using UnityEngine.Video;
 using TMPro;
 
 /*
- * Handels the Playback of Cutscenes. Will be activated and deactivated by the SystemGameMaster
- * TODO:
- *  -Get Camera GameObject and Display the Video+(optional)Sound of the Cutscene
+ * Handels the Playback of Cutscenes.
  */
 public class SystemCutscene : MonoBehaviour
 {
@@ -34,21 +32,6 @@ public class SystemCutscene : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown("a"))
-        {
-            SwitchToCutSceneCamera();
-            PlayCutscene(1);
-        }
-
-        if (Input.GetKeyDown("s"))
-        {
-            SwitchToMainCamera();
-        }
-
-    }
-
     private void SwitchToMainCamera()
     {
         cutsceneCam.enabled = false;
@@ -61,8 +44,11 @@ public class SystemCutscene : MonoBehaviour
         cutsceneCam.enabled = true;
     }
 
-    private void PlayCutscene(int index)
+    //Index Starts at 1 ==> So cutscene 1 needs index 1 as Input
+    public void PlayCutscene(int index)
     {
+        SwitchToCutSceneCamera();
+
         if (index <= cutScenes.Count && index > 0)
         {
             playingIndex = index - 1;
@@ -76,12 +62,6 @@ public class SystemCutscene : MonoBehaviour
     void EndReached(UnityEngine.Video.VideoPlayer vp)
     {
         vp.Stop();
-        Test(playingIndex);
         SwitchToMainCamera();
-    }
-
-    private void Test(int num)
-    {
-        Debug.Log("Set Progression Bool To True after Playing CutScene " + playingIndex);
     }
 }

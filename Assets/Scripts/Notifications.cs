@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 
-public class Notification_Controlle_Switcher : MonoBehaviour
+public class Notifications : MonoBehaviour
 {
     //Link to the GameMaster
     GameObject gameLogic;
@@ -17,11 +17,11 @@ public class Notification_Controlle_Switcher : MonoBehaviour
 
     public UnityEvent callOnEnter;
     public UnityEvent callOnInteraction;
+    public UnityEvent callOnExit;
 
     //Variables needed for calculations
-    private bool callOnEnterOnce = true;
-    private bool callOnInteractionOnce = true;
     private bool isInside = false;
+    private bool interactable = false;
     private int playerLayer;
 
     // Start is called before the first frame update
@@ -53,16 +53,9 @@ public class Notification_Controlle_Switcher : MonoBehaviour
         }
 
         CallOnEnter();
+        interactable = true;
 
         if (collision.gameObject.layer == playerLayer) {
-            isInside = true;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == playerLayer)
-        {
             isInside = true;
         }
     }
@@ -74,10 +67,12 @@ public class Notification_Controlle_Switcher : MonoBehaviour
             isInside = false;
         }
 
+        CallOnExit();
+
         DeactivateAll();
     }
 
-    private void DeactivateAll()
+    public void DeactivateAll()
     {
         xboxNotification.SetActive(false);
 
@@ -90,14 +85,15 @@ public class Notification_Controlle_Switcher : MonoBehaviour
         {
             text.SetActive(false);
         }
+
+        interactable = false;
     }
 
     public void CallOnEnter()
     {
-        if (callOnEnter != null && callOnEnterOnce)
+        if (callOnEnter != null)
         {
             callOnEnter.Invoke();
-            callOnEnterOnce = false;
         }
 
     }
@@ -105,10 +101,18 @@ public class Notification_Controlle_Switcher : MonoBehaviour
     public void CallOnInteraction()
     {
 
-        if (callOnInteraction != null && isInside)
+        if (callOnInteraction != null && isInside && interactable)
         {
             callOnInteraction.Invoke();
-            callOnInteractionOnce = false;
+        }
+
+    }
+
+    public void CallOnExit()
+    {
+        if (callOnExit != null)
+        {
+            callOnExit.Invoke();
         }
 
     }
