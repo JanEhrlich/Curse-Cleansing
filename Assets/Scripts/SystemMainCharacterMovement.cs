@@ -466,6 +466,15 @@ public class SystemMainCharacterMovement : MonoBehaviour
             return;
         }
 
+
+        //If player is transformed in something other than kraken ==> do nothing
+        if (componentKrakenMarker.closestMarkerInRange.GetComponent<KrakenMarker>().isInteractionMarker)
+        {
+            componentMainCharacterAction.krakenImpulse = true;
+            componentKrakenMarker.closestMarkerInRange.GetComponent<KrakenMarker>().ExecuteInteraction();
+            return;
+        }
+
         //If player is transformed in kraken ==> TODO make something usefull
         if (componentMainCharacterAction.isKraken)
         {
@@ -729,7 +738,10 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         Gizmos.color = Color.red;
         //The next line is causing an Error when not in Play mode
-        Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.currentAttackBox.x, componentMainCharacterAction.currentAttackBox.y, 1f));
+        if (Application.isPlaying)
+        {
+            Gizmos.DrawWireCube(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, new Vector3(componentMainCharacterAction.currentAttackBox.x, componentMainCharacterAction.currentAttackBox.y, 1f));
+        }
     }
 
     #region IncreaseCurseCounters

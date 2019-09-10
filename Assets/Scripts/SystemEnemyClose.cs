@@ -318,7 +318,10 @@ public class SystemEnemyClose : SystemEnemy
     {
         Gizmos.color = Color.red;
         //The next line is causing an Error when not in Play mode
-        Gizmos.DrawWireSphere(transform.position, componentEnemyAction.attackRange);
+        if (Application.isPlaying)
+        {
+            Gizmos.DrawWireSphere(transform.position, componentEnemyAction.attackRange);
+        }
     }
 }
 

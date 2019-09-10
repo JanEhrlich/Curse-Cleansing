@@ -104,10 +104,6 @@ public class Notification_Controlle_Switcher : MonoBehaviour
 
     public void CallOnInteraction()
     {
-        if (isInside)
-        {
-            Debug.Log("jo");
-        }
 
         if (callOnInteraction != null && isInside)
         {

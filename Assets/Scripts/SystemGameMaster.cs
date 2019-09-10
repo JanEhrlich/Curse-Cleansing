@@ -96,6 +96,11 @@ public class SystemGameMaster : MonoBehaviour
         systemKrakenMarker.AddMarker(marker);
     }
 
+    public void DeregisterKrakenMarker(GameObject marker)
+    {
+        systemKrakenMarker.RemoveMarker(marker);
+    }
+
     public void EnemyWasKilled(GameObject enemy)
     {
         if (!enemys.Remove(enemy))
