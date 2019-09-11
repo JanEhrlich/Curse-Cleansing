@@ -14,6 +14,7 @@ using UnityEngine.SceneManagement;
 public class SystemEvent : MonoBehaviour
 {
     SystemGameMaster gameMaster;
+    GameObject gameLogic;
     static SystemEvent current;
     static int lastScene;
 
@@ -28,6 +29,7 @@ public class SystemEvent : MonoBehaviour
     private List<Action>[] triggersActions;
     public GameObject[] respawnPoints;
     private List<Action>[] respawnActions;
+    private int numberRespawn = 0;
 
     private ComponentScene lastRespawnState = new ComponentScene();
     public ComponentScene currentState = new ComponentScene();
@@ -39,7 +41,9 @@ public class SystemEvent : MonoBehaviour
     {
         Debug.Log(lastScene);
         Debug.Log(SceneManager.GetActiveScene().buildIndex);
+        gameLogic = GameObject.Find("GameLogic");
         //try to make sure SystemEvent is new for every new Scene, but not on respawn within a scene
+        //TODO DOES NOT WORK
         if (lastScene == SceneManager.GetActiveScene().buildIndex)
         {
             if (current != null && current != this)
@@ -75,7 +79,7 @@ public class SystemEvent : MonoBehaviour
         currentState.lastRespawnpoint = 0;
         currentState.spawnedEnemies = new List<GameObject>();
 
-        gameMaster = GameObject.Find("GameLogic").GetComponent<SystemGameMaster>();
+        gameMaster = gameLogic.GetComponent<SystemGameMaster>();
         filter.useTriggers = false;
         filter.SetLayerMask(1<<LayerMask.NameToLayer("Player"));
         filter.useLayerMask = true;
@@ -83,7 +87,12 @@ public class SystemEvent : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        for (int i = 0; i < triggers.Length; i++)
+        //do nothing until the this is the same scene
+
+        //TODO DOES NOT WORK
+        if (lastScene != SceneManager.GetActiveScene().buildIndex) return;
+
+            for (int i = 0; i < triggers.Length; i++)
         {
             if (triggers[i].GetComponent<BoxCollider2D>().OverlapCollider(filter,overlap) == 0) continue;
             foreach (Action func in triggersActions[i])
@@ -114,12 +123,15 @@ public class SystemEvent : MonoBehaviour
 
         //Debug.Log("lastrespawn:" + respawnPoints[currentState.lastRespawnpoint].name);
         gameMaster.mainCharacterGameObject.transform.position = respawnPoints[currentState.lastRespawnpoint].transform.position;
+        if(numberRespawn > 0) gameLogic.GetComponent<SystemMainCharacterMovement>().UnlockKrakenOnRespawn();
+        numberRespawn++;
     }
 
 
     void SetNewPointers()
     {
-        gameMaster = GameObject.Find("GameLogic").GetComponent<SystemGameMaster>();
+        gameLogic = GameObject.Find("GameLogic");
+        gameMaster = gameLogic.GetComponent<SystemGameMaster>();
     }
 
     public void ResetComponent()

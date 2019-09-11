@@ -6,6 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Level1_Prison 1.unity
+    guid: fcefcd6ba86425647ad569e16e9d9d63
+  - enabled: 1
+    path: Assets/Scenes/Level2_Town_Escape 1.unity
+    guid: d08ecad6115876d4fac11662a1317f65
+  - enabled: 1
+    path: Assets/Scenes/Level3_Hideout 1.unity
+    guid: c29b8f97912b7fc4b966b747e3c343f5
+  - enabled: 1
+    path: Assets/Scenes/Level4_Road_To_Tavern 1.unity
+    guid: 3300e5f00d9d1d04e84321a3757d24b8
+  - enabled: 1
+    path: Assets/Scenes/Level5_Tavern 1.unity
+    guid: 10104f92a6f1d8441b715e9a30b59c0a
+  - enabled: 1
     path: Assets/Scenes/Level1_Prison.unity
     guid: c52af71992a6f8a4b949fe765f6f0764
   - enabled: 1

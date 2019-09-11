@@ -57,6 +57,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     private float attackLength = 2f;
 
+    //used to handle that the player can not attack for some time
+    public bool allowAttack = true;
+
     int numberOfOverlaps = 0;
     //should be equally long
     Collider2D[] enemyToDamageColliders = new Collider2D[10];
@@ -149,6 +152,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         HandleGliding();
         
+        if(allowAttack)
         HandleAttackInstruction();  
         
         CheckTimers();
@@ -450,6 +454,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //If no marker is in range ==> do nothing (TODO do krakenAttack)
         if (componentKrakenMarker.closestMarkerInRange == null)
         {
+            if(allowAttack)
             HandleKrakenAttack();
             return;
         }
@@ -582,7 +587,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack < Time.time)
         {
-            Debug.Log("DidAttack");
+            //Debug.Log("DidAttack");
             componentMainCharacterState.isAttacking = true;
             numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.currentAttackBox, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
 
@@ -786,6 +791,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
     public void UnlockKraken()
     {
         AudioManager.PlayExhaustedSFXAudio();
+        componentMainCharacterAction.hasKraken = true;
+    }
+
+    public void UnlockKrakenOnRespawn()
+    {
         componentMainCharacterAction.hasKraken = true;
     }
 }

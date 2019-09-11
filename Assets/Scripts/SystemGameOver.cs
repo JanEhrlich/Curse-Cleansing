@@ -56,7 +56,7 @@ public class SystemGameOver : MonoBehaviour
 
     void ResetStates()
     {
-       // componentMainCharacterState = new ComponentMainCharacterState(); //TODO does this work as intendet????????
+        //componentMainCharacterState = new ComponentMainCharacterState(); //TODO does this work as intendet????????
         systemEvent.RespawnPlayer();
     }
 }
