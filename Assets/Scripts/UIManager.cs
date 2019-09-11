@@ -294,4 +294,16 @@ public class UIManager : MonoBehaviour
             ring.fillAmount = Mathf.Lerp(ring.fillAmount, percentage, 5 * Time.deltaTime);
         }
     }
+
+    public void resetCurrentValues()
+    {
+        currentDecayValueBat = 0f;
+        currentDecayValueKraken = 0f;
+        lastHealth = maxHealth;
+        //TODO RESET THE HEALTH
+
+        isPlayerTransformed = false;
+        wasPlayerTransformedLastFrame = false;
+
+}
 }

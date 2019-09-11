@@ -25,6 +25,7 @@ public class SystemEnemy : MonoBehaviour
     protected SystemMainCharacterMovement mainCharacterMovement;
     protected virtual void Start()
     {
+        collider2d = GetComponentInChildren<BoxCollider2D>();
         componentEnemyState = new ComponentEnemyState(); //GetComponent<ComponentEnemyState>();
         componentEnemyAction = new ComponentEnemyAction(); //GetComponent<ComponentEnemyAction>();
         gameLogic = GameObject.Find("GameLogic");
@@ -33,9 +34,11 @@ public class SystemEnemy : MonoBehaviour
         mainCharacterGameObject = systemGameMaster.getMainCharacterGameobject();
         componentMainCharacterState = systemGameMaster.ComponentMainCharacterState;
         rigidBody = GetComponent<Rigidbody2D>();
-        collider2d = GetComponentInChildren<BoxCollider2D>();
-        componentEnemyState.enemyHeight = collider2d.size.y;
-        componentEnemyState.originalXScale = transform.localScale.x;
+        if (!gameObject.name.Contains("Traps"))
+        {
+            componentEnemyState.enemyHeight = collider2d.size.y;
+            componentEnemyState.originalXScale = transform.localScale.x;
+        }
 
         //Sets Layermask of enemy
         componentEnemyState.layerMask = systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy"), true);

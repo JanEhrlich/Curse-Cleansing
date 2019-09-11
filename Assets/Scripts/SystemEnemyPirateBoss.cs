@@ -118,7 +118,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     */
     void TrackPlayerMovement()
     {
-        componentEnemyAction.distanceToMainCharacter = Vector3.Distance(mainCharacterGameObject.transform.position, transform.position);
+        componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
         systemGameMaster.SystemUtility.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.zero, attackDirection, componentEnemyAction.followRange, componentEnemyState.layerMask, debugRayCasts);
         if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
         {

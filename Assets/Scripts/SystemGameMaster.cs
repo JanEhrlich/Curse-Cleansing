@@ -21,8 +21,8 @@ public class SystemGameMaster : MonoBehaviour
     public ComponentCutscene ComponentCutscene { get; } = new ComponentCutscene();
     public ComponentGameState ComponentGameState { get; } = new ComponentGameState();
     public ComponentInput ComponentInput { get; } = new ComponentInput();
-    public ComponentMainCharacterAction ComponentMainCharacterAction { get; } = new ComponentMainCharacterAction();
-    public ComponentMainCharacterState ComponentMainCharacterState { get; } = new ComponentMainCharacterState();
+    public ComponentMainCharacterAction ComponentMainCharacterAction { get; set; } = new ComponentMainCharacterAction();
+    public ComponentMainCharacterState ComponentMainCharacterState { get; set; } = new ComponentMainCharacterState();
     public ComponentProgression ComponentProgression { get; } = new ComponentProgression();
     public ComponentScene ComponentScene { get; } = new ComponentScene();
     public ComponentSpawn ComponentSpawn { get; } = new ComponentSpawn();
@@ -35,6 +35,7 @@ public class SystemGameMaster : MonoBehaviour
     private SystemMainCharacterAnimation systemMainCharacterAnimation;
     private SystemKrakenMarker systemKrakenMarker;
     private SystemProgression systemProgression;
+    private GameObject systemEventObject;
 
     void Awake()
     {
@@ -81,6 +82,8 @@ public class SystemGameMaster : MonoBehaviour
 
         systemProgression = GetComponent<SystemProgression>();
         systemProgression.Init(this);
+
+        systemEventObject = GameObject.Find("Events");
     }
 
     /*
@@ -108,6 +111,11 @@ public class SystemGameMaster : MonoBehaviour
     public GameObject getMainCharacterGameobject()
     {
         return mainCharacterGameObject;
+    }
+
+    public GameObject getSystemEvents()
+    {
+        return systemEventObject;
     }
 
 }

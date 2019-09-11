@@ -43,6 +43,7 @@ public class SystemEnemyClose : SystemEnemy
         componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
         componentEnemyAction.isAttacking = false;
         componentEnemyAction.followRange = 5f;
+        componentEnemyAction.attackRange = 3f;
         //TODO check - for the sprite direction
         componentEnemyAction.attackPositionOffset = new Vector3(-1f,0,0f);
     }
@@ -74,7 +75,6 @@ public class SystemEnemyClose : SystemEnemy
             default:
                 break;
         }
-
         Attack(); 
     }
 
@@ -138,7 +138,7 @@ public class SystemEnemyClose : SystemEnemy
      */
      void TrackPlayerMovement()
     {
-        componentEnemyAction.distanceToMainCharacter = Vector3.Distance(mainCharacterGameObject.transform.position, transform.position);
+        componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
     }
 
     /*
@@ -222,9 +222,18 @@ public class SystemEnemyClose : SystemEnemy
      */
     void Attack()
     {
+        Debug.Log(componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange);
+        Debug.Log(componentEnemyAction.distanceToMainCharacter);
+
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
+        {
+            Debug.Log(componentEnemyState.direction != (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1));
+            Debug.Log(componentEnemyState.direction);
+            Debug.Log((transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1));
+        }
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time && componentEnemyState.direction !=  (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1))
         {
-            //Debug.Log("Enemy Attack");
+            Debug.Log("Enemy Attack");
             //Debug.Log(componentEnemyState.direction);
             //Debug.Log(componentMainCharacterState.direction);
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
@@ -286,7 +295,7 @@ public class SystemEnemyClose : SystemEnemy
     /*
      * Flips the dierection of the Gameobject and the State in the Component
      */
-    void FlipCharacterDirection(int newDirection)
+    public void FlipCharacterDirection(int newDirection)
     {
         //Turn the character by flipping the direction
         componentEnemyState.direction = newDirection;
@@ -319,6 +328,7 @@ public class SystemEnemyClose : SystemEnemy
         Gizmos.color = Color.red;
         //The next line is causing an Error when not in Play mode
         Gizmos.DrawWireSphere(transform.position, componentEnemyAction.attackRange);
+        Gizmos.DrawWireCube(transform.position + componentEnemyAction.attackPositionOffset, new Vector3(componentEnemyAction.attackBoxNormal.x, componentEnemyAction.attackBoxNormal.y, 1f));
     }
 }
 
