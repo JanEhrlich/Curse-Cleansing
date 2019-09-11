@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Level1_Prison.unity
+    guid: c52af71992a6f8a4b949fe765f6f0764
   - enabled: 1
-    path: Assets/Scenes/Level1_Prison_Progression.unity
-    guid: 2b557bd96c883934ab9c49c8191090dd
+    path: Assets/Scenes/Level2_Town_Escape.unity
+    guid: 6e5b362a25d7e9a4ab4cc811ad87c25c
+  - enabled: 1
+    path: Assets/Scenes/Level3_Hideout.unity
+    guid: 71b7690e07967254ca7f4d25995bfe6c
+  - enabled: 1
+    path: Assets/Scenes/Level4_Road_To_Tavern.unity
+    guid: 9c9efd5dd17ee4b40a4663dbf7c17baa
+  - enabled: 1
+    path: Assets/Scenes/Level5_Tavern.unity
+    guid: b4e9f21bfedf17844ba2fd143406d63d
   m_configObjects: {}

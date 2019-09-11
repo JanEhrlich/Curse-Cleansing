@@ -83,11 +83,11 @@ public class ComponentMainCharacterAction
      * Variables which will be set during the game progression. They will only changed once during the game.
      */
     #region SetDuringGameProgressionVariables
-    public bool hasKraken = true;                           //TODO set to false, just for testing
-    public bool hasBat = true;                              //TODO set to false, just for testing
+    public bool hasKraken = false;                           //TODO set to false, just for testing
+    public bool hasBat = false;                              //TODO set to false, just for testing
     public bool hasGhost = false;
     public bool hasWolf = false;
-    public bool hasSword = true;                            //TODO set to false, just for testing
+    public bool hasSword = false;                            //TODO set to false, just for testing
     #endregion
 
 

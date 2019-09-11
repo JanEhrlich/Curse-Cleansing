@@ -11,9 +11,12 @@ public class OpenPrisonExit : MonoBehaviour
     public GameObject switchClose;
     public GameObject switchOpen;
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (Input.GetButtonDown("Attack"))
+    private bool hasSword = false;
+    private bool inside = false;
+
+    public void Update()
+    {     
+        if (Input.GetButtonDown("Attack") && hasSword && inside)
         {
             doorClose.SetActive(false);
             doorOpen.SetActive(true);
@@ -22,5 +25,20 @@ public class OpenPrisonExit : MonoBehaviour
             switchOpen.SetActive(true);
             Destroy(this.gameObject);
         }
+    }
+
+    public void UnlockedSword()
+    {
+        hasSword = true;
+    }
+
+    public void Enter()
+    {
+        inside = true;
+    }
+
+    public void Leave()
+    {
+        inside = false;
     }
 }
