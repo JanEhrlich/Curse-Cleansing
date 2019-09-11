@@ -421,8 +421,10 @@ public class SystemEnemyPirateBoss : SystemEnemy
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        //The next line is causing an Error when not in Play mode
-        //Gizmos.DrawWireSphere(transform.position, componentEnemyAction.followRange);
-        Gizmos.DrawWireCube(transform.position+debugOffset, debugAttackbox );
+        if (Application.isPlaying)
+        {
+            //Gizmos.DrawWireSphere(transform.position, componentEnemyAction.followRange);
+            Gizmos.DrawWireCube(transform.position + debugOffset, debugAttackbox);
+        }
     }
 }

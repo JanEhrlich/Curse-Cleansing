@@ -8,9 +8,7 @@ public class SystemProgressionLevel1 : MonoBehaviour
     SystemEvent systemEvent;
     SystemSpawn systemSpawn;
     ComponentScene componentScene;
-    GameObject enemyClosePrefab;
     GameObject enemyClose;
-    bool wasSaved = true;
 
 
     //tmpvariable
@@ -20,9 +18,7 @@ public class SystemProgressionLevel1 : MonoBehaviour
     {
         systemEvent = GameObject.Find("Events").GetComponent<SystemEvent>();
         systemSpawn = GameObject.Find("GameLogic").GetComponent<SystemSpawn>();
-        enemyClosePrefab = Resources.Load("EnemyOrderClose") as GameObject;
         componentScene = systemEvent.currentState;
-        //systemEvent.AddActionTrigger(SaveGameState,0);
         systemEvent.AddActionTrigger(SetFirstEnemySpawn,0);
         systemEvent.AddActionTrigger(SetComponentRespawn,0);
     }

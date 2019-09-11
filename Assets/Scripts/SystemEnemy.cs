@@ -23,6 +23,13 @@ public class SystemEnemy : MonoBehaviour
     protected ComponentEnemyState componentEnemyState;
     protected ComponentMainCharacterState componentMainCharacterState;
     protected SystemMainCharacterMovement mainCharacterMovement;
+
+    //for spawning, set if needed
+    public float followRange = 0;
+    public float speedMultiplier = 0f;
+    public int direction = 0;
+    public bool appliedDirection = false;
+    public bool allowAttack = true;
     protected virtual void Start()
     {
         collider2d = GetComponentInChildren<BoxCollider2D>();
@@ -54,6 +61,12 @@ public class SystemEnemy : MonoBehaviour
         systemGameMaster.RegisterNewEnemy(gameObject);
     }
 
+
+    public void SetFollowRange(float range)
+    {
+        componentEnemyAction.followRange = range;
+    }
+
     /*
      * let the enemy get hit
      */
@@ -73,8 +86,9 @@ public class SystemEnemy : MonoBehaviour
     /*
      * Handle the death of the enemy
      */
-    protected virtual void HandleDieEnemy()
+    protected void HandleDieEnemy()
     {
+        systemGameMaster.enemys.Remove(gameObject);
         Destroy(gameObject);
     }
 

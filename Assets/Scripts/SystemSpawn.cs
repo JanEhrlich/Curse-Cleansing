@@ -27,25 +27,38 @@ public class SystemSpawn : MonoBehaviour
         flyinSkullPrefab = Resources.Load("FlyingSkull") as GameObject;
     }
 
-    public GameObject InstantiateEnemyOrderClose(Transform transform, int direction = 1)
+    public GameObject InstantiateEnemyOrderClose(Transform transform)
     {
         enemyClose = Instantiate(enemyClosePrefab, transform);
-        //enemyClose.GetComponent<SystemEnemyClose>().FlipCharacterDirection(direction);
         return enemyClose;
     }
+    public GameObject InstantiateEnemyOrderClose(Transform transform, Vector3 offset)
+    {
+        enemyClose = Instantiate(enemyClosePrefab, transform.position+offset,transform.rotation);
+        return enemyClose;
+    }
+    
 
-
-    public GameObject InstantiateEnemyPirateRange(Transform transform, int direction = 1)
+    public GameObject InstantiateEnemyPirateRange(Transform transform)
     {
         enemyRange = Instantiate(enemyRangePrefab, transform);
-        //enemyRange.GetComponent<SystemEnemyRange>().FlipCharacterDirection(direction);
+        return enemyRange;
+    }
+    public GameObject InstantiateEnemyPirateRange(Transform transform, Vector3 offset)
+    {
+        enemyRange = Instantiate(enemyRangePrefab, transform.position + offset, transform.rotation);
         return enemyRange;
     }
 
-    public GameObject InstatiateFlyingSkull(Transform transform, int direction = 1)
+    public GameObject InstatiateFlyingSkull(Transform transform)
     {
         flyingSkull = Instantiate(flyinSkullPrefab, transform);
-        //flyingSkull.GetComponent<SystemEnemyFlyingSkull>().UpdateDirection( direction < 0? SystemEnemyFlyingSkull.Direction.LEFT: SystemEnemyFlyingSkull.Direction.RIGHT);
+
+        return flyingSkull;
+    }
+    public GameObject InstatiateFlyingSkull(Transform transform, Vector3 offset)
+    {
+        flyingSkull = Instantiate(flyinSkullPrefab, transform.position + offset, transform.rotation);
         return flyingSkull;
     }
 

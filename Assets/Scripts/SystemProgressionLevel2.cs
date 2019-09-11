@@ -4,15 +4,61 @@ using UnityEngine;
 
 public class SystemProgressionLevel2 : MonoBehaviour
 {
+    SystemEvent systemEvent;
+    SystemSpawn systemSpawn;
+    ComponentScene componentScene;
+    GameObject enemyClose;
+
+
+    //tmpvariable
+    int enemyWasSpawned1 = 0;
+    int enemyWasSpawned2 = 0;
+    float spawnTimeBetween = 0.5f;
+    float nextEnemySpawnTime1 = 0;
+    float nextEnemySpawnTime2 = 0;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        systemEvent = GameObject.Find("Events").GetComponent<SystemEvent>();
+        systemSpawn = GameObject.Find("GameLogic").GetComponent<SystemSpawn>();
+        componentScene = systemEvent.currentState;
+        systemEvent.AddActionTrigger(SetFirstEnemySpawn, 0);
+
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy")) ;
     }
 
-    // Update is called once per frame
-    void Update()
+    void SetFirstEnemySpawn()
     {
-        
+        componentScene.enemySpawns[0] = true;
+        componentScene.enemySpawns[1] = true;
+    }
+
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (componentScene.enemySpawns[0] == true && enemyWasSpawned1 < 8 && nextEnemySpawnTime1 < Time.time)
+        {
+            enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
+            enemyClose.GetComponent<SystemEnemyClose>().enemyType = SystemEnemyClose.EnemyType.ZOMBIE;
+            enemyClose.GetComponent<SystemEnemyClose>().followRange = 20f;
+            enemyClose.GetComponent<SystemEnemyClose>().speedMultiplier= 1.6f;
+            componentScene.spawnedEnemies.Add(enemyClose);
+            enemyWasSpawned1++;
+            nextEnemySpawnTime1 = Time.time + spawnTimeBetween;
+        }
+
+        if (componentScene.enemySpawns[1] == true && enemyWasSpawned2 < 3 && nextEnemySpawnTime2 < Time.time)
+        {
+            enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(1).transform);
+            enemyClose.GetComponent<SystemEnemyClose>().enemyType = SystemEnemyClose.EnemyType.ZOMBIE;
+            enemyClose.GetComponent<SystemEnemyClose>().followRange = 20f;
+            enemyClose.GetComponent<SystemEnemyClose>().speedMultiplier = 1.5f;
+            componentScene.spawnedEnemies.Add(enemyClose);
+            enemyWasSpawned2++;
+            nextEnemySpawnTime2 =( Time.time + spawnTimeBetween)*2f;
+        }
+        spawnTimeBetween = Random.Range(0.5f, 1f);
     }
 }

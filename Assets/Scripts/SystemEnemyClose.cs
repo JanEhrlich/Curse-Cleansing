@@ -58,6 +58,16 @@ public class SystemEnemyClose : SystemEnemy
     {
         UpdatedSpeedAndJumpForce();
 
+        if (followRange != 0) componentEnemyAction.followRange = followRange;
+
+        if (speedMultiplier != 0) componentEnemyState.speedMultiplier = speedMultiplier;
+
+        if (!appliedDirection && direction != 0)
+        {
+            FlipCharacterDirection(direction);
+            appliedDirection = true;
+        } 
+
         TrackPlayerMovement();
 
         GroundedCheck();

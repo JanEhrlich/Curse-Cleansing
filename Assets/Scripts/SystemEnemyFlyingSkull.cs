@@ -12,7 +12,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
     Vector2 movement;
     float timeUntilFlap = 0;
     float timeBetweenFlaps = 1f;
-    int direction;
+    int tmpdirection;
 
     // Start is called before the first frame update
 
@@ -22,11 +22,11 @@ public class SystemEnemyFlyingSkull : SystemEnemy
         base.Start();
         if (flyingDirection == Direction.RIGHT)
         {
-            direction = 1;
+            tmpdirection = 1;
         }
         else
         {
-            direction = -1;
+            tmpdirection = -1;
         }
     }
     void Start()
@@ -41,6 +41,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
 
     void FixedUpdate(){
         UpdatedSpeedAndJumpForce();
+        UpdateDirection(flyingDirection);
 
         Fly();
     }
@@ -58,7 +59,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
     void Fly(){
         if(timeUntilFlap <= Time.time){
             //multiply with direction, since this is either 1 or -1 for the correct direction
-            rigidBody.velocity = new Vector2(direction * componentEnemyState.currentSpeed, componentEnemyState.currentJumpForce);
+            rigidBody.velocity = new Vector2(tmpdirection * componentEnemyState.currentSpeed, componentEnemyState.currentJumpForce);
             timeUntilFlap  = Time.time + timeBetweenFlaps;
         }
     }
@@ -79,7 +80,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
             //throw the player back
             gameLogic.GetComponent<SystemMainCharacterMovement>().ReceiveDamage(componentEnemyState.damage, mainCharacterGameObject.transform.position.x <= transform.position.x ? -1 : 1);
 
-            Destroy(gameObject);
+            HandleDieEnemy();
         }
         else
         {
@@ -91,11 +92,11 @@ public class SystemEnemyFlyingSkull : SystemEnemy
     {
         if (update == Direction.RIGHT)
         {
-           direction = 1;
+           tmpdirection = 1;
         }
         else
         {
-           direction = -1;
+           tmpdirection = -1;
         }
     }
 
