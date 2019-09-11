@@ -27,14 +27,6 @@ public class SystemProgressionLevel1 : MonoBehaviour
         systemEvent.AddActionTrigger(SetComponentRespawn,0);
     }
 
-
-    void SaveGameState()
-    {
-        if (!componentScene.wasSaved)
-        {
-            componentScene.wasSaved = true;
-        }
-    }
     void SetFirstEnemySpawn()
     {
         componentScene.enemySpawns[0] = true;

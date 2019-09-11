@@ -30,7 +30,6 @@ public class SystemEvent : MonoBehaviour
     private List<Action>[] respawnActions;
 
     private ComponentScene lastRespawnState = new ComponentScene();
-    int lastRespawnPoint = 0;
     public ComponentScene currentState = new ComponentScene();
     ContactFilter2D filter = new ContactFilter2D();
 
@@ -109,9 +108,18 @@ public class SystemEvent : MonoBehaviour
         {
             Destroy(enemy);
         }
+        SetNewPointers();
+
         ResetComponent();
+
+        //Debug.Log("lastrespawn:" + respawnPoints[currentState.lastRespawnpoint].name);
         gameMaster.mainCharacterGameObject.transform.position = respawnPoints[currentState.lastRespawnpoint].transform.position;
-        currentState.wasSaved = false;
+    }
+
+
+    void SetNewPointers()
+    {
+        gameMaster = GameObject.Find("GameLogic").GetComponent<SystemGameMaster>();
     }
 
     public void ResetComponent()
