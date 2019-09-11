@@ -222,8 +222,8 @@ public class SystemEnemyClose : SystemEnemy
      */
     void Attack()
     {
-        Debug.Log(componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange);
-        Debug.Log(componentEnemyAction.distanceToMainCharacter);
+        //Debug.Log(componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange);
+        //Debug.Log(componentEnemyAction.distanceToMainCharacter);
 
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
