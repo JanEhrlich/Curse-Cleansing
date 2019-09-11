@@ -257,9 +257,6 @@ public class AudioManager : MonoBehaviour
         current.musicSource.clip = current.musicClipLevel5_2;
         current.musicSource.loop = true;
         current.musicSource.Play();
-
-        //Play the audio that repeats whenever the level reloads
-        PlaySceneRestartSFXAudio();
     }
 
     public static void StartLevel6Audio()
@@ -379,7 +376,7 @@ public class AudioManager : MonoBehaviour
 
         //Set the door open sting clip and tell the source to play
         current.soundEffectsSource.clip = current.doorOpenSFXClip;
-        current.soundEffectsSource.PlayDelayed(1f);
+        current.soundEffectsSource.Play();
     }
 
     public static void PlayDeathSFXAudio()
@@ -390,7 +387,7 @@ public class AudioManager : MonoBehaviour
 
         //Set the door open sting clip and tell the source to play
         current.soundEffectsSource.clip = current.deathSFXClip;
-        current.soundEffectsSource.PlayDelayed(1f);
+        current.soundEffectsSource.Play();
     }
 
     public static void PlayExhaustedSFXAudio()
@@ -401,7 +398,7 @@ public class AudioManager : MonoBehaviour
 
         //Set the door open sting clip and tell the source to play
         current.soundEffectsSource.clip = current.exhaustedSFXClip;
-        current.soundEffectsSource.PlayDelayed(1f);
+        current.soundEffectsSource.Play();
     }
 
     public static void PlayGrabSFXAudio()
@@ -412,7 +409,7 @@ public class AudioManager : MonoBehaviour
 
         //Set the door open sting clip and tell the source to play
         current.soundEffectsSource.clip = current.grabSFXClip;
-        current.soundEffectsSource.PlayDelayed(1f);
+        current.soundEffectsSource.Play();
     }
 
     public static void PlayWaterBlasterSFXAudio()
@@ -423,7 +420,7 @@ public class AudioManager : MonoBehaviour
 
         //Set the door open sting clip and tell the source to play
         current.soundEffectsSource.clip = current.waterBlastSFXClip;
-        current.soundEffectsSource.PlayDelayed(1f);
+        current.soundEffectsSource.Play();
     }
     #endregion
 

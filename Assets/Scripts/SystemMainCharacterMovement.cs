@@ -569,7 +569,16 @@ public class SystemMainCharacterMovement : MonoBehaviour
      */
     void HandleAttackInstruction()
     {
-        if (!componentMainCharacterAction.hasSword) return;
+        if (!componentMainCharacterAction.hasSword)
+        {
+            //Hotfix for Kraken Attack
+            if (componentMainCharacterAction.timeUntillNextAttack < Time.time)
+            {
+                componentMainCharacterState.isAttacking = false;
+            }
+            receivedAttackFlag = false;
+            return;
+        }
 
         if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack < Time.time)
         {
@@ -767,4 +776,16 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
     }
     #endregion
+
+    public void UnlockSword()
+    {
+        AudioManager.PlayGrabSFXAudio();
+        componentMainCharacterAction.hasSword = true;
+    }
+
+    public void UnlockKraken()
+    {
+        AudioManager.PlayExhaustedSFXAudio();
+        componentMainCharacterAction.hasKraken = true;
+    }
 }
