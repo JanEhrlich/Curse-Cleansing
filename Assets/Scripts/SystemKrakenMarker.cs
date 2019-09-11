@@ -37,6 +37,11 @@ public class SystemKrakenMarker : MonoBehaviour
         componentMarker.AddMarker(marker);      
     }
 
+    public void RemoveMarker(GameObject marker)
+    {
+        componentMarker.RemoveMarker(marker);
+    }
+
     private void CalculateClosestMarker()
     {
         player_pos = gameMaster.mainCharacterGameObject.transform.position;

@@ -27,6 +27,7 @@ public class SystemInput : MonoBehaviour
 
     //Variables Used to to identify the Type of the connected Controller
     int fingerprintXboxOne = 33;
+    int fingerprintXboxElite = 22;
     int fingerprintXbox360Wireless = 51;
     int fingerptintSwitchPro = 16;
     int fingerprintOfLastState = -1;
@@ -521,7 +522,8 @@ public class SystemInput : MonoBehaviour
     {
         for (int i = 0; i < controllerNames.Length; i++)
         {
-            if (controllerNames[i].Length != fingerprintXboxOne && controllerNames[i].Length != fingerptintSwitchPro && controllerNames[i].Length != fingerprintXbox360Wireless)
+            //Debug.Log(controllerNames[i].Length);
+            if (controllerNames[i].Length != fingerprintXboxOne && controllerNames[i].Length != fingerptintSwitchPro && controllerNames[i].Length != fingerprintXbox360Wireless && controllerNames[i].Length != fingerprintXboxElite)
             {
                 componentInput.setControllerTypeToNone();
                 componentInput.setConnectedStatus(false);
@@ -531,7 +533,7 @@ public class SystemInput : MonoBehaviour
             }
             else
             {               
-                if (controllerNames[i].Length == fingerprintXboxOne || controllerNames[i].Length == fingerprintXbox360Wireless)
+                if (controllerNames[i].Length == fingerprintXboxOne || controllerNames[i].Length == fingerprintXbox360Wireless || controllerNames[i].Length == fingerprintXboxElite)
                 {
                     componentInput.setControllerTypeToXbox();
                     fingerprintOfLastState = controllerNames[i].Length;

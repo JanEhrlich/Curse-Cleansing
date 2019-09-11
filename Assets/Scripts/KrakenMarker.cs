@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class KrakenMarker : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class KrakenMarker : MonoBehaviour
     public GameObject krakenMarkerPassive;
 
     private bool isActive;
+
+    public bool isInteractionMarker;
+    public UnityEvent callOnInteraction;
 
     GameObject gameLogic;
     SystemGameMaster systemGameMaster;
@@ -53,5 +57,18 @@ public class KrakenMarker : MonoBehaviour
 
         go = Instantiate(krakenMarkerActive, transform.position, Quaternion.identity) as GameObject;
         go.transform.parent = this.transform;
+    }
+
+    public void ExecuteInteraction()
+    {
+        if (callOnInteraction != null && isInteractionMarker)
+        {
+            callOnInteraction.Invoke();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        systemGameMaster.DeregisterKrakenMarker(this.gameObject);
     }
 }
