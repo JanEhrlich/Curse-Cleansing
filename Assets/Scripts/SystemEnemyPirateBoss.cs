@@ -363,7 +363,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     /*
     * Flips the dierection of the Gameobject and the State in the Component
     */
-    void FlipCharacterDirection(int newDirection)
+    public void FlipCharacterDirection(int newDirection)
     {
         //Turn the character by flipping the direction
         componentEnemyState.direction = newDirection;

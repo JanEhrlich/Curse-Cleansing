@@ -6,6 +6,7 @@ public class SystemProgressionLevel1 : MonoBehaviour
 {
 
     SystemEvent systemEvent;
+    SystemSpawn systemSpawn;
     ComponentScene componentScene;
     GameObject enemyClosePrefab;
     GameObject enemyClose;
@@ -18,6 +19,7 @@ public class SystemProgressionLevel1 : MonoBehaviour
     void Start()
     {
         systemEvent = GameObject.Find("Events").GetComponent<SystemEvent>();
+        systemSpawn = GameObject.Find("GameLogic").GetComponent<SystemSpawn>();
         enemyClosePrefab = Resources.Load("EnemyOrderClose") as GameObject;
         componentScene = systemEvent.currentState;
         //systemEvent.AddActionTrigger(SaveGameState,0);
@@ -25,14 +27,6 @@ public class SystemProgressionLevel1 : MonoBehaviour
         systemEvent.AddActionTrigger(SetComponentRespawn,0);
     }
 
-
-    void SaveGameState()
-    {
-        if (!componentScene.wasSaved)
-        {
-            componentScene.wasSaved = true;
-        }
-    }
     void SetFirstEnemySpawn()
     {
         componentScene.enemySpawns[0] = true;
@@ -49,7 +43,7 @@ public class SystemProgressionLevel1 : MonoBehaviour
     {
         if (componentScene.enemySpawns[0] == true && !enemyWasSpawned1)
         {
-            enemyClose = Instantiate(enemyClosePrefab, systemEvent.getEnemySpawn(0).transform);
+            enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
             componentScene.spawnedEnemies.Add(enemyClose);
             enemyWasSpawned1 = true;
         }

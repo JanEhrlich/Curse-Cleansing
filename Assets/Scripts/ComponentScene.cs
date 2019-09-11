@@ -12,6 +12,4 @@ public class ComponentScene
     public int lastRespawnpoint = 0;
 
     public List<GameObject> spawnedEnemies;
-
-    public bool wasSaved = false;
 }

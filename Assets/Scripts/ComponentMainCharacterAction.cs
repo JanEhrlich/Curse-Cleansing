@@ -87,6 +87,7 @@ public class ComponentMainCharacterAction
     public bool hasBat = true;                              //TODO set to false, just for testing
     public bool hasGhost = false;
     public bool hasWolf = false;
+    public bool hasSword = true;                            //TODO set to false, just for testing
     #endregion
 
 

@@ -569,6 +569,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
      */
     void HandleAttackInstruction()
     {
+        if (!componentMainCharacterAction.hasSword) return;
+
         if (receivedAttackFlag && componentMainCharacterAction.timeUntillNextAttack < Time.time)
         {
             Debug.Log("DidAttack");
