@@ -138,7 +138,7 @@ public class SystemEnemyClose : SystemEnemy
      */
      void TrackPlayerMovement()
     {
-        componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
+            componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
     }
 
     /*
@@ -222,15 +222,6 @@ public class SystemEnemyClose : SystemEnemy
      */
     void Attack()
     {
-        Debug.Log(componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange);
-        Debug.Log(componentEnemyAction.distanceToMainCharacter);
-
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time)
-        {
-            Debug.Log(componentEnemyState.direction != (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1));
-            Debug.Log(componentEnemyState.direction);
-            Debug.Log((transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1));
-        }
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.attackRange && componentEnemyAction.timeForNextAttack < Time.time && componentEnemyState.direction !=  (transform.position.x < mainCharacterGameObject.transform.position.x ? 1 : -1))
         {
             Debug.Log("Enemy Attack");

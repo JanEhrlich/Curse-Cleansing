@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 /*
  * Checks for current Player relevant events in the game
@@ -13,6 +14,8 @@ using System.Linq;
 public class SystemEvent : MonoBehaviour
 {
     SystemGameMaster gameMaster;
+    static SystemEvent current;
+    static int lastScene;
 
 
 
@@ -35,6 +38,29 @@ public class SystemEvent : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log(lastScene);
+        Debug.Log(SceneManager.GetActiveScene().buildIndex);
+        //try to make sure SystemEvent is new for every new Scene, but not on respawn within a scene
+        if (lastScene == SceneManager.GetActiveScene().buildIndex)
+        {
+            if (current != null && current != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
+        else
+        {
+            if (current != null && current != this)
+            {
+                Destroy(current.gameObject);
+                return;
+            }
+        }
+        current = this;
+        lastScene = SceneManager.GetActiveScene().buildIndex;
+
+
         DontDestroyOnLoad(this);
 
         enemySpawnsActions = Enumerable.Range(0, enemySpawns.Length).Select((i) => new List<Action>()).ToArray();
