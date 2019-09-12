@@ -6099,7 +6099,7 @@ PrefabInstance:
     - target: {fileID: 1247707422860271165, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422860271164, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -6159,12 +6159,22 @@ PrefabInstance:
     - target: {fileID: 5642004323596250589, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.47
+      value: -0.47000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642004323596250589, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.19999981
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224082, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642004323596250590, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7674681058911426211, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -6181,6 +6191,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0.00000023841858
       objectReference: {fileID: 0}
+    - target: {fileID: 7674681058911426211, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1572572798110525993, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -6189,7 +6204,7 @@ PrefabInstance:
     - target: {fileID: 5642004323596250588, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: m_Offset.x
-      value: -12
+      value: -12.7
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224087, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -22536,7 +22551,12 @@ PrefabInstance:
     - target: {fileID: 1894252333274841238, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.47
+      value: -0.47000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252333274841238, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.19999981
       objectReference: {fileID: 0}
     - target: {fileID: 1894252332187189817, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
@@ -22562,6 +22582,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252332880928889, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 1894252331937761235, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
@@ -22872,7 +22897,7 @@ PrefabInstance:
     - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: dialogueTexts.Array.data[49]
-      value: Geh dorthin.
+      value: Aber,
       objectReference: {fileID: 0}
     - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
@@ -22912,7 +22937,7 @@ PrefabInstance:
     - target: {fileID: 1894252333177612330, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_Offset.x
-      value: -12
+      value: -12.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bfd0cf297715454e90a96af384666a9, type: 3}
