@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class RespawnState : MonoBehaviour
 {
     public static GameObject current;
-    public static int currentIndex;
+    public static int currentIndex = 0;
     public static SystemGameMaster gameMaster;
     public static GameObject gameLogic;
 
@@ -14,6 +14,13 @@ public class RespawnState : MonoBehaviour
 
     private void Awake()
     {
+        if (currentIndex != SceneManager.GetActiveScene().buildIndex)
+        {
+            currentIndex = SceneManager.GetActiveScene().buildIndex;
+            //Debug.Log("DID SWITCH");
+            SwitchScene();
+        }
+
         if (current != null && current != this)
         {
             Destroy(gameObject);
@@ -25,6 +32,7 @@ public class RespawnState : MonoBehaviour
 
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,15 +40,6 @@ public class RespawnState : MonoBehaviour
         gameMaster = gameLogic.GetComponent<SystemGameMaster>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if(currentIndex != SceneManager.GetActiveScene().buildIndex)
-        {
-            currentIndex = SceneManager.GetActiveScene().buildIndex;
-            SwitchScene();
-        }
-    }
 
     /*
      * call after switching scene, or respawning

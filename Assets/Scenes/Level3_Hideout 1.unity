@@ -1728,11 +1728,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed9085912246ed489156671943ecdb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startEnemies: []
   enemySpawns: []
   interactions: []
   triggers: []
   respawnPoints:
   - {fileID: 613697795}
+  playerDied: 0
 --- !u!4 &158212549
 Transform:
   m_ObjectHideFlags: 0
@@ -5230,6 +5232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
+  allowAttack: 1
 --- !u!114 &437925226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6153,20 +6156,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1247707422770224087, guid: 327578bf5ec6c3647bade1a1c027c826,
+    - target: {fileID: 5642004323596250589, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
-      propertyPath: m_Mesh
-      value: 
+      propertyPath: m_LocalPosition.y
+      value: -0.47
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224082, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5642004323596250589, guid: 327578bf5ec6c3647bade1a1c027c826,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.47
       objectReference: {fileID: 0}
     - target: {fileID: 7674681058911426211, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -6187,6 +6185,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -1.1499999
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642004323596250588, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224087, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224085, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_margin.y
+      value: -0.04750061
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224085, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: m_margin.w
+      value: 0.0665009
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -6217,21 +6235,6 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogueTexts.Array.data[4]
       value: Geh los mein Junge
-      objectReference: {fileID: 0}
-    - target: {fileID: 1247707422770224085, guid: 327578bf5ec6c3647bade1a1c027c826,
-        type: 3}
-      propertyPath: m_margin.y
-      value: -0.04750061
-      objectReference: {fileID: 0}
-    - target: {fileID: 1247707422770224085, guid: 327578bf5ec6c3647bade1a1c027c826,
-        type: 3}
-      propertyPath: m_margin.w
-      value: 0.0665009
-      objectReference: {fileID: 0}
-    - target: {fileID: 5642004323596250588, guid: 327578bf5ec6c3647bade1a1c027c826,
-        type: 3}
-      propertyPath: m_Offset.x
-      value: -12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 327578bf5ec6c3647bade1a1c027c826, type: 3}
@@ -11814,6 +11817,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370108652}
   m_CullTransparentMesh: 0
+--- !u!1 &1370166379
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1370166381}
+  - component: {fileID: 1370166380}
+  m_Layer: 0
+  m_Name: Progression
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1370166380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370166379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3e8bafd802d6846a2c30270c7406da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1370166381
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370166379}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1373458558
 GameObject:
   m_ObjectHideFlags: 0
@@ -22407,6 +22453,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1894252332187189819, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: m_Name
+      value: Dialogue_Chain_Start
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252332187189819, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1894252332187189818, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -22462,21 +22518,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1894252332187189819, guid: 3bfd0cf297715454e90a96af384666a9,
-        type: 3}
-      propertyPath: m_Name
-      value: Dialogue_Chain_Start
-      objectReference: {fileID: 0}
-    - target: {fileID: 1894252332187189819, guid: 3bfd0cf297715454e90a96af384666a9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1894252331937761233, guid: 3bfd0cf297715454e90a96af384666a9,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1894252331937761236, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_SizeDelta.y
@@ -22497,6 +22538,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.47
       objectReference: {fileID: 0}
+    - target: {fileID: 1894252332187189817, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: nextDialogue
+      value: 
+      objectReference: {fileID: 488073723}
+    - target: {fileID: 1894252331274877620, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.1999998
+      objectReference: {fileID: 0}
     - target: {fileID: 1894252332880928889, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_LocalScale.y
@@ -22512,16 +22563,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0.00000023841858
       objectReference: {fileID: 0}
-    - target: {fileID: 1894252331274877620, guid: 3bfd0cf297715454e90a96af384666a9,
+    - target: {fileID: 1894252331937761235, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.1999998
+      propertyPath: m_margin.w
+      value: 0.0665009
       objectReference: {fileID: 0}
-    - target: {fileID: 1894252332187189817, guid: 3bfd0cf297715454e90a96af384666a9,
+    - target: {fileID: 1894252331937761235, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
-      propertyPath: nextDialogue
+      propertyPath: m_margin.y
+      value: -0.04750061
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761233, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 488073723}
+      objectReference: {fileID: 0}
     - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.size
@@ -22852,16 +22908,6 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogueTexts.Array.data[56]
       value: "Wir werden sehen, wie gro\xDF dein Kampfeswille ist."
-      objectReference: {fileID: 0}
-    - target: {fileID: 1894252331937761235, guid: 3bfd0cf297715454e90a96af384666a9,
-        type: 3}
-      propertyPath: m_margin.w
-      value: 0.0665009
-      objectReference: {fileID: 0}
-    - target: {fileID: 1894252331937761235, guid: 3bfd0cf297715454e90a96af384666a9,
-        type: 3}
-      propertyPath: m_margin.y
-      value: -0.04750061
       objectReference: {fileID: 0}
     - target: {fileID: 1894252333177612330, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
