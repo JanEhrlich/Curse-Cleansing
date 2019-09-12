@@ -36,12 +36,14 @@ public class SystemCutscene : MonoBehaviour
     {
         cutsceneCam.enabled = false;
         mainCam.enabled = true;
+        Time.timeScale = 1f;
     }
 
     private void SwitchToCutSceneCamera()
     {
         mainCam.enabled = false;
         cutsceneCam.enabled = true;
+        Time.timeScale = 0f;
     }
 
     //Index Starts at 1 ==> So cutscene 1 needs index 1 as Input

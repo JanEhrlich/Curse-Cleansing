@@ -27,6 +27,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
     float nextEnemySpawnTime = 0f;
 
     bool alternate = true;
+    bool[] enemySpawns = { false, false, false, false, false };
 
     Vector3 offset;
 
@@ -48,15 +49,15 @@ public class SystemProgressionLevel4 : MonoBehaviour
 
     void SetFirstEnemySpawn()
     {
-        componentScene.enemySpawns[0] = true;
-        componentScene.enemySpawns[1] = true;
-        componentScene.enemySpawns[2] = true;
+        enemySpawns[0] = true;
+        enemySpawns[1] = true;
+        enemySpawns[2] = true;
     }
 
     void SetSecondEnemySpawn()
     {
-        componentScene.enemySpawns[3] = true;
-        componentScene.enemySpawns[4] = true;
+        enemySpawns[3] = true;
+        enemySpawns[4] = true;
     }
 
 
@@ -85,7 +86,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
             alternate = !alternate;
         }
 
-        if (componentScene.enemySpawns[2] == true && enemySpawn3 > 0 && nextEnemySpawnTime < Time.time)
+        if (enemySpawns[2] == true && enemySpawn3 > 0 && nextEnemySpawnTime < Time.time)
         {
             flyingSkull = systemSpawn.InstatiateFlyingSkull(systemEvent.getEnemySpawn(2).transform, offset);
             flyingSkull.GetComponent<SystemEnemyFlyingSkull>().flyingDirection = SystemEnemyFlyingSkull.Direction.LEFT;
@@ -94,7 +95,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
             enemySpawn3--;
         }
 
-        if (componentScene.enemySpawns[3] == true && enemySpawn4 > 0 && nextEnemySpawnTime < Time.time)
+        if (enemySpawns[3] == true && enemySpawn4 > 0 && nextEnemySpawnTime < Time.time)
         {
             flyingSkull = systemSpawn.InstatiateFlyingSkull(systemEvent.getEnemySpawn(3).transform, offset);
             flyingSkull.GetComponent<SystemEnemyFlyingSkull>().flyingDirection = SystemEnemyFlyingSkull.Direction.LEFT;
@@ -103,7 +104,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
             enemySpawn4--;
         }
 
-        if (componentScene.enemySpawns[4] == true && enemySpawn5 > 0 && nextEnemySpawnTime < Time.time)
+        if (enemySpawns[4] == true && enemySpawn5 > 0 && nextEnemySpawnTime < Time.time)
         {
             flyingSkull = systemSpawn.InstatiateFlyingSkull(systemEvent.getEnemySpawn(4).transform, offset*2.5f);
             flyingSkull.GetComponent<SystemEnemyFlyingSkull>().flyingDirection = SystemEnemyFlyingSkull.Direction.LEFT;

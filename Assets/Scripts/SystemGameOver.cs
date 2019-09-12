@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SystemGameOver : MonoBehaviour
 {
+    GameObject gameLogic;
     SystemGameMaster gameMaster;
     ComponentMainCharacterState componentMainCharacterState;
     UIManager ui;
@@ -18,14 +19,16 @@ public class SystemGameOver : MonoBehaviour
 
     void Start()
     {
-        gameMaster = GameObject.Find("GameLogic").GetComponent<SystemGameMaster>();
+        gameLogic = GameObject.Find("GameLogic");
+        gameMaster = gameLogic.GetComponent<SystemGameMaster>();
         systemEvent = GameObject.Find("Events").GetComponent<SystemEvent>();
         ui = GameObject.Find("UI").GetComponent<UIManager>();
         componentMainCharacterState = gameMaster.ComponentMainCharacterState;
         gameOverScreen = gameObject.transform.GetChild(0).gameObject;
         dead = false;
+        systemEvent.playerDied = false;
 
-        ResetStates();
+        HandleRespawn();
     }
 
     private void Update()
@@ -38,6 +41,7 @@ public class SystemGameOver : MonoBehaviour
         {
             timeUntilRestart = Time.realtimeSinceStartup+timeForGameOverScreen;
             dead = true;
+            systemEvent.playerDied = true;
             gameOverScreen.SetActive(true);
             Time.timeScale = 0f;
         }
@@ -48,15 +52,29 @@ public class SystemGameOver : MonoBehaviour
             gameOverScreen.SetActive(false);
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            //Start();
-            //ResetStates();
         }
     }
 
 
-    void ResetStates()
+    void HandleRespawn()
     {
-        //componentMainCharacterState = new ComponentMainCharacterState(); //TODO does this work as intendet????????
-        systemEvent.RespawnPlayer();
+        //used for respawn
+        RespawnState.UpdatePointer();
+
+        if (RespawnState.lastRespawn != 0)
+        {
+            RespawnState.gameMaster.getMainCharacterGameobject().transform.position = systemEvent.respawnPoints[RespawnState.lastRespawn].transform.position;
+
+
+            if (RespawnState.currentIndex == 0) RespawnState.gameMaster.GetComponent<SystemMainCharacterMovement>().UnlockKrakenOnRespawn();
+
+            //TODO write "fight" ...
+            if (RespawnState.currentIndex == 4)
+            {
+                GameObject.Find("Pre-Figth").SetActive(false);
+                AudioManager.StartLevel5_2Audio();
+            }
+        }
     }
+
 }

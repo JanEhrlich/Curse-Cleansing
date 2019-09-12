@@ -73,7 +73,7 @@ public class SystemEnemy : MonoBehaviour
     public virtual void ReceiveDamage(int damage, int direction)
     {
         componentEnemyState.health -= damage;
-        Debug.Log("Was hit: " + componentEnemyState.health + " Time:"+Time.time); //TEST
+        //Debug.Log("Was hit: " + componentEnemyState.health + " Time:"+Time.time); //TEST
         if (componentEnemyState.health <= 0)
         {
             HandleDieEnemy();

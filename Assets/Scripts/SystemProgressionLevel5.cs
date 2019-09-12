@@ -10,6 +10,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
     SystemGameMaster gameMaster;
     ComponentScene componentScene;
     GameObject enemyClose;
+    GameObject enemyRange;
 
     public GameObject afterFight;
 
@@ -28,6 +29,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
     int randomSpawn = 0;
     int modulo = 0;
     bool attack = false;
+    bool startFight = false;
     bool finished = false;
 
     // Start is called before the first frame update
@@ -38,56 +40,68 @@ public class SystemProgressionLevel5 : MonoBehaviour
         systemSpawn = gameLogic.GetComponent<SystemSpawn>();
         gameMaster = gameLogic.GetComponent<SystemGameMaster>();
         componentScene = systemEvent.currentState;
-        randomSpawn = Mathf.RoundToInt(Random.Range(0,(float)componentScene.enemySpawns.Length + 0.0001f));
+        randomSpawn = Mathf.RoundToInt(Random.Range(0,(float)(systemEvent.enemySpawns.Length-1)));
 
-        foreach (var enemy in gameMaster.enemys)
-        {
-            enemy.GetComponent<SystemEnemyRange>().allowAttack = false;
-        }
-        gameLogic.GetComponent<SystemMainCharacterMovement>().allowAttack = false;
+        //gameLogic.GetComponent<SystemMainCharacterMovement>().allowAttack = false;
 
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy"));
+
+        if (RespawnState.lastRespawn == 1)
+        {
+            StartFight();
+        }
     }
+
 
 
     public void StartFight()
     {
         gameLogic.GetComponent<SystemMainCharacterMovement>().allowAttack = true;
-
-        foreach (var enemy in gameMaster.enemys)
-        {
-            enemy.GetComponent<SystemEnemyRange>().allowAttack = true;
-        }
+        SpawnStartEnemies();
+        startFight = true;
+        //Debug.Log(gameMaster.enemys.Count);
+        RespawnState.lastRespawn = 1;
     }
+
+    void SpawnStartEnemies()
+    {
+        //Start enemies:
+        foreach (var pos in systemEvent.startEnemies)
+        {
+            enemyRange = systemSpawn.InstantiateEnemyPirateRange(pos.transform);
+        }
+        //some random dude is spawning, do not do that
+        nextEnemySpawnTime = Time.time + 5f;
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
         if (finished) return;
 
-        if (!attack && gameMaster.enemys.Count == 0) attack = true;
-
+        if (startFight && !attack && gameMaster.enemys.Count == 0 && nextEnemySpawnTime < Time.time) attack = true;
 
         if (/*componentScene.enemySpawns[0]*/ attack == true && maximalNumberOfSimultaniusSpawnedEnemies > gameMaster.enemys.Count && maximalNumberOfSpawningEnemies > 0 && nextEnemySpawnTime < Time.time)
         {
             while (maxNumberSpawn[randomSpawn] <= 0)
             {
                 //do this for modulo, since %-operator is just reminder, not complete modulo
-                modulo = (randomSpawn - 1) % componentScene.enemySpawns.Length;
-                randomSpawn = modulo < 0 ? modulo + componentScene.enemySpawns.Length : modulo;
+                modulo = (randomSpawn - 1) % systemEvent.enemySpawns.Length;
+                randomSpawn = modulo < 0 ? modulo + systemEvent.enemySpawns.Length : modulo;
             }
             enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(randomSpawn).transform);
             maxNumberSpawn[randomSpawn]--;
             componentScene.spawnedEnemies.Add(enemyClose);
             maximalNumberOfSpawningEnemies--;
             nextEnemySpawnTime = Time.time + spawnTimeBetween;
-            randomSpawn = Mathf.RoundToInt(Random.Range(0, (float)componentScene.enemySpawns.Length -0.9999f));
+            randomSpawn = Mathf.RoundToInt(Random.Range(0, (float)(systemEvent.enemySpawns.Length-1f)));
         }
       
         if (maximalNumberOfSpawningEnemies <=0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time)
         {
-            AfterFight();
             finished = true;
+            AfterFight();
         }
     }
 

@@ -63,7 +63,8 @@ public class SystemProgression : MonoBehaviour
                 AudioManager.StartLevel4Audio();
                 break;
             case 5:
-                AudioManager.StartLevel5_1Audio();
+                if(RespawnState.lastRespawn == 0)
+                    AudioManager.StartLevel5_1Audio();
                 break;
             default:
                 AudioManager.StartLevel6Audio();

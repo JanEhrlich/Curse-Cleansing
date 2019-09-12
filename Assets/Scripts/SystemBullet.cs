@@ -49,7 +49,7 @@ public class SystemBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.layer);
+        //Debug.Log(collision.gameObject.layer);
         if(collision.gameObject.layer != LayerMask.NameToLayer("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Camera") && collision.gameObject.layer != LayerMask.NameToLayer("Enemy"))
         {
             Destroy(gameObject);

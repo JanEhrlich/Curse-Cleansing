@@ -34,7 +34,8 @@ public class SystemEnemyClose : SystemEnemy
     int lastDirectionOfZombie = 0;
     float attackLength = 2f;
 
-    private void Start()
+
+    void Start()
     {
         base.Start();
         //do not change direction if the player is hit
@@ -275,7 +276,7 @@ public class SystemEnemyClose : SystemEnemy
     {
         if (direction != componentEnemyState.direction)
         {
-            Debug.Log("Was Block Time:" + Time.time); //TEST
+            //Debug.Log("Was Block Time:" + Time.time); //TEST
         }
         else
         {

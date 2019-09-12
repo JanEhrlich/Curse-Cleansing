@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SystemProgressionLevel2 : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class SystemProgressionLevel2 : MonoBehaviour
     float spawnTimeBetween = 0.5f;
     float nextEnemySpawnTime1 = 0;
     float nextEnemySpawnTime2 = 0;
+    bool[] enemySpawns = { false, false };
 
     // Start is called before the first frame update
     void Start()
@@ -24,21 +26,21 @@ public class SystemProgressionLevel2 : MonoBehaviour
         systemSpawn = GameObject.Find("GameLogic").GetComponent<SystemSpawn>();
         componentScene = systemEvent.currentState;
         systemEvent.AddActionTrigger(SetFirstEnemySpawn, 0);
-
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy")) ;
     }
 
     void SetFirstEnemySpawn()
     {
-        componentScene.enemySpawns[0] = true;
-        componentScene.enemySpawns[1] = true;
+        enemySpawns[0] = true;
+        enemySpawns[1] = true;
     }
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (componentScene.enemySpawns[0] == true && enemyWasSpawned1 < 8 && nextEnemySpawnTime1 < Time.time)
+        //Debug.Log(componentScene);
+        if (enemySpawns[0] == true && enemyWasSpawned1 < 8 && nextEnemySpawnTime1 < Time.time)
         {
             enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
             enemyClose.GetComponent<SystemEnemyClose>().enemyType = SystemEnemyClose.EnemyType.ZOMBIE;
@@ -49,7 +51,7 @@ public class SystemProgressionLevel2 : MonoBehaviour
             nextEnemySpawnTime1 = Time.time + spawnTimeBetween;
         }
 
-        if (componentScene.enemySpawns[1] == true && enemyWasSpawned2 < 3 && nextEnemySpawnTime2 < Time.time)
+        if (enemySpawns[1] == true && enemyWasSpawned2 < 3 && nextEnemySpawnTime2 < Time.time)
         {
             enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(1).transform);
             enemyClose.GetComponent<SystemEnemyClose>().enemyType = SystemEnemyClose.EnemyType.ZOMBIE;

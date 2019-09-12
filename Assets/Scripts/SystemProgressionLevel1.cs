@@ -9,6 +9,8 @@ public class SystemProgressionLevel1 : MonoBehaviour
     SystemSpawn systemSpawn;
     ComponentScene componentScene;
     GameObject enemyClose;
+    bool[] enemySpawns = { false };
+
 
 
     //tmpvariable
@@ -20,24 +22,23 @@ public class SystemProgressionLevel1 : MonoBehaviour
         systemSpawn = GameObject.Find("GameLogic").GetComponent<SystemSpawn>();
         componentScene = systemEvent.currentState;
         systemEvent.AddActionTrigger(SetFirstEnemySpawn,0);
-        systemEvent.AddActionTrigger(SetComponentRespawn,0);
+        systemEvent.AddActionTrigger(SetRespawn,0);
     }
 
     void SetFirstEnemySpawn()
     {
-        componentScene.enemySpawns[0] = true;
+        enemySpawns[0] = true;
     }
 
-    void SetComponentRespawn()
+    void SetRespawn()
     {
-        componentScene.respawnpoints[1] = true;
-        componentScene.lastRespawnpoint = 1;
+        RespawnState.lastRespawn = 1;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (componentScene.enemySpawns[0] == true && !enemyWasSpawned1)
+        if (enemySpawns[0] == true && !enemyWasSpawned1)
         {
             enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
             componentScene.spawnedEnemies.Add(enemyClose);
