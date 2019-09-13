@@ -29,7 +29,7 @@ public class FallingCrate : MonoBehaviour
     {
         if(activated && despawnTime < Time.time) Destroy(this.gameObject);
 
-        if (Input.GetButtonDown("Attack") && inside)
+        if (Input.GetButtonDown("Interact") && inside)
         {
             Lever1.SetActive(false);
             Lever2.SetActive(true);
