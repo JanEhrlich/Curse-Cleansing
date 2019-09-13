@@ -48,6 +48,9 @@ public class UIManager : MonoBehaviour
     public Color disabledColor;
     public Color enabledColor;
 
+    private bool enabledOnceKraken;
+    private bool enabledOnceBat;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,6 +76,17 @@ public class UIManager : MonoBehaviour
             krakenRingWhite.enabled = false;
             krakenLockTimer.enabled = false;
         }
+        else
+        {
+            if (!enabledOnceKraken)
+            {
+                enabledOnceKraken = true;
+
+                krakenImage.enabled = true;
+                krakenRingTransparent.enabled = true;
+                krakenRingWhite.enabled = true;
+            }
+        }
 
         if (!action.hasBat)
         {
@@ -82,6 +96,18 @@ public class UIManager : MonoBehaviour
             batRingWhite.enabled = false;
             batLockTimer.enabled = false;
         }
+        else
+        {
+            if (!enabledOnceBat)
+            {
+                enabledOnceBat = true;
+
+                batImage.enabled = true;
+                batRingTransparent.enabled = true;
+                batRingWhite.enabled = true;
+            }
+        }
+
         #endregion
 
         if (action.hasKraken ||action.hasBat || action.hasGhost || action.hasWolf)

@@ -18,9 +18,9 @@ public class OpenPrisonExit : MonoBehaviour
     {     
         if (Input.GetButtonDown("Attack") && hasSword && inside)
         {
-            doorClose.SetActive(false);
-            doorOpen.SetActive(true);
-            doorLight.SetActive(true);
+            //doorClose.SetActive(false);
+            //doorOpen.SetActive(true);
+            //doorLight.SetActive(true);
             switchClose.SetActive(false);
             switchOpen.SetActive(true);
             Destroy(this.gameObject);
