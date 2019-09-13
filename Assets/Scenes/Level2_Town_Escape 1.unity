@@ -1954,6 +1954,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424971219}
   m_CullTransparentMesh: 0
+--- !u!1 &432093017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8685188180378770559, guid: 7df6758346e1bea4aaf776caa92065ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 2108259187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &437925221
 GameObject:
   m_ObjectHideFlags: 0
@@ -5722,6 +5728,12 @@ PolygonCollider2D:
       - {x: 0.08268089, y: -1.0101578}
       - {x: 0.7236342, y: -0.56695724}
       - {x: 0.8286059, y: 0.32448986}
+--- !u!1 &1160424951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1738959113340697373, guid: 7df6758346e1bea4aaf776caa92065ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 2108259187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1193776032
 GameObject:
   m_ObjectHideFlags: 0
@@ -8120,6 +8132,12 @@ Transform:
   m_Father: {fileID: 1257905018}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1636586702 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4141715816991036763, guid: 7df6758346e1bea4aaf776caa92065ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 2108259187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1657033307
 GameObject:
   m_ObjectHideFlags: 0
@@ -21742,9 +21760,9 @@ MonoBehaviour:
   Lever1: {fileID: 573411623}
   Lever2: {fileID: 649592062}
   Wagon: {fileID: 287280816}
-  deactivate1: {fileID: 0}
-  deactivate2: {fileID: 0}
-  deactivate3: {fileID: 0}
+  deactivate1: {fileID: 1160424951}
+  deactivate2: {fileID: 432093017}
+  deactivate3: {fileID: 1636586702}
   deactivate4: {fileID: 1310657536}
 --- !u!1001 &2123996017
 PrefabInstance:
