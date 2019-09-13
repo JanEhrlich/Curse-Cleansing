@@ -13,17 +13,17 @@ public class SystemProgressionLevel4 : MonoBehaviour
 
 
     //tmpvariable
-    int enemySpawn1 = 2;
-    int enemySpawn2 = 2;
+    int enemySpawn1 = 3;
+    int enemySpawn2 = 4;
 
-    int enemySpawn3 = 3;
+    int enemySpawn3 = 4;
 
-    int enemySpawn4 = 3;
+    int enemySpawn4 = 5;
     int enemySpawn5 = 6;
 
 
 
-    float spawnTimeBetween = 1f;
+    float spawnTimeBetween = 0.7f;
     float nextEnemySpawnTime = 0f;
 
     bool alternate = true;
@@ -66,7 +66,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        offset = new Vector3(Random.Range(0f,1f), Random.Range(0f, 4f),1f);
+        offset = new Vector3(Random.Range(-1f,1f), Random.Range(-2f, 2f),1f);
         if (alternate && enemySpawn1 > 0 && nextEnemySpawnTime < Time.time)
         {
             flyingSkull = systemSpawn.InstatiateFlyingSkull(systemEvent.getEnemySpawn(0).transform, offset);
@@ -106,7 +106,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
 
         if (enemySpawns[4] == true && enemySpawn5 > 0 && nextEnemySpawnTime < Time.time)
         {
-            flyingSkull = systemSpawn.InstatiateFlyingSkull(systemEvent.getEnemySpawn(4).transform, offset*2.5f);
+            flyingSkull = systemSpawn.InstatiateFlyingSkull(systemEvent.getEnemySpawn(4).transform, offset);
             flyingSkull.GetComponent<SystemEnemyFlyingSkull>().flyingDirection = SystemEnemyFlyingSkull.Direction.LEFT;
             componentScene.spawnedEnemies.Add(flyingSkull);
             nextEnemySpawnTime = Time.time + spawnTimeBetween;

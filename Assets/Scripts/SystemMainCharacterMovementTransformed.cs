@@ -134,7 +134,6 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
 
     private void TransformToNormalCaracter()
     {
-
         //Handels all Variables
         SetTransformationVariables(0, 1, 1, componentMainCharacterAction.colliderStandSize, componentMainCharacterAction.colliderStandOffset,false);
 

@@ -16,7 +16,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
 
 
     //tmpvariable
-    int maximalNumberOfSpawningEnemies = 5;
+    int maximalNumberOfSpawningEnemies = 10;
     int maximalNumberOfSimultaniusSpawnedEnemies = 5;
 
     int[] maxNumberSpawn = { 3,3,3,3,3};

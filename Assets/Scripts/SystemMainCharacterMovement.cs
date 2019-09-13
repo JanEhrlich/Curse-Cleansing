@@ -152,8 +152,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
         HandleGliding();
         
-        if(allowAttack)
-        HandleAttackInstruction();  
+        if(allowAttack && !IsAlreadyTransformed())
+            HandleAttackInstruction();  
         
         CheckTimers();
         #region checkKrakenAbility
@@ -327,6 +327,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
                 {
                     componentMainCharacterAction.isHangingOnMarker = false;
                     rigidBody.bodyType = RigidbodyType2D.Dynamic;
+                    allowAttack = true;
                 }
 
                 Jump();
@@ -454,8 +455,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //If no marker is in range ==> do nothing (TODO do krakenAttack)
         if (componentKrakenMarker.closestMarkerInRange == null)
         {
-            if(allowAttack)
-            HandleKrakenAttack();
+            if(allowAttack && !IsAlreadyTransformed())
+                HandleKrakenAttack();
             return;
         }
 
@@ -506,6 +507,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
             {
                 rigidBody.velocity = Vector2.zero;
                 rigidBody.bodyType = RigidbodyType2D.Static;
+                allowAttack = false;
                 componentMainCharacterAction.isUsingKrakenPull = false;
                 componentMainCharacterAction.isHangingOnMarker = true;
                 componentMainCharacterAction.hasDoubleJump = true;
@@ -590,7 +592,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
             //Debug.Log("DidAttack");
             componentMainCharacterState.isAttacking = true;
             numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(mainCharacterTransform.position + componentMainCharacterAction.attackPositionOffset, componentMainCharacterAction.currentAttackBox, 0, enemyToDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Enemy")));
-
+            //TODO Bug if enemy spawn and one attacks to fast, here gets a null pointer thrown
             ApplyDamageToAllEnemys(enemyToDamageColliders, componentMainCharacterState.damage);
 
             ResetTempArrays();
@@ -781,6 +783,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
         }
     }
     #endregion
+
+    private bool IsAlreadyTransformed()
+    {
+        return componentMainCharacterAction.isKraken || componentMainCharacterAction.isWolf || componentMainCharacterAction.isGhost || componentMainCharacterAction.isBat;
+    }
 
     public void UnlockSword()
     {
