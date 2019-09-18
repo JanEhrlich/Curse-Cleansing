@@ -16,7 +16,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     Vector3 debugOffset;
     Vector3 debugAttackbox;
 
-    public enum BossStage { NORMAL, THREESHOT, COMBO, SKULLS, HEAVY};
+    public enum BossStage { NORMAL, THREESHOT, COMBO, SKULLS, JUMP, RUN};
 
     //handles
     GameObject rangeAttackMisslePrefab;
@@ -24,6 +24,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
 
     //set attack range multiplier in inspector
     public float attackrangeMultiplier = 6f;
+    public float maxSpeed = 3f;
 
     //Tmp Variables used for Calculations
     Vector3 tmp_scale;
@@ -36,6 +37,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     float tmp_xVelocity;
     RaycastHit2D leftCheck;
     RaycastHit2D rightCheck;
+    RaycastHit2D ground;
     bool leftEdge = false;
     bool rightEdge = false;
     bool leftWall = false;
@@ -70,7 +72,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     {
         base.Start();
         //do not change direction if the player is hit
-        componentEnemyState.layerMask &= componentEnemyState.layerMask &= systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
+        componentEnemyState.layerMask &= componentEnemyState.layerMask & systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
         componentEnemyAction.timeToAttack = 0.5f;
         componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
         componentEnemyAction.isAttacking = false;
@@ -83,15 +85,27 @@ public class SystemEnemyPirateBoss : SystemEnemy
 
         //TODO check - for the sprite direction
         componentEnemyAction.attackPositionOffset = new Vector3(-1f, 0, 0f);
+        //componentEnemyState.speedMultiplier = 2f;
     }
 
     void FixedUpdate()
     {
+        UpdatedSpeedAndJumpForce();
+
+        GroundedCheck();
+
+        WallCheck();
+
+        Movement();
+
         TrackPlayerMovement();
+
 
         if(timeUntillvulnerable < Time.time) {
             gameObject.GetComponent<SpriteRenderer>().color = new Color(255f,255f,255f,255f);
         }
+
+        ChooseAttack();
 
         switch (stage)
         {
@@ -107,10 +121,56 @@ public class SystemEnemyPirateBoss : SystemEnemy
             case BossStage.THREESHOT:
                 ThreeShotAttack();
                 break;
-            case BossStage.HEAVY:
+            case BossStage.JUMP:
+                BigJump();
                 break;
+            case BossStage.RUN:
+                FastRun();
+                break;                
 
         }
+    }
+
+    /*
+     * simply update the current speed and jump force of the enemy
+     */
+    private void UpdatedSpeedAndJumpForce()
+    {
+        componentEnemyState.speedMultiplier = componentEnemyAction.distanceToMainCharacter*4 / componentEnemyAction.followRange;
+        componentEnemyState.speedMultiplier = componentEnemyState.speedMultiplier < maxSpeed? componentEnemyState.speedMultiplier : maxSpeed;
+        componentEnemyState.currentSpeed = ComponentEnemyState.speed * componentEnemyState.speedMultiplier;
+        componentEnemyState.currentJumpForce = ComponentEnemyState.jumpForce * componentEnemyState.jumpForceMultiplier;
+    }
+
+    //TODO can make a pattern here
+    void ChooseAttack()
+    {
+
+    }
+
+
+    void Movement()
+    {
+        if(!componentEnemyState.isOnGround)
+        {
+        //TODO maby need the minus for other sprite
+        tmp_xVelocity = componentEnemyState.currentSpeed * componentEnemyState.direction;
+        rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+        }
+
+
+        if(componentEnemyState.isRunning)
+        {
+        //TODO maby need the minus for other sprite
+        //runspeed 
+        tmp_xVelocity = 10f * componentEnemyState.direction;
+        rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+        }
+
+        //Tracking of some State
+        componentEnemyState.currentVelocity = rigidBody.velocity;
+        componentEnemyState.isMoving = rigidBody.velocity.x > 0.1f || rigidBody.velocity.y > 0.1f || rigidBody.velocity.x < -0.1f || rigidBody.velocity.y < -0.1f;
+        
     }
 
     /*
@@ -120,7 +180,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     {
         componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
         systemGameMaster.SystemUtility.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.zero, attackDirection, componentEnemyAction.followRange, componentEnemyState.layerMask, debugRayCasts);
-        if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
+        if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyState.isOnGround && !componentEnemyState.isRunning)
         {
             if (mainCharacterGameObject.transform.position.x < transform.position.x)
             {
@@ -132,6 +192,24 @@ public class SystemEnemyPirateBoss : SystemEnemy
                 FlipCharacterDirection(1);
             }
         }
+    }
+
+
+    /*
+     * check if enemy is abount to hit a wall, left or right
+     */
+    private void WallCheck()
+    {
+        //Cast rays for the left and right foot
+        leftCheck = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.down * 2f,
+            new Vector2(-1f, 0f), Vector2.left, 1.5f, componentEnemyState.layerMask, debugRayCasts);
+
+        rightCheck = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.down * 2f,
+            new Vector2(1f, 0f), Vector2.right, 1.5f, componentEnemyState.layerMask, debugRayCasts);
+
+        leftWall = leftCheck;
+        rightWall = rightCheck;
+
     }
 
 
@@ -338,7 +416,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
             componentEnemyAction.isAttacking = false;
-            stage = BossStage.NORMAL;
+            stage = BossStage.JUMP;
         }
     }
 
@@ -352,11 +430,86 @@ public class SystemEnemyPirateBoss : SystemEnemy
     }
 
     /*
-     * maybe make 2 damage?
+     * jump on the player
      */
-     void HeavyAttack()
+     void BigJump()
     {
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0)
+        {
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
+            componentEnemyAction.isAttacking = true;
 
+            //remove y-velocity, so that one can not use edges to boost
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+
+            componentEnemyState.isOnGround = false;
+            rigidBody.AddForce(new Vector2(0f, componentEnemyState.currentJumpForce*1.6f), ForceMode2D.Impulse);
+        }
+        if (componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        {
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks/3f;
+            componentEnemyAction.isAttacking = false;
+            stage = BossStage.RUN;
+        }
+    }
+
+        /*
+    * Checks if Player is grounded using 2 raycasts
+    */
+    private void GroundedCheck()
+    {
+        //Cast rays for the left and right foot
+        ground = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.down, Vector2.zero, Vector2.down, 2f, componentEnemyState.layerMask, debugRayCasts);
+
+        componentEnemyState.isOnGround = ground;
+    }
+
+    /*
+     * run towards the player
+     */
+    void FastRun()
+    {
+        if(leftWall || rightWall)
+        {
+            componentEnemyState.isRunning = false;
+            if(leftWall)
+            {
+                tmp_xVelocity = 1f;
+                rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+
+                //Tracking of some State
+                componentEnemyState.currentVelocity = rigidBody.velocity;
+            }
+            else
+            {
+                tmp_xVelocity = -1f;
+                rigidBody.velocity = new Vector2(tmp_xVelocity, rigidBody.velocity.y);
+
+                //Tracking of some State
+                componentEnemyState.currentVelocity = rigidBody.velocity;
+            }
+        }
+
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0)
+        {
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
+            componentEnemyAction.isAttacking = true;
+            componentEnemyState.isRunning = true;
+        }
+
+        if(componentEnemyState.isRunning)
+        {
+            componentEnemyAction.timeForNextAttack = Time.time +  componentEnemyAction.timeBetweenAttacks/3f;
+        }
+
+
+        if (componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        {
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
+            componentEnemyAction.isAttacking = false;
+            componentEnemyState.isRunning = false;
+            stage = BossStage.NORMAL;
+        }        
     }
 
 

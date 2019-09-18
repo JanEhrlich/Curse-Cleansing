@@ -45,6 +45,8 @@ public class ComponentEnemyState
 
     public bool hasJump;                            //Can the enemy intentionally jump once
     public bool isOnGround;                         //Is the enemy on the ground?
+    public bool isRunning;
+
 
     public float originalXScale;                    //Original scale on X axis
     public int direction = 1;                       //Direction enemy is facing

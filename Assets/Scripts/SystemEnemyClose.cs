@@ -39,7 +39,7 @@ public class SystemEnemyClose : SystemEnemy
     {
         base.Start();
         //do not change direction if the player is hit
-        componentEnemyState.layerMask &= componentEnemyState.layerMask &= systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
+        componentEnemyState.layerMask &= componentEnemyState.layerMask & systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
         componentEnemyAction.timeToAttack = 0.5f;
         componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
         componentEnemyAction.isAttacking = false;
