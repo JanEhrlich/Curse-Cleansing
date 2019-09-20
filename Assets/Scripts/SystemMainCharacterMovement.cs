@@ -52,8 +52,10 @@ public class SystemMainCharacterMovement : MonoBehaviour
     float tmp_xVelocity;
     RaycastHit2D leftCheck;
     RaycastHit2D rightCheck;
+    Vector2 initial_tmp_direction;
     Vector2 tmp_direction;
     bool glidingAllowed = false;
+    bool wasOnGroundLastFrame = false;
 
     private float attackLength = 2f;
 
@@ -225,11 +227,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentMainCharacterState.isOnGround = leftCheck || rightCheck;
 
 
-        if (componentMainCharacterState.isOnGround)
+        if (componentMainCharacterState.isOnGround && componentMainCharacterState.isOnGround != wasOnGroundLastFrame)
         {
+            componentMainCharacterAction.landingImpulse = true;
             componentMainCharacterState.hasJump = true;
             componentMainCharacterAction.hasDoubleJump = true;
         }
+
+        wasOnGroundLastFrame = componentMainCharacterState.isOnGround;
     }
 
     /*
@@ -247,6 +252,23 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //If the sign of the velocity and direction don't match, flip the character
         if (tmp_xVelocity * componentMainCharacterState.direction < 0f)
             FlipCharacterDirection();
+
+        //Handle turn around during Hanging
+        if (componentMainCharacterAction.isHangingOnMarker)
+        {
+            if (componentInput.getCurrentJoystickDirectionClamped().x != 0)
+            {
+                if ((initial_tmp_direction.x > 0 && componentInput.getCurrentJoystickDirectionClamped().x < 0) || 
+                    (initial_tmp_direction.x < 0 && componentInput.getCurrentJoystickDirectionClamped().x > 0))
+                {
+                    componentMainCharacterAction.hangingTurnAround = true;
+                }
+                else
+                {
+                    componentMainCharacterAction.hangingTurnAround = false;
+                }
+            }
+        }
 
         //If the player is on the ground, extend the coyote time window
         if (componentMainCharacterState.isOnGround)
@@ -284,14 +306,17 @@ public class SystemMainCharacterMovement : MonoBehaviour
      */
     void FlipCharacterDirection()
     {
-        //Turn the character by flipping the direction
-        componentMainCharacterState.direction *= -1;
-        componentMainCharacterAction.attackPositionOffset.x *= -1; 
-        tmp_scale = mainCharacterGameObject.transform.localScale;
-        tmp_scale.x = componentMainCharacterState.originalXScale * componentMainCharacterState.direction;
+        if (!componentMainCharacterAction.isHangingOnMarker)
+        {
+            //Turn the character by flipping the direction
+            componentMainCharacterState.direction *= -1;
+            componentMainCharacterAction.attackPositionOffset.x *= -1;
+            tmp_scale = mainCharacterGameObject.transform.localScale;
+            tmp_scale.x = componentMainCharacterState.originalXScale * componentMainCharacterState.direction;
 
-        //Apply the new scale
-        mainCharacterGameObject.transform.localScale = tmp_scale;
+            //Apply the new scale
+            mainCharacterGameObject.transform.localScale = tmp_scale;
+        }
     }
     #endregion
 
@@ -328,9 +353,13 @@ public class SystemMainCharacterMovement : MonoBehaviour
                     componentMainCharacterAction.isHangingOnMarker = false;
                     rigidBody.bodyType = RigidbodyType2D.Dynamic;
                     allowAttack = true;
+
+                    initial_tmp_direction = Vector2.zero;
+                    componentMainCharacterAction.hangingTurnAround = false;
                 }
 
                 Jump();
+                componentMainCharacterAction.jumpImpulse = true;
                 skipNextFrame = true;
                 componentMainCharacterState.isOnGround = false;
                 componentMainCharacterState.hasJump = false;
@@ -424,6 +453,8 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
     void StartGlide()
     {
+        componentMainCharacterAction.glidingImpulse = true;
+
         rigidBody.gravityScale = componentMainCharacterState.normalGravity * ComponentMainCharacterAction.gravityPercentageHALFBat;
         componentMainCharacterState.speedMultiplier = 0.6f;
 
@@ -500,6 +531,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
     {
         tmp_direction = (Vector2)(componentKrakenMarker.closestMarkerInRange.transform.position - mainCharacterTransform.position);
 
+        if (initial_tmp_direction == Vector2.zero)
+        {
+            initial_tmp_direction = tmp_direction;
+        }
+
         //Checking player distance to the krakenMarker
         if (tmp_direction.sqrMagnitude < ComponentMainCharacterAction.krakePullThresholdDistance * ComponentMainCharacterAction.krakePullThresholdDistance)
         {
@@ -549,7 +585,7 @@ public class SystemMainCharacterMovement : MonoBehaviour
 
             //trigger Animation
             //TODO make right animation
-            componentMainCharacterAction.attackImpulse = true;
+            componentMainCharacterAction.krakenAttackImpulse = true;
             //AudioManager.PlaySwordAttackAudio();
         }
         if (componentMainCharacterAction.timeUntillNextAttack < Time.time)
@@ -568,6 +604,10 @@ public class SystemMainCharacterMovement : MonoBehaviour
         componentMainCharacterAction.batFlapDoubleJumpImpulse = false;
         componentMainCharacterAction.attackImpulse = false;
         componentMainCharacterAction.krakenImpulse = false;
+        componentMainCharacterAction.jumpImpulse = false;
+        componentMainCharacterAction.landingImpulse = false;
+        componentMainCharacterAction.glidingImpulse = false;
+        componentMainCharacterAction.krakenAttackImpulse = false;
     }
 
     #region handleAttack

@@ -51,7 +51,8 @@ public class SystemKrakenMarker : MonoBehaviour
         {
             if (facingDirection > 0)
             {
-                if (marker.transform.position.x < player_pos.x - 0.5f)
+                // if (marker.transform.position.x < player_pos.x - 0.5f || marker.transform.position.y < player_pos.y - 0.5f)
+                if (marker.transform.position.x < player_pos.x - 0f || marker.transform.position.y < player_pos.y - 0.5f)
                 {
                     continue;
                 }
@@ -62,7 +63,8 @@ public class SystemKrakenMarker : MonoBehaviour
             }
             else
             {
-                if (marker.transform.position.x > player_pos.x + 1f)
+                //if (marker.transform.position.x > player_pos.x + 1f || marker.transform.position.y < player_pos.y - 0.5f)
+                if (marker.transform.position.x > player_pos.x + 0f || marker.transform.position.y < player_pos.y - 0.5f)
                 {
                     continue;
                 }

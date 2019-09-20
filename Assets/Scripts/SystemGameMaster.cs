@@ -33,6 +33,7 @@ public class SystemGameMaster : MonoBehaviour
     private SystemMainCharacterMovement systemMainCharacterMovement;
     private SystemMainCharacterMovementTransformed systemMainCharacterMovementTransformed;
     private SystemMainCharacterAnimation systemMainCharacterAnimation;
+    private SystemMainCharacterAnimationFinal systemMainCharacterAnimationFinal;
     private SystemKrakenMarker systemKrakenMarker;
     private SystemProgression systemProgression;
     private GameObject systemEventObject;
@@ -47,7 +48,15 @@ public class SystemGameMaster : MonoBehaviour
     {
         systemInput.Tick();
         systemMainCharacterMovementTransformed.Tick();
-        systemMainCharacterAnimation.Tick();
+
+        if (systemMainCharacterAnimation) {
+            systemMainCharacterAnimation.Tick();
+        }
+        else
+        {
+            systemMainCharacterAnimationFinal.Tick();
+        }
+
         systemKrakenMarker.Tick();
         systemProgression.Tick();
     }
@@ -75,7 +84,16 @@ public class SystemGameMaster : MonoBehaviour
         systemMainCharacterMovementTransformed.Init(this);
 
         systemMainCharacterAnimation = GetComponent<SystemMainCharacterAnimation>();
-        systemMainCharacterAnimation.Init(this);
+        systemMainCharacterAnimationFinal = GetComponent<SystemMainCharacterAnimationFinal>();
+
+        if (systemMainCharacterAnimation)
+        {
+            systemMainCharacterAnimation.Init(this);
+        }
+        else
+        {
+            systemMainCharacterAnimationFinal.Init(this);
+        }
 
         systemKrakenMarker = GetComponent<SystemKrakenMarker>();
         systemKrakenMarker.Init(this);

@@ -104,7 +104,6 @@ public class ComponentMainCharacterAction
     public bool isHangingOnMarker = false;                  //Is the player currently hanging on the kraken Marker
     public bool krakenImpulse = false;
 
-    public bool isGliding = false;                          //Is the player gliding?
     public bool isHeadBlocked;                              //can the player transform back?
     public bool isFootBlocked;                              //can the player transform back?
     public bool hasDoubleJump = true;                       //Is the player's double jump available
@@ -126,5 +125,11 @@ public class ComponentMainCharacterAction
 
     public float currentKrakenCounter = 0f;                 //Current Kraken Curse Counter. When this value reaches 1, the player will transform into a kraken
     public float currentBatCounter = 0f;                    //Current Kraken Bat Counter. When this value reaches 1, the player will transform into a bat
+
+    public bool jumpImpulse = false;                        //Variable will be set to true for one Frame, to trigger Jump Start Animation
+    public bool landingImpulse = false;                     //Variable will be set to true for one Frame, to trigger Landing Animation
+    public bool glidingImpulse = false;                     //Variable will be set to true for one Frame, to trigger start Gliding Animation
+    public bool krakenAttackImpulse = false;                //Variable will be set to true for one Frame, to trigger kraken Attack Animation
+    public bool hangingTurnAround = false;                  //Variable gets used to set the Animation for turning around while hanging on a marker
     #endregion
 }
