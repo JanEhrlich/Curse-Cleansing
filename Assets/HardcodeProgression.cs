@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class HardcodeProgression : MonoBehaviour
 {
-    private bool hasSword = true;
-    private bool hasKraken = true;
+    public bool hasSword = true;
+    public bool hasKraken = true;
+    public bool hasBat = false;
 
     private SystemGameMaster gm;
 
@@ -15,5 +16,6 @@ public class HardcodeProgression : MonoBehaviour
         gm = GetComponent<SystemGameMaster>();
         gm.ComponentMainCharacterAction.hasSword = hasSword;
         gm.ComponentMainCharacterAction.hasKraken = hasKraken;
+        gm.ComponentMainCharacterAction.hasBat = hasBat;
     }
 }

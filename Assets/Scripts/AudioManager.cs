@@ -280,6 +280,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel7_1Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel7_1, current.ambientVolumeLevel7_1);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel7_1;
         current.ambientSource.loop = true;
@@ -296,6 +299,9 @@ public class AudioManager : MonoBehaviour
 
     public static void StartLevel7_2Audio()
     {
+        //Modify Mixer to make Volume consistent throughout the levels
+        setLevelBackgroundVolume(current.musicVolumeLevel7_2, current.ambientVolumeLevel7_2);
+
         //Set the clip for ambient audio, tell it to loop, and then tell it to play
         current.ambientSource.clip = current.ambientClipLevel7_2;
         current.ambientSource.loop = true;

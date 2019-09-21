@@ -44,6 +44,21 @@ public class SceneSwitcher : MonoBehaviour
         LoadSceneByNumber(4);
     }
 
+    public void LoadHideoutAfterTavernLevel()
+    {
+        LoadSceneByNumber(5);
+    }
+
+    public void LoadHarborLevel()
+    {
+        LoadSceneByNumber(6);
+    }
+
+    public void LoadShipLevel()
+    {
+        LoadSceneByNumber(7);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == playerLayer)

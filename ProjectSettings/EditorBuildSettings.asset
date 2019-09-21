@@ -21,18 +21,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Build Scenes/Level5_Tavern 1.unity
     guid: 10104f92a6f1d8441b715e9a30b59c0a
   - enabled: 1
-    path: Assets/Scenes/Level1_Prison.unity
-    guid: c52af71992a6f8a4b949fe765f6f0764
+    path: Assets/Scenes/Build Scenes/Level3_HideoutAfterTavern1.unity
+    guid: 14670070ca27afd4d9dc9da18a5d257c
   - enabled: 1
-    path: Assets/Scenes/Level2_Town_Escape.unity
-    guid: 6e5b362a25d7e9a4ab4cc811ad87c25c
+    path: Assets/Scenes/Build Scenes/Level6_Harbor.unity
+    guid: d872af28b3e17e147891197ccf16c459
   - enabled: 1
-    path: Assets/Scenes/Level3_Hideout.unity
-    guid: 71b7690e07967254ca7f4d25995bfe6c
-  - enabled: 1
-    path: Assets/Scenes/Level4_Road_To_Tavern.unity
-    guid: 9c9efd5dd17ee4b40a4663dbf7c17baa
-  - enabled: 1
-    path: Assets/Scenes/Level5_Tavern.unity
-    guid: b4e9f21bfedf17844ba2fd143406d63d
+    path: Assets/Scenes/Build Scenes/Level7_Ship.unity
+    guid: 7157c6f6d145efe438364ad7b9466d9f
   m_configObjects: {}
