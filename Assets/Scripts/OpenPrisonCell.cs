@@ -28,7 +28,7 @@ public class OpenPrisonCell : MonoBehaviour
         {
             if (!keyRemoved)
             {
-                systemGameMaster.mainCharacterGameObject.GetComponent<Animator>().Play("Player_Kraken_Skill");
+                systemGameMaster.mainCharacterGameObject.GetComponent<Animator>().Play("Kraken_Attack");
                 systemGameMaster.ComponentMainCharacterAction.currentKrakenCounter += ComponentMainCharacterAction.costKrakenAbility;
                 Destroy(key);
                 keyRemoved = true;

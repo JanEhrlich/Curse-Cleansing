@@ -215,11 +215,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
     private void GroundedCheck()
     {
         //Cast rays for the left and right foot
-        leftCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.49F * componentMainCharacterState.playerHeight, 
+        leftCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.6F * componentMainCharacterState.playerHeight, 
             new Vector2(-ComponentMainCharacterState.footOffsetLeft, 0f), Vector2.down, 
             ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask, drawDebugRaycasts);
 
-        rightCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.49F * componentMainCharacterState.playerHeight,
+        rightCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.6F * componentMainCharacterState.playerHeight,
             new Vector2(ComponentMainCharacterState.footOffsetRight, 0f), Vector2.down, 
             ComponentMainCharacterState.groundDistance, componentMainCharacterState.layerMask, drawDebugRaycasts);
 

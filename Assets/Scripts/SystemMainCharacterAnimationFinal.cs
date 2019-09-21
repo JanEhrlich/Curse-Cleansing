@@ -241,15 +241,59 @@ public class SystemMainCharacterAnimationFinal : MonoBehaviour
     {
         if (actions.landingImpulse)
         {
-            anim.Play(jumpLandingtNoWeapon);
+            if (!actions.hasSword && !actions.isBat && !actions.isKraken)
+            {
+                anim.Play(jumpLandingtNoWeapon);
+                return;
+            }
+
+            if (actions.hasSword && !actions.isBat && !actions.isKraken)
+            {
+                anim.Play(jumpLanding);
+                return;
+            }
+
+            if (actions.isBat && !actions.isKraken)
+            {
+                //Bat has no Start and Landing Animation
+                return;
+            }
+
+            if (!actions.isBat && actions.isKraken)
+            {
+                anim.Play(krakenJumpLanding);
+                return;
+            }
         }
     }
 
     private void checkJumpImpulse()
     {
         if (actions.jumpImpulse)
-        {
-            anim.Play(jumpStartNoWeapon);
+        {    
+            if (!actions.hasSword && !actions.isBat && !actions.isKraken)
+            {
+                anim.Play(jumpStartNoWeapon);
+                return;
+            }
+
+            if (actions.hasSword && !actions.isBat && !actions.isKraken)
+            {
+                anim.Play(jumpStart);
+                return;
+            }
+
+            if (actions.isBat && !actions.isKraken)
+            {
+                //Bat has no Start and Landing Animation
+                return;
+            }
+
+            if (!actions.isBat && actions.isKraken)
+            {
+                anim.Play(krakenJumpStart);
+                return;
+            }
         }
     }
 

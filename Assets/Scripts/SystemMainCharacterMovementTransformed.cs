@@ -191,7 +191,7 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
     void HeadSpaceCheck()
     {
         headCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
-            new Vector2(0f, collider2d.size.y / 2), Vector2.up, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
+            new Vector2(0f, (collider2d.size.y / 2)+(collider2d.offset.y)), Vector2.up, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
         componentMainCharacterAction.isHeadBlocked = headCheck;
     }
 
@@ -200,8 +200,8 @@ public class SystemMainCharacterMovementTransformed : MonoBehaviour
      */
     void FootSpaceCheck()
     {
-        footCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position + Vector3.down * 0.49F * componentMainCharacterState.playerHeight,
-            Vector2.zero, Vector2.down, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
+        footCheck = systemGameMaster.SystemUtility.Raycast(mainCharacterGameObject.transform.position,
+            new Vector2(0f, -(collider2d.size.y / 2) + (collider2d.offset.y)), Vector2.down, ComponentMainCharacterAction.headClearance, componentMainCharacterState.layerMask,drawDebugRaycasts);
         componentMainCharacterAction.isFootBlocked = footCheck;
     }
 

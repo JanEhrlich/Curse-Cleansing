@@ -19,8 +19,8 @@ public class ComponentMainCharacterState
     public static float jumpForce = 12f;            //Initial force of jump
     public static float groundDistance = .2f;       //Distance from player to ground which is considered as grounded
 
-    public static float footOffsetLeft = .47f;           //X Offset of left foot raycast
-    public static float footOffsetRight = .3f;           //X Offset of right foot raycast
+    public static float footOffsetLeft = .35f;      //X Offset of left foot raycast
+    public static float footOffsetRight = .35f;      //X Offset of right foot raycast
     #endregion
 
 
