@@ -31,7 +31,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
     bool attack = false;
     bool startFight = false;
     bool finished = false;
-
+    bool didSpawn = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -82,7 +82,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
 
         if (startFight && !attack && gameMaster.enemys.Count == 0 && nextEnemySpawnTime < Time.time) attack = true;
 
-        if (/*componentScene.enemySpawns[0]*/ attack == true && maximalNumberOfSimultaniusSpawnedEnemies > gameMaster.enemys.Count && maximalNumberOfSpawningEnemies > 0 && nextEnemySpawnTime < Time.time)
+        /*if ( attack == true && maximalNumberOfSimultaniusSpawnedEnemies > gameMaster.enemys.Count && maximalNumberOfSpawningEnemies > 0 && nextEnemySpawnTime < Time.time)
         {
             while (maxNumberSpawn[randomSpawn] <= 0)
             {
@@ -96,8 +96,66 @@ public class SystemProgressionLevel5 : MonoBehaviour
             maximalNumberOfSpawningEnemies--;
             nextEnemySpawnTime = Time.time + spawnTimeBetween;
             randomSpawn = Mathf.RoundToInt(Random.Range(0, (float)(systemEvent.enemySpawns.Length-1f)));
+        }*/
+
+
+        if (attack == true && maximalNumberOfSimultaniusSpawnedEnemies > gameMaster.enemys.Count && maximalNumberOfSpawningEnemies > 0 && nextEnemySpawnTime < Time.time)
+        {
+            switch (maximalNumberOfSpawningEnemies)
+            {
+                case 10:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(1).transform);
+                    didSpawn = true;
+                    break;
+                case 9:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(2).transform);
+                    didSpawn = true;
+                    break;
+                case 8:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(3).transform);
+                    didSpawn = true;
+                    break;
+                case 7:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(4).transform);
+                    didSpawn = true;
+                    break;
+                case 6:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
+                    didSpawn = true;
+                    break;
+                case 5:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(3).transform);
+                    didSpawn = true;
+                    break;
+                case 4:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(4).transform);
+                    didSpawn = true;
+                    break;
+                case 3:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
+                    didSpawn = true;
+                    break;
+                case 2:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
+                    didSpawn = true;
+                    break;
+                case 1:
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(3).transform);
+                    didSpawn = true;
+                    break;
+                default:
+                    didSpawn = false;
+                    break;
+            }
+            if (didSpawn)
+            {
+                componentScene.spawnedEnemies.Add(enemyClose);
+                maximalNumberOfSpawningEnemies--;
+                nextEnemySpawnTime = Time.time + spawnTimeBetween;
+                didSpawn = false;
+            }
         }
-      
+
         if (maximalNumberOfSpawningEnemies <=0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time)
         {
             finished = true;

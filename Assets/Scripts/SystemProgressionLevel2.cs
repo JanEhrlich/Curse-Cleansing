@@ -45,10 +45,10 @@ public class SystemProgressionLevel2 : MonoBehaviour
     void FixedUpdate()
     {
         //Debug.Log(componentScene);
-        if (enemySpawns[0] == true && enemyWasSpawned1 < 3 && nextEnemySpawnTime1 < Time.time)
+        if (enemySpawns[0] == true && enemyWasSpawned1 < 15 && nextEnemySpawnTime1 < Time.time)
         {
             enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
-            enemyClose.GetComponent<SystemEnemyClose>().enemyType = SystemEnemyClose.EnemyType.ZOMBIE;
+            //enemyClose.GetComponent<SystemEnemyClose>().enemyType = SystemEnemyClose.EnemyType.ZOMBIE;
             enemyClose.GetComponent<SystemEnemyClose>().followRange = 20f;
             enemyClose.GetComponent<SystemEnemyClose>().speedMultiplier= 2.5f;
             componentScene.spawnedEnemies.Add(enemyClose);

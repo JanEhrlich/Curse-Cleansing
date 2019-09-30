@@ -6236,6 +6236,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
       propertyPath: dialogueTexts.Array.data[0]
       value: Ja mach doch endlich
       objectReference: {fileID: 0}
@@ -6258,6 +6263,31 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogueTexts.Array.data[4]
       value: Geh los mein Junge
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetPlayerHasBat
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 327578bf5ec6c3647bade1a1c027c826, type: 3}
@@ -22434,7 +22464,7 @@ PrefabInstance:
     - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
@@ -22761,6 +22791,36 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogueTexts.Array.data[56]
       value: "Wir werden sehen, wie gro\xDF dein Kampfeswille ist."
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 437925232}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: SetPlayerHasBat
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1894252333177612330, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}

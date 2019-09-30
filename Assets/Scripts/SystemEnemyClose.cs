@@ -35,7 +35,7 @@ public class SystemEnemyClose : SystemEnemy
     float attackLength = 2f;
 
 
-    void Start()
+    void Awake()
     {
         base.Start();
         //do not change direction if the player is hit

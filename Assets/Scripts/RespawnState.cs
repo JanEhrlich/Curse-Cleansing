@@ -20,8 +20,7 @@ public class RespawnState : MonoBehaviour
             //Debug.Log("DID SWITCH");
             SwitchScene();
         }
-
-        if (current != null && current != this)
+        else
         {
             Destroy(gameObject);
         }

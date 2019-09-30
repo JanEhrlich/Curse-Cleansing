@@ -17,11 +17,13 @@ public class SystemEnemyRange : SystemEnemy
 
     //handles
     GameObject rangeAttackMisslePrefab;
-
+    GameObject arm;
     //set attack range multiplier in inspector
     public float attackrangeMultiplier = 3f;
 
     //Tmp Variables used for Calculations
+    Quaternion defaultPositionArm;
+    Quaternion armRotation;
     Vector3 tmp_scale;
     float tmp_direction;
     RaycastHit2D attackHit;
@@ -30,14 +32,21 @@ public class SystemEnemyRange : SystemEnemy
     Quaternion rotation;
     float rotZ;
 
+    float rotX = 0f;
+    float rotY = 0f;
+
     void Start()
     {
         base.Start();
         componentEnemyState.currentSpeed = 0;
         componentEnemyAction.followRange *= attackrangeMultiplier;
         rangeAttackMisslePrefab = Resources.Load("Bullet") as GameObject;
+        arm = gameObject.transform.GetChild(0).gameObject;
+        defaultPositionArm = arm.transform.rotation;
         componentEnemyAction.isAttacking = false;
+        componentEnemyAction.timeForNextAttack = Time.time + 3f;
     }
+
     void Update()
     {
     }
@@ -75,22 +84,35 @@ public class SystemEnemyRange : SystemEnemy
      */
      void Attack()
     {
-
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
         {
-            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
-            componentEnemyAction.isAttacking = true;
-            
-            attackDirection = new Vector3(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y,0f);
+            //Arm following the player
+            attackDirection = new Vector3(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y, 0f);
             attackDirection.Normalize();
 
             //rotate the bullet
             //roate only around z, this math-formula give us the angle between the maincaracter and the enemy
-            rotZ = Mathf.Atan2(attackDirection.y,attackDirection.x) * Mathf.Rad2Deg;
+            rotZ = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
             rotation = Quaternion.Euler(0f, 0f, rotZ);
+            armRotation = Quaternion.Euler(rotX, rotY, rotZ);
+            arm.transform.rotation = armRotation;
+
+
+        }
+
+
+        if (!componentEnemyAction.isAttacking &&  componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange &&componentEnemyAction.timeForNextAttack < Time.time)
+        {
+
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
+            componentEnemyAction.isAttacking = true;
+
+            //TODO make timings
+            gameObject.GetComponent<Animator>().Play("Shoot");
+            gameObject.transform.GetChild(0).gameObject.GetComponent<Animator>().Play("Arm_Shoot");
 
             //create the bullet
-            bullet = Instantiate(rangeAttackMisslePrefab, transform.position+ 2f* attackDirection.normalized, rotation);
+            bullet = Instantiate(rangeAttackMisslePrefab, transform.position+ 2f* attackDirection.normalized + Vector3.up * 0.4f, rotation);
             bullet.GetComponent<SystemBullet>().SetDirection(attackDirection.normalized);
         }
 
@@ -113,6 +135,8 @@ public class SystemEnemyRange : SystemEnemy
         //TODO let enemy attack
         componentEnemyAction.attackPositionOffset.x = newDirection;
         tmp_scale = transform.localScale;
+        rotX = newDirection == 1? 0 : 180;
+        rotY = newDirection == 1 ? 0 : 180;
         tmp_scale.x = componentEnemyState.originalXScale * componentEnemyState.direction;
         //Apply the new scale
         transform.localScale = tmp_scale;

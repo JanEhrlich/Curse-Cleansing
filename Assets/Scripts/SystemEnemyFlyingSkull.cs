@@ -50,7 +50,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
      * simply update the current speed and jump force of the enemy
      */
     private void UpdatedSpeedAndJumpForce()
-    {
+    {                                                        
         componentEnemyState.currentSpeed = ComponentEnemyState.speed * componentEnemyState.speedMultiplier;
         componentEnemyState.currentJumpForce = ComponentEnemyState.jumpForce/3.5f * componentEnemyState.jumpForceMultiplier;
     }
@@ -88,7 +88,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
         }
     }
 
-    public void UpdateDirection(Direction update)
+    void UpdateDirection(Direction update)
     {
         if (update == Direction.RIGHT)
         {

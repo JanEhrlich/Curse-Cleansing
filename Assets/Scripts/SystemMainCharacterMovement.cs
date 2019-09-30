@@ -673,6 +673,9 @@ public class SystemMainCharacterMovement : MonoBehaviour
         foreach (var enemy in enemys)
         {
             if (enemy == null) break;
+
+            if (enemy.gameObject.name.Contains("Bullet")) continue;
+
             // arguments damage, and direction -1 if we hit from the left and 1 if we hit from th right
             enemy.GetComponentInParent<SystemEnemy>().ReceiveDamage(damage, mainCharacterGameObject.transform.position.x <= enemy.transform.position.x ? -1 : 1);
         }

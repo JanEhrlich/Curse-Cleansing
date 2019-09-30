@@ -37,11 +37,15 @@ public class SystemEnemyPirateBoss : SystemEnemy
     float tmp_xVelocity;
     RaycastHit2D leftCheck;
     RaycastHit2D rightCheck;
+    RaycastHit2D ceilingCheck;
     RaycastHit2D ground;
     bool leftEdge = false;
     bool rightEdge = false;
     bool leftWall = false;
     bool rightWall = false;
+    bool ceiling = false;
+
+    int beforRunDirection = 0;
 
     //use for close compat
     Collider2D[] toDamageColliders = new Collider2D[10];
@@ -145,7 +149,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     //TODO can make a pattern here
     void ChooseAttack()
     {
-
+      
     }
 
 
@@ -207,8 +211,11 @@ public class SystemEnemyPirateBoss : SystemEnemy
         rightCheck = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.down * 2f,
             new Vector2(1f, 0f), Vector2.right, 1.5f, componentEnemyState.layerMask, debugRayCasts);
 
+        ceilingCheck = systemGameMaster.SystemUtility.Raycast(transform.position + Vector3.up, Vector2.zero, Vector2.up, 3f, componentEnemyState.layerMask, debugRayCasts);
+
         leftWall = leftCheck;
         rightWall = rightCheck;
+        ceiling = ceilingCheck;
 
     }
 
@@ -426,7 +433,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
      void SummonSkull(float offset = 0f)
     {
         flyingSkull = Instantiate(flyingSkullPrefab, transform.position + Vector3.down * offset + 3f * Vector3.right* (mainCharacterGameObject.transform.position.x <= transform.position.x ? -1 : 1), transform.rotation);
-        flyingSkull.GetComponent<SystemEnemyFlyingSkull>().UpdateDirection(mainCharacterGameObject.transform.position.x <= transform.position.x ? SystemEnemyFlyingSkull.Direction.LEFT: SystemEnemyFlyingSkull.Direction.RIGHT);
+        flyingSkull.GetComponent<SystemEnemyFlyingSkull>().flyingDirection =  mainCharacterGameObject.transform.position.x <= transform.position.x ? SystemEnemyFlyingSkull.Direction.LEFT: SystemEnemyFlyingSkull.Direction.RIGHT;
     }
 
     /*
@@ -434,7 +441,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
      */
      void BigJump()
     {
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0)
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0 || !ceiling)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
@@ -445,7 +452,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
             componentEnemyState.isOnGround = false;
             rigidBody.AddForce(new Vector2(0f, componentEnemyState.currentJumpForce*1.6f), ForceMode2D.Impulse);
         }
-        if (componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if (componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || ceiling)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks/3f;
             componentEnemyAction.isAttacking = false;
@@ -465,11 +472,13 @@ public class SystemEnemyPirateBoss : SystemEnemy
     }
 
     /*
-     * run towards the player
+     * run towards the player, stops if he runs past the player
      */
     void FastRun()
     {
-        if(leftWall || rightWall)
+        #region stopRun
+        //stop if a wall is hit
+        if (leftWall || rightWall)
         {
             componentEnemyState.isRunning = false;
             if(leftWall)
@@ -490,9 +499,17 @@ public class SystemEnemyPirateBoss : SystemEnemy
             }
         }
 
+        //stop if run past the player
+        if (componentEnemyState.isRunning && beforRunDirection != ((mainCharacterGameObject.transform.position.x - transform.position.x) < 0 ? -1 : 1))
+        {
+            componentEnemyState.isRunning = false;
+        }
+        #endregion
+
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
+            beforRunDirection = (mainCharacterGameObject.transform.position.x - transform.position.x) < 0 ? -1 : 1;
             componentEnemyAction.isAttacking = true;
             componentEnemyState.isRunning = true;
         }
@@ -508,6 +525,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
             componentEnemyAction.isAttacking = false;
             componentEnemyState.isRunning = false;
+            beforRunDirection = 0;
             stage = BossStage.NORMAL;
         }        
     }

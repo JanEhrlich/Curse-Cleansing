@@ -15,16 +15,18 @@ public class SystemSpawn : MonoBehaviour
     GameObject enemyClosePrefab;
     GameObject enemyClose;
     GameObject flyinSkullPrefab;
+    GameObject bossPrefab;
     GameObject flyingSkull;
     GameObject enemyRangePrefab;
     GameObject enemyRange;
+    GameObject boss;
 
-
-    void Start()
+    void Awake()
     {
         enemyClosePrefab = Resources.Load("EnemyOrderClose") as GameObject;
         enemyRangePrefab = Resources.Load("EnemyPirateRange") as GameObject;
         flyinSkullPrefab = Resources.Load("FlyingSkull") as GameObject;
+        bossPrefab = Resources.Load("Boss") as GameObject;
     }
 
     public GameObject InstantiateEnemyOrderClose(Transform transform)
@@ -60,6 +62,13 @@ public class SystemSpawn : MonoBehaviour
     {
         flyingSkull = Instantiate(flyinSkullPrefab, transform.position + offset, transform.rotation);
         return flyingSkull;
+    }
+
+
+    public GameObject InstantiateEnemyBoss(Transform transform)
+    {
+        boss = Instantiate(bossPrefab, transform);
+        return boss;
     }
 
 
