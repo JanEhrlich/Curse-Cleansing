@@ -27,7 +27,7 @@ public class ComponentMainCharacterAction
     public static float headClearance = 1.5f;              //Space needed above the player's head
     public static float foodClearance = 1.5f;              //Space needed under the player's foot
 
-    public static float durationAttackNormal = 0.2f;
+    public static float durationAttackNormal = 0.3f;
     public static float durationAttackKraken = 0.2f;
     public static float durationAttackBat = 0.2f;
 

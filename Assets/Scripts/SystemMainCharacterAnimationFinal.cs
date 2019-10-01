@@ -377,34 +377,34 @@ public class SystemMainCharacterAnimationFinal : MonoBehaviour
         {
             if (isLookingUp)
             {
-                anim.SetFloat("attackSpeed", attackJumpUpAnimationDuration / actions.waitingTime);
+                anim.SetFloat("attackSpeed", attackJumpUpAnimationDuration / ComponentMainCharacterAction.durationAttackNormal);
             }
 
             if (isLookingDown)
             {
-                anim.SetFloat("attackSpeed", attackJumpDownAnimationDuration / actions.waitingTime);
+                anim.SetFloat("attackSpeed", attackJumpDownAnimationDuration / ComponentMainCharacterAction.durationAttackNormal);
             }
 
             if (isLookingLeft || isLookingRight)
             {
-                anim.SetFloat("attackSpeed", attackJumpAnimationDuration / actions.waitingTime);
+                anim.SetFloat("attackSpeed", attackJumpAnimationDuration / ComponentMainCharacterAction.durationAttackNormal);
             }
         }
         else
         {
             if (isLookingUp)
             {
-                anim.SetFloat("attackSpeed", attackUpAnimationDuration / actions.waitingTime);
+                anim.SetFloat("attackSpeed", attackUpAnimationDuration / ComponentMainCharacterAction.durationAttackNormal);
             }
 
             if (isLookingDown)
             {
-                anim.SetFloat("attackSpeed", attackDownAnimationDuration / actions.waitingTime);
+                anim.SetFloat("attackSpeed", attackDownAnimationDuration / ComponentMainCharacterAction.durationAttackNormal);
             }
 
             if (isLookingLeft || isLookingRight)
             {
-                anim.SetFloat("attackSpeed", attackAnimationDuration / actions.waitingTime);
+                anim.SetFloat("attackSpeed", attackAnimationDuration / ComponentMainCharacterAction.durationAttackNormal);
             }
         }
     }

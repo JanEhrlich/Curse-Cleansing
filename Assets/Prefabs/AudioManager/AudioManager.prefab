@@ -106,7 +106,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ade0cbe122bfe644894f80a312532ab1, type: 3}
   - {fileID: 8300000, guid: acd93daa6e192d047a4c9eddf8884b45, type: 3}
   levelStartSFXClip: {fileID: 8300000, guid: 8551ec8217622164cb1dcf625f1f5da9, type: 3}
-  deathSFXClip: {fileID: 8300000, guid: 98e9afa50ce90d34cbbc34b76ee6f555, type: 3}
+  deathSFXClip: {fileID: 0}
   doorOpenSFXClip: {fileID: 8300000, guid: d813b3661223ea44ba4e800333c8fad5, type: 3}
   exhaustedSFXClip: {fileID: 8300000, guid: cb03fe0ec22f63f469759166a557143b, type: 3}
   grabSFXClip: {fileID: 8300000, guid: 41b92115e47c7554e9affbdba58bb336, type: 3}
