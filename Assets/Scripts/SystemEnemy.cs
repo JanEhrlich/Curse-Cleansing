@@ -30,7 +30,7 @@ public class SystemEnemy : MonoBehaviour
     public int direction = 0;
     public bool appliedDirection = false;
     public bool allowAttack = true;
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         collider2d = GetComponentInChildren<BoxCollider2D>();
         componentEnemyState = new ComponentEnemyState(); //GetComponent<ComponentEnemyState>();
@@ -58,6 +58,7 @@ public class SystemEnemy : MonoBehaviour
 
     void RegisterEnemy()
     {
+        //Debug.Log("CALLED FOR"+gameObject.name);
         systemGameMaster.RegisterNewEnemy(gameObject);
     }
 
@@ -88,7 +89,8 @@ public class SystemEnemy : MonoBehaviour
      */
     protected void HandleDieEnemy()
     {
-        systemGameMaster.enemys.Remove(gameObject);
+        //Debug.Log("called from" + gameObject.name);
+        systemGameMaster.EnemyWasKilled(gameObject);
         Destroy(gameObject);
     }
 

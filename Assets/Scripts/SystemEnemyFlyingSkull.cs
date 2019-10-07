@@ -19,7 +19,7 @@ public class SystemEnemyFlyingSkull : SystemEnemy
     //has error, that collider2d is null, if base.Start is called from the Start method
     private void Awake()
     {
-        base.Start();
+        base.Awake();
         if (flyingDirection == Direction.RIGHT)
         {
             tmpdirection = 1;
@@ -28,15 +28,6 @@ public class SystemEnemyFlyingSkull : SystemEnemy
         {
             tmpdirection = -1;
         }
-    }
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void FixedUpdate(){

@@ -22,6 +22,8 @@ public class SystemEnemyPirateBoss : SystemEnemy
     GameObject rangeAttackMisslePrefab;
     GameObject flyingSkullPrefab;
 
+    GameObject finish;
+
     //set attack range multiplier in inspector
     public float attackrangeMultiplier = 6f;
     public float maxSpeed = 3f;
@@ -51,9 +53,9 @@ public class SystemEnemyPirateBoss : SystemEnemy
     Collider2D[] toDamageColliders = new Collider2D[10];
     int numberOfOverlaps = 0;
     float attackLength = 2f;
-    Vector2 attackBoxCombo1 = new Vector2(8f,3f);
-    Vector2 attackBoxCombo2 = new Vector2(8f,3f);
-    Vector2 attackBoxCombo3 = new Vector2(10f,8f);
+    Vector2 attackBoxCombo1 = new Vector2(3f,2f);
+    Vector2 attackBoxCombo2 = new Vector2(3f,2f);
+    Vector2 attackBoxCombo3 = new Vector2(5f,4f);
 
     //use for checking which attack next
     BossStage stage = BossStage.NORMAL;
@@ -61,20 +63,24 @@ public class SystemEnemyPirateBoss : SystemEnemy
     //use for shooting
     Vector3 attackDirection;
     float rotZ;
-    public float spreadRange = 2f;
+    public float spreadRange = 1f;
     const float timeForThreeShot = 0.2f;
     float timeForNextThreeShot = 0f;
     float offsetBullet = 0.2f;
     int numberOFShots = 0;
 
     //use invulnerability if he was hit 3 times
-    float invulnerableTime = 2f;
+    float invulnerableTime = 1f;
     float timeUntillvulnerable = 0f;
+    float timeForBlinking = 0.2f;
+    float timeUntilNextBlink = 0f;
+    int numberOfBlinks = 0;
+    bool visible = true;
     int hitcounter = 0;
 
-    private void Start()
+    private void Awake()
     {
-        base.Start();
+        base.Awake();
         //do not change direction if the player is hit
         componentEnemyState.layerMask &= componentEnemyState.layerMask & systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
         componentEnemyAction.timeToAttack = 0.5f;
@@ -90,6 +96,9 @@ public class SystemEnemyPirateBoss : SystemEnemy
         //TODO check - for the sprite direction
         componentEnemyAction.attackPositionOffset = new Vector3(-1f, 0, 0f);
         //componentEnemyState.speedMultiplier = 2f;
+        componentEnemyAction.timeForNextAttack = Time.time + 3f;
+        gameObject.GetComponent<Animator>().Play("spawn_call_attack");
+        finish = GameObject.Find("CanvasFinish").transform.GetChild(0).gameObject;
     }
 
     void FixedUpdate()
@@ -104,9 +113,10 @@ public class SystemEnemyPirateBoss : SystemEnemy
 
         TrackPlayerMovement();
 
+        Blink();
 
         if(timeUntillvulnerable < Time.time) {
-            gameObject.GetComponent<SpriteRenderer>().color = new Color(255f,255f,255f,255f);
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(255f,255f,255f,255f); //TODO do not need if blinks
         }
 
         ChooseAttack();
@@ -149,8 +159,8 @@ public class SystemEnemyPirateBoss : SystemEnemy
     //TODO can make a pattern here
     void ChooseAttack()
     {
-      
     }
+
 
 
     void Movement()
@@ -228,6 +238,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
 
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
+            gameObject.GetComponent<Animator>().Play("shoot_boss");
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
 
@@ -260,7 +271,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
      */
     void NormalAttackClose(Vector3 offset, Vector2 attackBox)
     {
-        Debug.Log("Enemy Attack");
+        //Debug.Log("Enemy Attack");
         //delay the attackdirection of the enemy
         attackDirection = new Vector2(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y);
         debugOffset = offset; //DEBUG
@@ -286,19 +297,22 @@ public class SystemEnemyPirateBoss : SystemEnemy
                     //important set timeToAttack high enough, so that the whole attack ca be carried out
                     componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack*2;
                     componentEnemyAction.isAttacking = true;
+                    gameObject.GetComponent<Animator>().Play("attack1_boss");
                     NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f -2f*Vector3.up,attackBoxCombo1);
                     timeForNextThreeShot = Time.time + timeForThreeShot*3f;
                     numberOFShots++;
                     break;
                 case 1:
                     if (timeForNextThreeShot > Time.time) return;
+                    gameObject.GetComponent<Animator>().Play("attack2_boss");
                     NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f + 2f * Vector3.up, attackBoxCombo2);
                     timeForNextThreeShot = Time.time + timeForThreeShot*3f;
                     numberOFShots++;
-                    Debug.Log(numberOFShots);
+                    //Debug.Log(numberOFShots);
                     break;
                 case 2:
                     if (timeForNextThreeShot > Time.time) return;
+                    gameObject.GetComponent<Animator>().Play("attack3_boss");
                     NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f - 0f * Vector3.up, attackBoxCombo3);
                     numberOFShots = 0;
                     break;
@@ -340,18 +354,21 @@ public class SystemEnemyPirateBoss : SystemEnemy
                 case 0:
                     componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
                     componentEnemyAction.isAttacking = true;
+                    gameObject.GetComponent<Animator>().Play("shoot_boss");
                     ShootBullet(-offsetBullet, -spreadRange);
                     timeForNextThreeShot = Time.time + timeForThreeShot;
                     numberOFShots++;
                     break;
                 case 1:
                     if (timeForNextThreeShot > Time.time) return;
+                    gameObject.GetComponent<Animator>().Play("shoot_boss");
                     ShootBullet(0, 0);
                     timeForNextThreeShot = Time.time + timeForThreeShot;
                     numberOFShots++;
                     break;
                 case 2:
                     if (timeForNextThreeShot > Time.time) return;
+                    gameObject.GetComponent<Animator>().Play("shoot_boss");
                     ShootBullet(offsetBullet, spreadRange);
                     numberOFShots = 0;
                     break;
@@ -394,6 +411,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
+            gameObject.GetComponent<Animator>().Play("spawn_call_attack");
             switch (numberOFShots)
             {
                 case 0:
@@ -441,7 +459,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
      */
      void BigJump()
     {
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0 || !ceiling)
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time && componentEnemyState.isOnGround && numberOFShots <= 0 && !ceiling)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
@@ -454,7 +472,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
         }
         if (componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || ceiling)
         {
-            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks/3f;
+            componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeBetweenAttacks;
             componentEnemyAction.isAttacking = false;
             stage = BossStage.RUN;
         }
@@ -506,7 +524,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
         }
         #endregion
 
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0)
+        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time && numberOFShots <= 0)
         {
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             beforRunDirection = (mainCharacterGameObject.transform.position.x - transform.position.x) < 0 ? -1 : 1;
@@ -548,27 +566,67 @@ public class SystemEnemyPirateBoss : SystemEnemy
 
     #region handleHit
 
-    /*
-     * let the enemy get hit
-     *  TODO Make invulnerable if hit
-     */
-    public override void ReceiveDamage(int damage, int direction)
+
+
+   void Blink() //DOES NOT WORK
+    {
+
+        if (visible)
+        {
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        }
+        if (timeUntilNextBlink > Time.time) return;
+
+        for (; 0 < numberOfBlinks; numberOfBlinks--)
+        {
+            if (visible)
+            {
+                //  gameObject.GetComponent<SpriteRenderer>().color = Color.clear;
+                //Debug.Log(Time.time);
+                timeUntilNextBlink = Time.time + timeForBlinking;
+                //Debug.Log(timeUntilNextBlink);
+                visible = false;
+            }
+            else
+            {
+               // gameObject.GetComponent<SpriteRenderer>().color =Color.white;
+                timeUntilNextBlink = Time.time + timeForBlinking;
+                visible = true;
+            }
+        }
+
+        if (numberOfBlinks <= 0)
+        {
+            gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        }
+    }
+
+/*
+ * let the enemy get hit
+ *  TODO Make invulnerable if hit
+ */
+public override void ReceiveDamage(int damage, int direction)
     {
         if (timeUntillvulnerable > Time.time) return;
         componentEnemyState.health -= damage;
-        Debug.Log("Was hit: " + componentEnemyState.health + " Time:" + Time.time); //TEST
+        //Debug.Log("Was hit: " + componentEnemyState.health + " Time:" + Time.time); //TEST
         if (componentEnemyState.health <= 0)
         {
             HandleDieEnemy();
+            foreach (var enemy in systemGameMaster.enemys)
+            {
+                Destroy(enemy);
+            }
+            finish.SetActive(true);
         }
 
         hitcounter++;
-        Debug.Log("invulnerable:"+hitcounter);
+        //Debug.Log("invulnerable:"+hitcounter);
         if (hitcounter > 0 && hitcounter % 3 == 0)
         {
+            numberOfBlinks = 10;
             timeUntillvulnerable = Time.time + invulnerableTime;
             componentEnemyAction.timeForNextAttack = timeUntillvulnerable;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
 

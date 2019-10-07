@@ -13,7 +13,7 @@ public class SystemProgressionLevel7 : MonoBehaviour
     GameObject boss;
 
     //tmpvariable
-    int maximalNumberOfSpawningEnemies = 10;
+    int maximalNumberOfSpawningEnemies = 5;
     int maximalNumberOfSimultaniusSpawnedEnemies = 5;
 
 

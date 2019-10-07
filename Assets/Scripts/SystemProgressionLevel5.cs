@@ -16,7 +16,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
 
 
     //tmpvariable
-    int maximalNumberOfSpawningEnemies = 10;
+    int maximalNumberOfSpawningEnemies = 7;
     int maximalNumberOfSimultaniusSpawnedEnemies = 5;
 
     int[] maxNumberSpawn = { 3,3,3,3,3};
@@ -155,7 +155,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
                 didSpawn = false;
             }
         }
-
+        //Debug.Log(maximalNumberOfSpawningEnemies + " " + gameMaster.enemys.Count + "" + (nextEnemySpawnTime < Time.time));
         if (maximalNumberOfSpawningEnemies <=0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time)
         {
             finished = true;

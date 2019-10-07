@@ -35,9 +35,9 @@ public class SystemEnemyRange : SystemEnemy
     float rotX = 0f;
     float rotY = 0f;
 
-    void Start()
+    void Awake()
     {
-        base.Start();
+        base.Awake();
         componentEnemyState.currentSpeed = 0;
         componentEnemyAction.followRange *= attackrangeMultiplier;
         rangeAttackMisslePrefab = Resources.Load("Bullet") as GameObject;

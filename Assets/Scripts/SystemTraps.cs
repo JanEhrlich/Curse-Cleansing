@@ -12,7 +12,7 @@ public class SystemTraps : SystemEnemy
 
     private void Awake()
     {
-        base.Start();
+        base.Awake();
     }
 
     void FixedUpdate(){

@@ -37,9 +37,9 @@ public class SystemEnemyClose : SystemEnemy
 
     void Awake()
     {
-        base.Start();
+        base.Awake();
+
         //do not change direction if the player is hit
-        componentEnemyState.layerMask &= componentEnemyState.layerMask & systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
         componentEnemyAction.timeToAttack = 0.5f;
         componentEnemyAction.attackBoxNormal = new Vector2(attackLength, attackLength);
         componentEnemyAction.isAttacking = false;
@@ -47,6 +47,7 @@ public class SystemEnemyClose : SystemEnemy
         componentEnemyAction.attackRange = 3f;
         //TODO check - for the sprite direction
         componentEnemyAction.attackPositionOffset = new Vector3(-1f,0,0f);
+        componentEnemyState.layerMask &= componentEnemyState.layerMask & systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player"), true);
     }
 
     void Update()

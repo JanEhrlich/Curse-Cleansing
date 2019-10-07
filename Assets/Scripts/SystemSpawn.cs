@@ -23,10 +23,10 @@ public class SystemSpawn : MonoBehaviour
 
     void Awake()
     {
-        enemyClosePrefab = Resources.Load("EnemyOrderClose") as GameObject;
+        enemyClosePrefab = Resources.Load("EnemyOrderCloseFinal") as GameObject;
         enemyRangePrefab = Resources.Load("EnemyPirateRange") as GameObject;
         flyinSkullPrefab = Resources.Load("FlyingSkull") as GameObject;
-        bossPrefab = Resources.Load("Boss") as GameObject;
+        bossPrefab = Resources.Load("BossFinal") as GameObject;
     }
 
     public GameObject InstantiateEnemyOrderClose(Transform transform)
