@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using System;
+using System.Text.RegularExpressions;
 
 public class DialogueBox : MonoBehaviour
 {
     public bool canRepeat;
     public Notifications notification;
 
-    public List<string> dialogueTexts;
+    public TextAsset textFile;
+    public string[] dialogueTexts;
     public UnityEvent callAfterLastDialogue;
 
     private TextMeshPro textBox;
@@ -17,19 +20,31 @@ public class DialogueBox : MonoBehaviour
     private bool calledAfterLastDialogue;
     private GameObject parent;
 
+    private string fileText;
+
     public void Start()
     {
         textBox = GetComponent<TextMeshPro>();
         parent = transform.parent.gameObject;
+        ReadTextFile();
         NextDialogueText();
         DisableBox();
+    }
+
+    private void ReadTextFile()
+    {
+        if (textFile != null)
+        {
+            fileText = textFile.text;
+            dialogueTexts = Regex.Split(fileText, System.Environment.NewLine);
+        }
     }
 
     public void NextDialogueText()
     {
         if (textBox.enabled)
         {
-            if (nextTextIndex < dialogueTexts.Count)
+            if (nextTextIndex < dialogueTexts.Length)
             {
                 textBox.text = dialogueTexts[nextTextIndex];
                 nextTextIndex++;

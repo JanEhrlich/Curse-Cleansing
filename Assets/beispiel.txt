@@ -1,0 +1,4 @@
+﻿Diese Zeile wird in Sprechblase 1 angezeigt
+Diese Zeile wenn man mit A weiter drückt
+Dies ist der Inhalt der dritten Zeile
+Dies ist die letzte Blase. Bitte achte darauf, dass keine leere Zeile folgt. 

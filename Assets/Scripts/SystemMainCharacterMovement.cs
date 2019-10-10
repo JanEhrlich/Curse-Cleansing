@@ -63,8 +63,12 @@ public class SystemMainCharacterMovement : MonoBehaviour
     public bool allowAttack = true;
 
     int numberOfOverlaps = 0;
+
     //should be equally long
     Collider2D[] enemyToDamageColliders = new Collider2D[10];
+
+    // A handle to the Blood Screen which should be activated when received Damage
+    private GameObject bloodScreen;
 
     public void Init(SystemGameMaster gameMaster)
     {
@@ -732,6 +736,14 @@ public class SystemMainCharacterMovement : MonoBehaviour
         //Debug.Log("time till knockback: "+componentMainCharacterAction.timeUntillKnockBackEnd);
 
         AudioManager.PlayHurtAudio();
+
+        if (bloodScreen)
+        {
+            //This notation is correct. By setting it true and then false the bloodscreentime gets reset.
+            bloodScreen.SetActive(false);
+            bloodScreen.SetActive(true);
+        }
+
         componentMainCharacterState.health -= damage;
 
         if (componentMainCharacterState.isGliding) EndGlide();
@@ -769,6 +781,11 @@ public class SystemMainCharacterMovement : MonoBehaviour
     private void HandleDiePlayer()
     {
         //TODO Implement dieing
+    }
+
+    public void registerBloodScreen(GameObject screen)
+    {
+        bloodScreen = screen;
     }
     #endregion
 
