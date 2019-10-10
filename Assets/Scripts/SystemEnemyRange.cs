@@ -31,6 +31,9 @@ public class SystemEnemyRange : SystemEnemy
     GameObject bullet;
     Quaternion rotation;
     float rotZ;
+    float attackdelay = 0.5f;
+    float timeAfterAttackdelay = 0f;
+    bool afterAttackDelay = false;
 
     float rotX = 0f;
     float rotY = 0f;
@@ -54,8 +57,17 @@ public class SystemEnemyRange : SystemEnemy
     void FixedUpdate()
     {
         TrackPlayerMovement();
+
         if(allowAttack)
             Attack();
+
+        //set arm in default position 
+        if(!allowAttack || componentEnemyAction.distanceToMainCharacter > componentEnemyAction.followRange){
+            rotZ = 270f;
+            rotation = Quaternion.Euler(0f, 0f, rotZ);
+            armRotation = Quaternion.Euler(rotX, rotY, rotZ);
+            arm.transform.rotation = armRotation;
+        }
     }
 
     /*
@@ -63,8 +75,14 @@ public class SystemEnemyRange : SystemEnemy
     */
     void TrackPlayerMovement()
     {
+        //Arm following the player
+        attackDirection = new Vector3(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y, 0f);
+        attackDirection.Normalize();
+
+
         componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
-        systemGameMaster.SystemUtility.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.zero, attackDirection, 10f, componentEnemyState.layerMask, debugRayCasts);
+        attackHit = systemGameMaster.SystemUtility.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.zero, attackDirection, componentEnemyAction.followRange, componentEnemyState.layerMask, debugRayCasts);
+        if(attackHit != null && attackHit.transform != null && attackHit.transform.gameObject != null ) allowAttack = attackHit.transform.gameObject.layer == LayerMask.NameToLayer("Player");
         if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
         {
             if (mainCharacterGameObject.transform.position.x < transform.position.x)
@@ -86,10 +104,6 @@ public class SystemEnemyRange : SystemEnemy
     {
         if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
         {
-            //Arm following the player
-            attackDirection = new Vector3(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y, 0f);
-            attackDirection.Normalize();
-
             //rotate the bullet
             //roate only around z, this math-formula give us the angle between the maincaracter and the enemy
             rotZ = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
@@ -97,13 +111,17 @@ public class SystemEnemyRange : SystemEnemy
             armRotation = Quaternion.Euler(rotX, rotY, rotZ);
             arm.transform.rotation = armRotation;
 
-
         }
 
 
-        if (!componentEnemyAction.isAttacking &&  componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange &&componentEnemyAction.timeForNextAttack < Time.time)
+        if (!afterAttackDelay && !componentEnemyAction.isAttacking &&  componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange &&componentEnemyAction.timeForNextAttack < Time.time)
         {
-
+            afterAttackDelay = true;
+            timeAfterAttackdelay = Time.time + attackdelay;
+        }
+        if(afterAttackDelay && timeAfterAttackdelay <= Time.time &&  componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
+        {
+            afterAttackDelay = false;
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
 

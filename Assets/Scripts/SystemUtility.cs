@@ -18,7 +18,7 @@ public class SystemUtility
         //Record the player's position
         pos = position;
 
-        //Send out the desired raycasr and record the result
+        //Send out the desired raycast and record the result
         hit = Physics2D.Raycast(pos + offset, rayDirection, length, layerMask);
 
         //If we want to show debug raycasts in the scene...

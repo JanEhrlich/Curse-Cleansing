@@ -297,6 +297,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
                     //important set timeToAttack high enough, so that the whole attack ca be carried out
                     componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack*2;
                     componentEnemyAction.isAttacking = true;
+                    AudioManager.PlayBossAttack1Audio();
                     gameObject.GetComponent<Animator>().Play("attack1_boss");
                     NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f -2f*Vector3.up,attackBoxCombo1);
                     timeForNextThreeShot = Time.time + timeForThreeShot*3f;
@@ -304,6 +305,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
                     break;
                 case 1:
                     if (timeForNextThreeShot > Time.time) return;
+                    AudioManager.PlayBossAttack1Audio(); 
                     gameObject.GetComponent<Animator>().Play("attack2_boss");
                     NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f + 2f * Vector3.up, attackBoxCombo2);
                     timeForNextThreeShot = Time.time + timeForThreeShot*3f;
@@ -312,6 +314,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
                     break;
                 case 2:
                     if (timeForNextThreeShot > Time.time) return;
+                    AudioManager.PlayBossAttack2Audio();
                     gameObject.GetComponent<Animator>().Play("attack3_boss");
                     NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f - 0f * Vector3.up, attackBoxCombo3);
                     numberOFShots = 0;
@@ -409,6 +412,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     {
         if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time || numberOFShots > 0)
         {
+            AudioManager.PlayBossAttack3Audio();
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
             gameObject.GetComponent<Animator>().Play("spawn_call_attack");
