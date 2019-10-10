@@ -44,7 +44,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.041239157, y: -0.03}
+  m_Offset: {x: 0.17, y: -0.03}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -55,7 +55,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.97, y: 1.66}
+  m_Size: {x: 0.61, y: 1.66}
   m_EdgeRadius: 0
 --- !u!1 &4949717386296773241
 GameObject:
@@ -181,7 +181,7 @@ MonoBehaviour:
   allowAttack: 1
   attackrangeMultiplier: 2.3
   maxSpeed: 3
-  spreadRange: 4
+  spreadRange: 1.2
 --- !u!95 &-3676422343405858574
 Animator:
   serializedVersion: 3

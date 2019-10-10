@@ -53,9 +53,9 @@ public class SystemEnemyPirateBoss : SystemEnemy
     Collider2D[] toDamageColliders = new Collider2D[10];
     int numberOfOverlaps = 0;
     float attackLength = 2f;
-    Vector2 attackBoxCombo1 = new Vector2(3f,2f);
-    Vector2 attackBoxCombo2 = new Vector2(3f,2f);
-    Vector2 attackBoxCombo3 = new Vector2(5f,4f);
+    Vector2 attackBoxCombo1 = new Vector2(2f,2f);
+    Vector2 attackBoxCombo2 = new Vector2(2f,2f);
+    Vector2 attackBoxCombo3 = new Vector2(4f,4f);
 
     //use for checking which attack next
     BossStage stage = BossStage.NORMAL;
@@ -68,6 +68,12 @@ public class SystemEnemyPirateBoss : SystemEnemy
     float timeForNextThreeShot = 0f;
     float offsetBullet = 0.2f;
     int numberOFShots = 0;
+
+
+    float attackdelay = 0.2f;
+    float timeAfterAttackdelay = 0f;
+    bool afterAttackDelay = false;
+
 
     //use invulnerability if he was hit 3 times
     float invulnerableTime = 1f;
@@ -98,6 +104,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
         //componentEnemyState.speedMultiplier = 2f;
         componentEnemyAction.timeForNextAttack = Time.time + 3f;
         gameObject.GetComponent<Animator>().Play("spawn_call_attack");
+        AudioManager.PlayBossSpawn();
         finish = GameObject.Find("CanvasFinish").transform.GetChild(0).gameObject;
     }
 
@@ -159,6 +166,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
     //TODO can make a pattern here
     void ChooseAttack()
     {
+        stage = BossStage.COMBO;
     }
 
 
@@ -236,8 +244,14 @@ public class SystemEnemyPirateBoss : SystemEnemy
     void AttackNormalRange()
     {
 
-        if (!componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
+        if (!afterAttackDelay && !componentEnemyAction.isAttacking && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange && componentEnemyAction.timeForNextAttack < Time.time)
         {
+            afterAttackDelay = true;
+            timeAfterAttackdelay = Time.time + attackdelay;
+        }
+        if (afterAttackDelay && timeAfterAttackdelay <= Time.time && componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
+        {
+            afterAttackDelay = false;
             gameObject.GetComponent<Animator>().Play("shoot_boss");
             componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack;
             componentEnemyAction.isAttacking = true;
@@ -275,6 +289,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
         //delay the attackdirection of the enemy
         attackDirection = new Vector2(mainCharacterGameObject.transform.position.x - transform.position.x, mainCharacterGameObject.transform.position.y - transform.position.y);
         debugOffset = offset; //DEBUG
+        AudioManager.PlayBossAttack1Audio();
         debugAttackbox = (Vector3)attackBox;
         numberOfOverlaps = Physics2D.OverlapBoxNonAlloc(transform.position + offset, attackBox, 0, toDamageColliders, systemGameMaster.SystemUtility.TransformToLayerMask(LayerMask.NameToLayer("Player")));
 
@@ -298,16 +313,16 @@ public class SystemEnemyPirateBoss : SystemEnemy
                     componentEnemyAction.timeForNextAttack = Time.time + componentEnemyAction.timeToAttack*2;
                     componentEnemyAction.isAttacking = true;
                     AudioManager.PlayBossAttack1Audio();
-                    gameObject.GetComponent<Animator>().Play("attack1_boss");
-                    NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f -2f*Vector3.up,attackBoxCombo1);
+                    gameObject.GetComponent<Animator>().Play("attack2_boss");
+                    NormalAttackClose(componentEnemyAction.attackPositionOffset * 2f -2f*Vector3.up,attackBoxCombo1);
                     timeForNextThreeShot = Time.time + timeForThreeShot*3f;
                     numberOFShots++;
                     break;
                 case 1:
                     if (timeForNextThreeShot > Time.time) return;
                     AudioManager.PlayBossAttack1Audio(); 
-                    gameObject.GetComponent<Animator>().Play("attack2_boss");
-                    NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f + 2f * Vector3.up, attackBoxCombo2);
+                    gameObject.GetComponent<Animator>().Play("attack1_boss");
+                    NormalAttackClose(componentEnemyAction.attackPositionOffset * 2f + 2f * Vector3.up, attackBoxCombo2);
                     timeForNextThreeShot = Time.time + timeForThreeShot*3f;
                     numberOFShots++;
                     //Debug.Log(numberOFShots);
@@ -316,7 +331,7 @@ public class SystemEnemyPirateBoss : SystemEnemy
                     if (timeForNextThreeShot > Time.time) return;
                     AudioManager.PlayBossAttack2Audio();
                     gameObject.GetComponent<Animator>().Play("attack3_boss");
-                    NormalAttackClose(componentEnemyAction.attackPositionOffset * 4f - 0f * Vector3.up, attackBoxCombo3);
+                    NormalAttackClose(componentEnemyAction.attackPositionOffset * 2f - 0f * Vector3.up, attackBoxCombo3);
                     numberOFShots = 0;
                     break;
             }

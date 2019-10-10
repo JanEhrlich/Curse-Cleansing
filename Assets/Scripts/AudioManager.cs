@@ -95,6 +95,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip bossAttack1Clip;           //The effect played when the Boss is using Attack 1
     public AudioClip bossAttack2Clip;           //The effect played when the Boss is using Attack 2
     public AudioClip bossAttack3Clip;           //The effect played when the Boss is using Attack 3
+    public AudioClip bossShot;
+    public AudioClip bossSpawn;
 
     [Header("Mixer Groups")]
     public AudioMixerGroup ambientGroup;        //The ambient mixer group
@@ -563,6 +565,27 @@ public class AudioManager : MonoBehaviour
         current.bossSource.Play();
     }
 
+    public static void PlayBossSpawn()
+    {
+        //If there is no current AudioManager, exit
+        if (current == null)
+            return;
+
+        //Set the jump SFX clip and tell the source to play
+        current.bossSource.clip = current.bossSpawn;
+        current.bossSource.Play();
+    }
+
+    public static void PlayBossShot()
+    {
+        //If there is no current AudioManager, exit
+        if (current == null)
+            return;
+
+        //Set the jump SFX clip and tell the source to play
+        current.bossSource.clip = current.bossShot;
+        current.bossSource.Play();
+    }
     #endregion
 
     #region ModifyVolumePerLevel
