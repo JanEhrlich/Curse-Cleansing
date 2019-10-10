@@ -42430,7 +42430,7 @@ PrefabInstance:
     - target: {fileID: 5165373952096886858, guid: 106ea5521c50ba944a227f896acc4932,
         type: 3}
       propertyPath: cutSceneTexts.Array.data[0]
-      value: Die Arme weit, des Ozeans Macht / aus der tiefsten Tiefe gebracht.
+      value: Die Arme weit, des Ozeans Macht /n aus der tiefsten Tiefe gebracht.
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 106ea5521c50ba944a227f896acc4932, type: 3}

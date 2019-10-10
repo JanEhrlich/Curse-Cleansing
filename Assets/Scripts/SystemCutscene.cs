@@ -54,7 +54,7 @@ public class SystemCutscene : MonoBehaviour
         if (index <= cutScenes.Count && index > 0)
         {
             playingIndex = index - 1;
-            textBox.text = cutSceneTexts[playingIndex];
+            textBox.text = cutSceneTexts[playingIndex].Replace("/n", System.Environment.NewLine);
             rawImage.texture = cutScenes[playingIndex].texture;
             cutScenes[playingIndex].Play();
             cutScenes[playingIndex].loopPointReached += EndReached;
