@@ -85,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4949717386296773241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7827289, y: 7.5368137, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -3, y: 3, z: 1}
   m_Children:
   - {fileID: 4949717384715449616}
@@ -179,7 +179,7 @@ MonoBehaviour:
   direction: 0
   appliedDirection: 0
   allowAttack: 1
-  attackrangeMultiplier: 2
+  attackrangeMultiplier: 2.3
   maxSpeed: 3
   spreadRange: 4
 --- !u!95 &-3676422343405858574
