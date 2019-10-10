@@ -641,6 +641,11 @@ PrefabInstance:
       propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6543231237800994087, guid: 4bac2dc5b85396d4e92947555b7f3d48,
+        type: 3}
+      propertyPath: textFile
+      value: 
+      objectReference: {fileID: 4900000, guid: c13fcb9cf0a494f42a5b789bce6248a8, type: 3}
     - target: {fileID: 6543231237800994089, guid: 4bac2dc5b85396d4e92947555b7f3d48,
         type: 3}
       propertyPath: m_Mesh
@@ -2433,7 +2438,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.386259, y: 1.5510477, z: -15}
+  m_LocalPosition: {x: 4.386259, y: 1.5510478, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2602,7 +2607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603843884}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.386259, y: 1.5510477, z: -15}
+  m_LocalPosition: {x: 4.386259, y: 1.5510478, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1275067913}
@@ -17076,6 +17081,11 @@ PrefabInstance:
       propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_IntArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6543231237800994087, guid: 4bac2dc5b85396d4e92947555b7f3d48,
+        type: 3}
+      propertyPath: textFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 7bebd636b5f9e47459241d9d5a752d16, type: 3}
     - target: {fileID: 6543231237800994089, guid: 4bac2dc5b85396d4e92947555b7f3d48,
         type: 3}
       propertyPath: m_Mesh

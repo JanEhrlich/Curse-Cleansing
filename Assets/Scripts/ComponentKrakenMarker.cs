@@ -10,7 +10,7 @@ public class ComponentKrakenMarker
     #region StaticVariables
 
     //The Max distance to a Marker to mark it as active
-    public float distanceThreshold = 3;
+    public float distanceThreshold = 3.5f;
 
     #endregion
 

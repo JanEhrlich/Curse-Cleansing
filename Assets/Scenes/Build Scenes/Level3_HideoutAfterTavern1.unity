@@ -5735,7 +5735,7 @@ PrefabInstance:
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: dialogueTexts.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -5745,12 +5745,12 @@ PrefabInstance:
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: dialogueTexts.Array.data[0]
-      value: Ja mach doch endlich
+      value: Viel Erfolg mein Junge!
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: dialogueTexts.Array.data[1]
-      value: "Du wei\xDFt alles was du wissen musst."
+      value: Beeil dich!
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -21067,6 +21067,11 @@ PrefabInstance:
       propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_IntArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: textFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 9edb9a9e7f0d11c4097ad29e850bb5de, type: 3}
     - target: {fileID: 1894252333177612330, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_Offset.x

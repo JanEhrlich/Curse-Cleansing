@@ -5740,7 +5740,7 @@ PrefabInstance:
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: dialogueTexts.Array.data[0]
-      value: "Geh zu \u201EElbas ulkige Ecke\u201C!"
+      value: "Geh zu \u201EElmas ulkige Ecke\u201C!"
       objectReference: {fileID: 0}
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
@@ -5760,7 +5760,7 @@ PrefabInstance:
     - target: {fileID: 1247707422770224089, guid: 327578bf5ec6c3647bade1a1c027c826,
         type: 3}
       propertyPath: dialogueTexts.Array.data[4]
-      value: Geh los mein Junge
+      value: Geh los mein Junge!
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 327578bf5ec6c3647bade1a1c027c826, type: 3}
@@ -20908,6 +20908,11 @@ PrefabInstance:
       propertyPath: callAfterLastDialogue.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_IntArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1894252331937761247, guid: 3bfd0cf297715454e90a96af384666a9,
+        type: 3}
+      propertyPath: textFile
+      value: 
+      objectReference: {fileID: 4900000, guid: bc0839a3534e2d145837fbcd2edd7e36, type: 3}
     - target: {fileID: 1894252333177612330, guid: 3bfd0cf297715454e90a96af384666a9,
         type: 3}
       propertyPath: m_Offset.x
