@@ -23,7 +23,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
 
 
 
-    float spawnTimeBetween = 0.7f;
+    float spawnTimeBetween = 1.4f;
     float nextEnemySpawnTime = 0f;
 
     bool alternate = true;
@@ -74,7 +74,7 @@ public class SystemProgressionLevel4 : MonoBehaviour
             componentScene.spawnedEnemies.Add(flyingSkull);
             nextEnemySpawnTime = Time.time + spawnTimeBetween;
             enemySpawn1--;
-            alternate = !alternate;
+            if(enemySpawn1 <= 0) alternate = false;
         }
 
         if (!alternate && enemySpawn2 > 0 && nextEnemySpawnTime < Time.time)
@@ -83,7 +83,6 @@ public class SystemProgressionLevel4 : MonoBehaviour
             componentScene.spawnedEnemies.Add(flyingSkull);
             nextEnemySpawnTime = Time.time + spawnTimeBetween;
             enemySpawn2--;
-            alternate = !alternate;
         }
 
         if (enemySpawns[2] == true && enemySpawn3 > 0 && nextEnemySpawnTime < Time.time)
