@@ -11,17 +11,20 @@ public class RespawnState : MonoBehaviour
     public static GameObject gameLogic;
 
     public static int lastRespawn = 0;
+    public static bool newScene = false;
 
     private void Awake()
     {
         if (currentIndex != SceneManager.GetActiveScene().buildIndex)
         {
+            newScene = true;
             currentIndex = SceneManager.GetActiveScene().buildIndex;
             //Debug.Log("DID SWITCH");
             SwitchScene();
         }
         else
         {
+            newScene = false;
             Destroy(gameObject);
         }
 

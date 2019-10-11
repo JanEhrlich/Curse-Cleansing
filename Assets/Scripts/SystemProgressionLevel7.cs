@@ -38,10 +38,17 @@ public class SystemProgressionLevel7 : MonoBehaviour
         componentScene = systemEvent.currentState;
 
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy"));
-        if (RespawnState.lastRespawn != 1)
+
+        if (RespawnState.lastRespawn != 2)
         {
             StartFight();
         }
+        else
+        {
+            startFight = true;
+        }
+        
+
     }
 
 
@@ -122,6 +129,7 @@ public class SystemProgressionLevel7 : MonoBehaviour
         if (maximalNumberOfSpawningEnemies <= 0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time && spawnBoss)
         {
             finished = true;
+            RespawnState.lastRespawn = 2;
         }
     }
 

@@ -166,7 +166,6 @@ public class SystemEnemyPirateBoss : SystemEnemy
     //TODO can make a pattern here
     void ChooseAttack()
     {
-        stage = BossStage.COMBO;
     }
 
 
