@@ -8,7 +8,7 @@ public class ComponentEnemyAction
      * Hardcoded Variables which shape the games behaviour
      */
     #region StaticVariables
-    public static float knockBackTime = 0.5f;                     //time untill the enemy can attack again
+    public static float knockBackTime = 0.1f;                     //time untill the enemy can attack again
     public static float knockBackPowerUp = 3f;                  //the upwards velocity
     public static float knowBackPowerHorizontal = 2f;           //the horizontal velocity 
     #endregion
