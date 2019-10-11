@@ -20,6 +20,30 @@ public class SceneSwitcher : MonoBehaviour
         playerLayer = systemGameMaster.mainCharacterGameObject.layer;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("r"))
+        {
+            LoadSceneByNumber(nextLevelNumber - 1);
+        }
+
+        if (Input.GetKeyDown("t"))
+        {
+            if (nextLevelNumber < 8)
+            {
+                LoadSceneByNumber(nextLevelNumber);
+            }
+        }
+
+        if (Input.GetKeyDown("e"))
+        {
+            if (nextLevelNumber > 1)
+            {
+                LoadSceneByNumber(nextLevelNumber-2);
+            }
+        }
+    }
+
     public void LoadSceneByNumber(int num)
     {
         SceneManager.LoadScene(num);
