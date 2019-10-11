@@ -82,8 +82,15 @@ public class SystemEnemyRange : SystemEnemy
 
         componentEnemyAction.distanceToMainCharacter = Vector2.Distance(mainCharacterGameObject.transform.position, transform.position);
         attackHit = systemGameMaster.SystemUtility.Raycast(new Vector2(transform.position.x, transform.position.y), Vector2.zero, attackDirection, componentEnemyAction.followRange, componentEnemyState.layerMask, debugRayCasts);
-        if(attackHit != null && attackHit.transform != null && attackHit.transform.gameObject != null ) allowAttack = attackHit.transform.gameObject.layer == LayerMask.NameToLayer("Player");
+        if (attackHit != null && attackHit.transform != null && attackHit.transform.gameObject != null)
+        {
+            allowAttack = attackHit.transform.gameObject.layer == LayerMask.NameToLayer("Player");
+        }
         if (componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
+            if (!allowAttack)
+            {
+                afterAttackDelay = false;
+            }
         {
             if (mainCharacterGameObject.transform.position.x < transform.position.x)
             {
@@ -113,12 +120,17 @@ public class SystemEnemyRange : SystemEnemy
 
         }
 
+        if (componentEnemyAction.distanceToMainCharacter >= componentEnemyAction.followRange)
+        {
+            afterAttackDelay = false;
+        }
 
         if (!afterAttackDelay && !componentEnemyAction.isAttacking &&  componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange &&componentEnemyAction.timeForNextAttack < Time.time)
         {
             afterAttackDelay = true;
             timeAfterAttackdelay = Time.time + attackdelay;
         }
+
         if(afterAttackDelay && timeAfterAttackdelay <= Time.time &&  componentEnemyAction.distanceToMainCharacter <= componentEnemyAction.followRange)
         {
             afterAttackDelay = false;

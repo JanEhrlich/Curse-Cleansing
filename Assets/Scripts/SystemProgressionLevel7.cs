@@ -13,7 +13,7 @@ public class SystemProgressionLevel7 : MonoBehaviour
     GameObject boss;
 
     //tmpvariable
-    int maximalNumberOfSpawningEnemies = 5;
+    int maximalNumberOfSpawningEnemies = 0;
     int maximalNumberOfSimultaniusSpawnedEnemies = 5;
 
 
@@ -38,8 +38,10 @@ public class SystemProgressionLevel7 : MonoBehaviour
         componentScene = systemEvent.currentState;
 
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Enemy"));
-
+        if (RespawnState.lastRespawn != 1)
+        {
             StartFight();
+        }
     }
 
 
@@ -117,7 +119,7 @@ public class SystemProgressionLevel7 : MonoBehaviour
             }
         }
 
-        if (maximalNumberOfSpawningEnemies <= 0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time)
+        if (maximalNumberOfSpawningEnemies <= 0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time && spawnBoss)
         {
             finished = true;
         }

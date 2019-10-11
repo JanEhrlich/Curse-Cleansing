@@ -16,7 +16,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
 
 
     //tmpvariable
-    int maximalNumberOfSpawningEnemies = 7;
+    int maximalNumberOfSpawningEnemies = 4;
     int maximalNumberOfSimultaniusSpawnedEnemies = 5;
 
     int[] maxNumberSpawn = { 3,3,3,3,3};
@@ -50,6 +50,10 @@ public class SystemProgressionLevel5 : MonoBehaviour
         {
             StartFight();
         }
+        if (RespawnState.lastRespawn == 2)
+        {
+            startFight = true;
+        }
     }
 
 
@@ -66,8 +70,11 @@ public class SystemProgressionLevel5 : MonoBehaviour
     void SpawnStartEnemies()
     {
         //Start enemies:
+        int i = 0;
         foreach (var pos in systemEvent.startEnemies)
         {
+            i++;
+            if (i == 2) continue;
             enemyRange = systemSpawn.InstantiateEnemyPirateRange(pos.transform);
         }
         //some random dude is spawning, do not do that
@@ -80,7 +87,11 @@ public class SystemProgressionLevel5 : MonoBehaviour
     {
         if (finished) return;
 
-        if (startFight && !attack && gameMaster.enemys.Count == 0 && nextEnemySpawnTime < Time.time) attack = true;
+        if (startFight && !attack && gameMaster.enemys.Count == 0 && nextEnemySpawnTime < Time.time)
+        {
+            attack = true;
+            RespawnState.lastRespawn = 2;
+        }
 
         /*if ( attack == true && maximalNumberOfSimultaniusSpawnedEnemies > gameMaster.enemys.Count && maximalNumberOfSpawningEnemies > 0 && nextEnemySpawnTime < Time.time)
         {
@@ -132,7 +143,7 @@ public class SystemProgressionLevel5 : MonoBehaviour
                     didSpawn = true;
                     break;
                 case 3:
-                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(0).transform);
+                    enemyClose = systemSpawn.InstantiateEnemyOrderClose(systemEvent.getEnemySpawn(1).transform);
                     didSpawn = true;
                     break;
                 case 2:
