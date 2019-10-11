@@ -46,8 +46,8 @@ public class ComponentMainCharacterAction
     public static float costKrakenAbility = 0.2f;              //How much will the kraken counter be increased per use. Value has to be between 0 and 1.
     public static float costBatAbility = 0.2f;                 //How much will the bat counter be increased per use. Value has to be between 0 and 1.
 
-    public static float decaySpeedKraken = 0.02f;               //How fast will the Kraken counter decay (Normal Form)
-    public static float decaySpeedBat = 0.02f;                  //How fast will the Bat counter decay (Normal Form)
+    public static float decaySpeedKraken = 0.06f;               //How fast will the Kraken counter decay (Normal Form)
+    public static float decaySpeedBat = 0.03f;                  //How fast will the Bat counter decay (Normal Form)
     #endregion
 
 

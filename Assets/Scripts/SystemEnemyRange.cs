@@ -31,7 +31,7 @@ public class SystemEnemyRange : SystemEnemy
     GameObject bullet;
     Quaternion rotation;
     float rotZ;
-    float attackdelay = 0.5f;
+    float attackdelay = 0.4f;
     float timeAfterAttackdelay = 0f;
     bool afterAttackDelay = false;
 
