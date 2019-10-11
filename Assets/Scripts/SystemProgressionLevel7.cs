@@ -85,6 +85,7 @@ public class SystemProgressionLevel7 : MonoBehaviour
         {
             boss = systemSpawn.InstantiateEnemyBoss(systemEvent.getEnemySpawn(5).transform);
             componentScene.spawnedEnemies.Add(boss);
+            RespawnState.lastRespawn = 2;
             spawnBoss = true;
         }
 
@@ -129,7 +130,7 @@ public class SystemProgressionLevel7 : MonoBehaviour
         if (maximalNumberOfSpawningEnemies <= 0 && gameMaster.enemys.Count <= 0 && nextEnemySpawnTime < Time.time && spawnBoss)
         {
             finished = true;
-            RespawnState.lastRespawn = 2;
+            
         }
     }
 
