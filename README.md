@@ -15,6 +15,7 @@ Following resources can also be relevant:
 * [Trailer]()
 * [Screenshots]()
 * [Description of the Game (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Beschreibung_Curse_Cleansing.pdf)
+* [Concept Document with highlighted table of what was included in the prototype](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Konzept%20Final.pdf)
 
 ## How to start the Game
 
