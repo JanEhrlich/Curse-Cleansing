@@ -11,10 +11,26 @@ Der Spieler nimmt die Rolle des jungen Matt an, der mit dem skrupellosen Vorgehe
 Get the game from our [releases page.](https://github.com/JanEhrlich/Curse-Cleansing/releases)
 
 Following resources can also be relevant:
-* [Conducted Study Summary (German)]()
+* [Conducted Study Summary (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/StudieCurseCleasing.pdf)
 * [Trailer]()
 * [Screenshots]()
-* [Description of the Game (German)]()
+* [Description of the Game (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Beschreibung_Curse_Cleansing.pdf)
+
+## How to start the Game
+
+Unzip the file from our release page and and double click on Curse-Cleansing.exe.
+Make sure to connect you controller before starting the game.
+
+The game was build and tested for Windows only.
+It can be played with Xbox Wireless Controller or with Nintendo Switch Pro Controller.
+
+There is no exit option inside the game. To leave the game just press ALT+F4.
+
+## Cheats
+
+* Press "R" to reload the current level 
+* Press "E" to load the previous level 
+* Press "T" to load the next level 
 
 ## Authors
 
