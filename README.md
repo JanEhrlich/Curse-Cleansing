@@ -8,7 +8,7 @@ Der Spieler nimmt die Rolle des jungen Matt an, der mit dem skrupellosen Vorgehe
 
 ## Downloads
 
-Get the game from our [releases page.](https://github.com/JanEhrlich/Curse-Cleansing/releases)
+Get the game ("Curse_Cleasning_The_First_Outbreak.zip") from our [releases page.](https://github.com/JanEhrlich/Curse-Cleansing/releases)
 
 Following resources can also be relevant:
 * [Trailer](https://drive.google.com/open?id=1gnjEUiMrySlrr3_bwYT62fRiAb_POV29)
