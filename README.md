@@ -12,8 +12,8 @@ Get the game from our [releases page.](https://github.com/JanEhrlich/Curse-Clean
 
 Following resources can also be relevant:
 * [Conducted Study Summary (German)]()
-* [Trailer] ()
-* [Screenshots] ()
+* [Trailer]()
+* [Screenshots]()
 * [Description of the Game (German)]()
 
 ## Authors
@@ -51,12 +51,12 @@ Following Asset Packs have been used:
 * [Platformer Tiles](https://opengameart.org/content/platformer-tiles-4) created by [Buch](https://opengameart.org/users/buch) 
 committer and creative consultant: Jeffrey Kern
 
-* [Various Soundeffect and Music] (https://gamesounds.xyz/) collection of royalty free or public domain music and sounds provided by [Gamesounds.xyz](https://gamesounds.xyz/)
+* [Various Soundeffect and Music](https://gamesounds.xyz/) collection of royalty free or public domain music and sounds provided by [Gamesounds.xyz](https://gamesounds.xyz/)
 
-* [Child 3D Model] (https://www.turbosquid.com/FullPreview/Index.cfm/ID/674892) by robe_is
+* [Child 3D Model](https://www.turbosquid.com/FullPreview/Index.cfm/ID/674892) by robe_is
 
-* [Knight 3D Model] (https://www.turbosquid.com/FullPreview/Index.cfm/ID/192070) by FatCat_3D
+* [Knight 3D Model](https://www.turbosquid.com/FullPreview/Index.cfm/ID/192070) by FatCat_3D
 
-* [Corset Dress Briannaby] (https://www.turbosquid.com/FullPreview/Index.cfm/ID/578949) by anticz
+* [Corset Dress Briannaby](https://www.turbosquid.com/FullPreview/Index.cfm/ID/578949) by anticz
 
-* [Low Poly Base Mesh Female Free 3D model] (https://www.cgtrader.com/free-3d-models/character/woman/low-poly-base-mesh-female) by pavel-fpm
+* [Low Poly Base Mesh Female Free 3D model](https://www.cgtrader.com/free-3d-models/character/woman/low-poly-base-mesh-female) by pavel-fpm
