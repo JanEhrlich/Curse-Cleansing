@@ -9,34 +9,34 @@ Der Spieler nimmt die Rolle des jungen Matt an, der mit dem skrupellosen Vorgehe
 ## Authors
 
 Developers:
-*[Jan Ehrlich](https://github.com/janehrlich)
-*[Jannis Roth](https://github.com/jannisroth)
+* [Jan Ehrlich](https://github.com/janehrlich)
+* [Jannis Roth](https://github.com/jannisroth)
 
 Level Design:
-*[Jan Ehrlich](https://github.com/janehrlich)
+* [Jan Ehrlich](https://github.com/janehrlich)
 
 Character Art & Animation:
-*[Luigi Raia]()
+* [Luigi Raia]()
 
 Background Music:
-*[Jannina Litzinger]()
+* [Jannina Litzinger]()
 
 Story:
-*[Jannina Litzinger]()
+* [Jannina Litzinger]()
 
 ## Acknowledgements
 
 Following Asset Packs have been used:
 
-*[Castle Platformer Tileset](https://rottingpixels.itch.io/castle-platformer-tileset-16x16free) created by RottingPixels
+* [Castle Platformer Tileset](https://rottingpixels.itch.io/castle-platformer-tileset-16x16free) created by RottingPixels
 
-*[Generic Dungeon Pack](https://bakudas.itch.io/generic-dungeon-pack) created by Anokolisa, published by Vaca Roxa
+* [Generic Dungeon Pack](https://bakudas.itch.io/generic-dungeon-pack) created by Anokolisa, published by Vaca Roxa
 
-*[Pixel Castle 2D](https://szadiart.itch.io/pixle-castle-2d) created by Szadi art
+* [Pixel Castle 2D](https://szadiart.itch.io/pixle-castle-2d) created by Szadi art
 
-*[GothicVania Town](https://ansimuz.itch.io/gothicvania-town) created by Luis Zuno @ansimuz
+* [GothicVania Town](https://ansimuz.itch.io/gothicvania-town) created by Luis Zuno @ansimuz
 
-*[GothicVania Cemetery](https://ansimuz.itch.io/gothicvania-cemetery) created by Luis Zuno @ansimuz
+* [GothicVania Cemetery](https://ansimuz.itch.io/gothicvania-cemetery) created by Luis Zuno @ansimuz
 
-*[Platformer Tiles](https://opengameart.org/content/platformer-tiles-4) created by [Buch](https://opengameart.org/users/buch) 
+* [Platformer Tiles](https://opengameart.org/content/platformer-tiles-4) created by [Buch](https://opengameart.org/users/buch) 
 committer and creative consultant: Jeffrey Kern
