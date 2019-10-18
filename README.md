@@ -11,10 +11,10 @@ Der Spieler nimmt die Rolle des jungen Matt an, der mit dem skrupellosen Vorgehe
 Get the game from our [releases page.](https://github.com/JanEhrlich/Curse-Cleansing/releases)
 
 Following resources can also be relevant:
-* [Conducted Study Summary (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/StudieCurseCleasing.pdf)
 * [Trailer](https://drive.google.com/open?id=1gnjEUiMrySlrr3_bwYT62fRiAb_POV29)
 * [Screenshots]()
 * [Description of the game (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Beschreibung_Curse_Cleansing.pdf)
+* [Conducted Study Summary (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/StudieCurseCleasing.pdf)
 * [Concept document with highlighted table of what was included in the prototype (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Konzept%20Final.pdf)
 
 ## How to start the Game
