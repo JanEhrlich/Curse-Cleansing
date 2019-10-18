@@ -78,7 +78,7 @@ Following Asset Packs have been used:
 * [Platformer Tiles](https://opengameart.org/content/platformer-tiles-4) created by [Buch](https://opengameart.org/users/buch) 
 committer and creative consultant: Jeffrey Kern
 
-* [Various Soundeffect and Music](https://gamesounds.xyz/) collection of royalty free or public domain music and sounds provided by [Gamesounds.xyz](https://gamesounds.xyz/)
+* [Various Soundeffects and Music](https://gamesounds.xyz/) collection of royalty free or public domain music and sounds provided by [Gamesounds.xyz](https://gamesounds.xyz/)
 
 * [Child 3D Model](https://www.turbosquid.com/FullPreview/Index.cfm/ID/674892) by robe_is
 
