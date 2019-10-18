@@ -12,10 +12,10 @@ Get the game from our [releases page.](https://github.com/JanEhrlich/Curse-Clean
 
 Following resources can also be relevant:
 * [Conducted Study Summary (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/StudieCurseCleasing.pdf)
-* [Trailer]()
+* [Trailer](https://drive.google.com/open?id=1gnjEUiMrySlrr3_bwYT62fRiAb_POV29)
 * [Screenshots]()
-* [Description of the Game (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Beschreibung_Curse_Cleansing.pdf)
-* [Concept Document with highlighted table of what was included in the prototype](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Konzept%20Final.pdf)
+* [Description of the game (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Beschreibung_Curse_Cleansing.pdf)
+* [Concept document with highlighted table of what was included in the prototype (German)](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Konzept%20Final.pdf)
 
 ## How to start the Game
 
