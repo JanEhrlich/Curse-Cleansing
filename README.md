@@ -16,6 +16,22 @@ Following resources can also be relevant:
 * [Screenshots]()
 * [Description of the Game (German)]()
 
+## How to start the Game
+
+Unzip the file from our release page and and double click on Curse-Cleansing.exe.
+Make sure to connect you controller before starting the game.
+
+The game was build and tested for Windows only.
+It can be played with Xbox Wireless Controller or with Nintendo Switch Pro Controller.
+
+There is no exit option inside the game. To leave the game just press ALT+F4.
+
+## Cheats
+
+* Press "R" to reload the current level 
+* Press "E" to load the previous level 
+* Press "T" to load the next level 
+
 ## Authors
 
 Developers:
