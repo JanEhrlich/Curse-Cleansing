@@ -3,6 +3,8 @@ Curse Cleansing: The First Outbreak is a game which was developed throughout the
 
 ## Trailer
 
+[![Watch the video](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Screenshots/trailer_video.PNG?raw=true)](https://drive.google.com/open?id=1gnjEUiMrySlrr3_bwYT62fRiAb_POV29)
+
 ## Screenshots
 
 ![Titel](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Screenshots/titel.png?raw=true)
