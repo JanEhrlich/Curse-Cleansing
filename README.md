@@ -38,7 +38,7 @@ It can be played with Xbox Wireless Controller or with Nintendo Switch Pro Contr
 There is no exit option inside the game. To leave the game just press ALT+F4.
 
 ## Controls
-![Controls](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Screenshots/controls.jpg?raw=true)
+![Controls](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Screenshots/controls_table.jpg?raw=true)
 
 ## Cheats
 
