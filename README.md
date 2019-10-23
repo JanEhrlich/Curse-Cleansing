@@ -37,11 +37,14 @@ It can be played with Xbox Wireless Controller or with Nintendo Switch Pro Contr
 
 There is no exit option inside the game. To leave the game just press ALT+F4.
 
+## Controls
+![Controls](https://github.com/JanEhrlich/Curse-Cleansing/blob/master/Screenshots/controls.jpg?raw=true)
+
 ## Cheats
 
-* Press "R" to reload the current level 
-* Press "E" to load the previous level 
-* Press "T" to load the next level 
+* Press "T" to reload the current level 
+* Press "R" to load the previous level 
+* Press "Z" to load the next level 
 
 ## Authors
 
