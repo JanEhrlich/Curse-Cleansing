@@ -22,12 +22,14 @@ public class SceneSwitcher : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("r"))
+        //Reload Level
+        if (Input.GetKeyDown("t"))
         {
             LoadSceneByNumber(nextLevelNumber - 1);
         }
 
-        if (Input.GetKeyDown("t"))
+        //Load next Level
+        if (Input.GetKeyDown("z"))
         {
             if (nextLevelNumber < 8)
             {
@@ -35,7 +37,8 @@ public class SceneSwitcher : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown("e"))
+        //Load previous Level
+        if (Input.GetKeyDown("r"))
         {
             if (nextLevelNumber > 1)
             {

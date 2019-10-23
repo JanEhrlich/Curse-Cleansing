@@ -137,11 +137,101 @@ public class SystemInput : MonoBehaviour
                 HandelXboxTriggerButtons();
             }
         }
+        else
+        {
+            CheckKeyboardControl();
+        }
     }
 
     public void FixedTick()
     {
 
+    }
+
+    //This function is a Hotfix which enables Keyboard Controlle. It was requested by our advisors after the deadline
+    private void CheckKeyboardControl()
+    {
+        #region MovementAxis
+        tmp_x = Input.GetAxisRaw("Horizontal");
+        tmp_y = Input.GetAxisRaw("Vertical");
+
+        componentInput.setCurrentHorizontalJoystickPosition(tmp_x);
+        componentInput.setCurrentVerticalJoystickPosition(tmp_y);
+
+        componentInput.setCurrentJoystickDirection(tmp_x, tmp_y);
+
+        componentInput.setCurrentJoystickDirectionClamped(ClampValue(tmp_x), ClampValue(tmp_y));
+
+        tmp_axis = CalculateActiveAxis(tmp_x, tmp_y);
+        componentInput.setCurrentJoystickAxis(tmp_axis);
+        #endregion
+
+        #region DPadEmulation
+        tmp_x = Input.GetKeyDown("n") ? -1 : 0;
+        tmp_x = Input.GetKeyDown("m") ? 1 : tmp_x;
+        tmp_y = 0;
+
+        tmp_axis = CalculateActiveAxis(tmp_x, tmp_y);
+        MapAxisToDirection(tmp_axis);
+        DetectDPadTriggerAndCancels();
+        #endregion
+
+        #region Keybindings
+        if (Input.GetKeyDown("space"))
+        {
+            foreach (Action func in componentInput.getCallOnJumpButtonPress())
+                func();
+        }
+        if (Input.GetKeyUp("space"))
+        {
+            foreach (Action func in componentInput.getCallOnJumpButtonCancel())
+                func();
+        }
+
+        if (Input.GetKeyDown("l"))
+        {
+            foreach (Action func in componentInput.getCallOnAttackButtonPress())
+                func();
+        }
+        if (Input.GetKeyUp("l"))
+        {
+            foreach (Action func in componentInput.getCallOnAttackButtonCancel())
+                func();
+        }
+
+        if (Input.GetKeyDown("k"))
+        {
+            foreach (Action func in componentInput.getCallOnTentacleButtonPress())
+                func();
+        }
+        if (Input.GetKeyUp("k"))
+        {
+            foreach (Action func in componentInput.getCallOnTentacleButtonCancel())
+                func();
+        }
+
+        if (Input.GetKeyDown("u"))
+        {
+            foreach (Action func in componentInput.getCallOnPauseButtonPress())
+                func();
+        }
+        if (Input.GetKeyUp("u"))
+        {
+            foreach (Action func in componentInput.getCallOnPauseButtonCancel())
+                func();
+        }
+
+        if (Input.GetKeyDown("return"))
+        {
+            foreach (Action func in componentInput.getCallOnInteractButtonPress())
+                func();
+        }
+        if (Input.GetKeyUp("return"))
+        {
+            foreach (Action func in componentInput.getCallOnInteractButtonCancel())
+                func();
+        }
+        #endregion
     }
 
     //Sets all relevant Values for Movement Directions in ComponentInput
@@ -435,7 +525,8 @@ public class SystemInput : MonoBehaviour
             foreach (Action func in componentInput.getCallOnJumpButtonPress())
                 func();
         }
-        if (Input.GetButtonUp(jumpString)){
+        if (Input.GetButtonUp(jumpString))
+        {
             foreach (Action func in componentInput.getCallOnJumpButtonCancel())
                 func();
         }
