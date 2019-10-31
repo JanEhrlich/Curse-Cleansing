@@ -60,6 +60,7 @@ Character Art & Animation:
 
 Background Music:
 * Jannina Litzinger
+* [Katarina Jörg](https://www.instagram.com/katarinajoerg/)
 
 Story:
 * Jannina Litzinger
