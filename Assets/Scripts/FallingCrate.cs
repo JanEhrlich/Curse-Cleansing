@@ -42,6 +42,19 @@ public class FallingCrate : MonoBehaviour
             //
         }
 
+        if (Input.GetKeyDown(KeyCode.Return) && inside)
+        {
+            Lever1.SetActive(false);
+            Lever2.SetActive(true);
+            deactivate1.SetActive(false);
+            deactivate2.SetActive(false);
+            deactivate3.SetActive(false);
+            deactivate4.SetActive(false);
+            activated = true;
+            despawnTime += Time.time;
+            //
+        }
+
         if (activated && despawnTime > Time.time)
         {
             step = speed * Time.deltaTime;

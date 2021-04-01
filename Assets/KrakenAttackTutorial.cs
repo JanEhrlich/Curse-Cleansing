@@ -20,6 +20,20 @@ public class KrakenAttackTutorial : MonoBehaviour
             Trap.SetActive(false);
             Destroy(this.gameObject);
         }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.K) && inside)
+            {
+                //doorClose.SetActive(false);
+                //doorOpen.SetActive(true);
+                //doorLight.SetActive(true);
+                Enemy.SetActive(false);
+                Trap.SetActive(false);
+                Destroy(this.gameObject);
+            }
+        }
+
+
     }
 
     public void Enter()

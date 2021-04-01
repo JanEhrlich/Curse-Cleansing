@@ -1,5 +1,5 @@
 # Curse-Cleansing
-Curse Cleansing: The First Outbreak is a game which was developed throughout the Rapid Game Development course at Saarland University. The provided prototype was developed in 8 weeks. 
+Curse Cleansing: The First Outbreak is a game which was developed throughout the [Rapid Game Development course](https://umtl.cs.uni-saarland.de/research/projects/rapid-game-development-hochschul%C3%BCbergreifende-gaming-veranstaltung.html) at Saarland University. The provided prototype was developed in 8 weeks. 
 
 ## Trailer
 
@@ -50,6 +50,9 @@ Developers:
 * [Jannis Roth](https://github.com/jannisroth)
 
 Level Design:
+* [Jan Ehrlich](https://github.com/janehrlich)
+
+UI/UX Design:
 * [Jan Ehrlich](https://github.com/janehrlich)
 
 Character Art & Animation:

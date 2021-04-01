@@ -24,6 +24,17 @@ public class OpenPrisonExit : MonoBehaviour
             switchClose.SetActive(false);
             switchOpen.SetActive(true);
             Destroy(this.gameObject);
+        } else
+        {
+            if (Input.GetKeyDown(KeyCode.L) && hasSword && inside)
+            {
+                //doorClose.SetActive(false);
+                //doorOpen.SetActive(true);
+                //doorLight.SetActive(true);
+                switchClose.SetActive(false);
+                switchOpen.SetActive(true);
+                Destroy(this.gameObject);
+            }
         }
     }
 
